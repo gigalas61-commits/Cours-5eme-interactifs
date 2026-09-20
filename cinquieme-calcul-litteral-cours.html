@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calcul littéral — 5ème</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f5f2ed; --surface:#ffffff; --surface2:#ebe6de; --text:#2c2418;
+    --heading:#8b4513; --muted:#6b5a48; --border:#d4c8b8; --accent:#a0522d; --accent-light:#faf5ef;
+    --good:#2f7d4f; --bad:#b0402f;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:#161210; --surface:#221c18; --surface2:#302820; --text:#ddd0c0;
+      --heading:#e0a868; --muted:#9a8878; --border:#403428; --accent:#d08840; --accent-light:#1e1610;
+      --good:#5cbf88; --bad:#e07a63;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:#161210; --surface:#221c18; --surface2:#302820; --text:#ddd0c0;
+    --heading:#e0a868; --muted:#9a8878; --border:#403428; --accent:#d08840; --accent-light:#1e1610;
+    --good:#5cbf88; --bad:#e07a63;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:'Nunito Sans', sans-serif; line-height:1.6;
+    transition: background .2s, color .2s;
+  }
+  h1,h2,h3,h4 { font-family:'Cormorant Garamond', serif; color:var(--heading); font-weight:600; margin-top:0; }
+  h1 { font-size:2.1rem; }
+  h2 { font-size:1.6rem; border-bottom:2px solid var(--border); padding-bottom:.3rem; }
+  h3 { font-size:1.25rem; color:var(--accent); }
+  header {
+    background:var(--surface); border-bottom:1px solid var(--border);
+    padding:1rem 16px; display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+  }
+  .header-left { display:flex; align-items:center; gap:.8rem; }
+  .badge {
+    background:var(--accent); color:#fff; font-weight:700; font-size:.8rem;
+    padding:.25rem .7rem; border-radius:999px; font-family:'Nunito Sans',sans-serif;
+  }
+  header h1 { margin:0; }
+  #themeBtn {
+    background:var(--surface2); border:1px solid var(--border); color:var(--text);
+    border-radius:8px; padding:.5rem .8rem; cursor:pointer; font-size:1rem;
+  }
+  nav.tabs {
+    display:flex; overflow-x:auto; gap:.3rem; background:var(--surface);
+    padding:.5rem 16px; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:10;
+  }
+  nav.tabs button {
+    flex:0 0 auto; background:transparent; border:none; color:var(--muted);
+    font-family:'Nunito Sans',sans-serif; font-weight:600; font-size:.9rem;
+    padding:.6rem 1rem; border-radius:8px 8px 0 0; cursor:pointer; white-space:nowrap;
+    border-bottom:3px solid transparent;
+  }
+  nav.tabs button.active { color:var(--accent); border-bottom:3px solid var(--accent); background:var(--accent-light); }
+  main { max-width:900px; margin:0 auto; padding:1.5rem 16px 4rem; }
+  section.tab-content { display:none; }
+  section.tab-content.active { display:block; animation: fade .25s; }
+  @keyframes fade { from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+  .card {
+    background:var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:1.2rem 1.4rem; margin-bottom:1.2rem;
+  }
+  .info-box {
+    background:var(--accent-light); border-left:4px solid var(--accent);
+    padding:.9rem 1.1rem; border-radius:6px; margin:1rem 0;
+  }
+  .method-box {
+    background:var(--surface2); border:1px dashed var(--border); border-radius:8px;
+    padding:.9rem 1.1rem; margin:1rem 0;
+  }
+  table { width:100%; border-collapse:collapse; margin:1rem 0; }
+  th, td { border:1px solid var(--border); padding:.5rem .7rem; text-align:left; }
+  th { background:var(--surface2); color:var(--heading); }
+  .expr { font-family:'Cormorant Garamond', serif; font-size:1.15rem; font-weight:600; color:var(--accent); }
+  code { background:var(--surface2); padding:.1rem .4rem; border-radius:4px; font-size:.95em; }
+  input[type="text"], input[type="number"] {
+    background:var(--surface2); border:1px solid var(--border); color:var(--text);
+    border-radius:6px; padding:.4rem .6rem; font-family:'Nunito Sans',sans-serif; font-size:1rem; width:140px;
+  }
+  button.check-btn, button.action-btn {
+    background:var(--accent); color:#fff; border:none; border-radius:6px;
+    padding:.5rem 1rem; font-weight:700; cursor:pointer; font-family:'Nunito Sans',sans-serif;
+    margin-left:.5rem;
+  }
+  button.check-btn:hover, button.action-btn:hover { opacity:.85; }
+  .feedback { margin-top:.6rem; font-weight:700; min-height:1.4em; }
+  .feedback.ok { color:var(--good); }
+  .feedback.ko { color:var(--bad); }
+  details {
+    background:var(--surface2); border:1px solid var(--border); border-radius:8px;
+    padding:.6rem 1rem; margin-top:.8rem;
+  }
+  summary { cursor:pointer; font-weight:700; color:var(--accent); }
+  details[open] summary { margin-bottom:.5rem; }
+  .exo {
+    border-top:1px solid var(--border); padding-top:1rem; margin-top:1rem;
+  }
+  .exo:first-of-type { border-top:none; margin-top:0; padding-top:0; }
+  canvas { max-width:100%; display:block; margin:1rem auto; background:var(--surface2); border-radius:8px; }
+  .qcm-q { margin-bottom:1.4rem; }
+  .qcm-options label {
+    display:block; padding:.5rem .7rem; margin:.3rem 0; border:1px solid var(--border);
+    border-radius:6px; cursor:pointer; background:var(--surface2);
+  }
+  .qcm-options label:hover { border-color:var(--accent); }
+  .qcm-options input { margin-right:.6rem; }
+  #qcmResult {
+    text-align:center; font-size:1.3rem; font-weight:700; padding:1.2rem; border-radius:10px;
+    background:var(--accent-light); border:1px solid var(--border); display:none;
+  }
+  .tag { display:inline-block; font-size:.75rem; font-weight:700; padding:.15rem .6rem; border-radius:999px; margin-bottom:.5rem; }
+  .tag.appliquer { background:#2f7d4f33; color:var(--good); }
+  .tag.comprendre { background:#d0884033; color:var(--accent); }
+  .tag.approfondir { background:#b0402f33; color:var(--bad); }
+  @media (max-width:600px) {
+    header { flex-direction:column; align-items:flex-start; }
+    h1 { font-size:1.4rem; }
+    nav.tabs button { font-size:.8rem; padding:.5rem .7rem; }
+    input[type="text"], input[type="number"] { width:100px; }
+  }
+  button:focus-visible, input:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  footer {
+    text-align:center; color:var(--muted); font-size:.85rem;
+    padding:2rem 16px; border-top:1px solid var(--border); margin-top:2rem;
+  }
+  @media print {
+    header, nav.tabs, footer, button, #qcmResult { display:none !important; }
+    section.tab-content { display:block !important; }
+    body { background:#fff; color:#000; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <span class="badge">5ème</span>
+    <h1>Calcul littéral</h1>
+  </div>
+  <button id="themeBtn" onclick="toggleTheme()">🌓 Thème</button>
+</header>
+
+<div class="card" style="max-width:900px; margin:1rem auto 0; padding:1rem 1.4rem;">
+  <p style="margin:0; color:var(--muted);">
+    Ce cours couvre l'introduction au <strong>calcul littéral</strong> au programme de 5ème :
+    écriture des expressions, substitution, distributivité simple, réduction et programmes de calcul.
+    Utilise les onglets ci-dessous pour naviguer entre le cours, les exercices interactifs et le QCM final.
+  </p>
+</div>
+
+<nav class="tabs" id="tabNav">
+  <button class="active" onclick="showTab(0)">1. Expressions</button>
+  <button onclick="showTab(1)">2. Substituer</button>
+  <button onclick="showTab(2)">3. Distributivité</button>
+  <button onclick="showTab(3)">4. Réduire</button>
+  <button onclick="showTab(4)">5. Programmes</button>
+  <button onclick="showTab(5)">6. Exercices</button>
+  <button onclick="showTab(6)">7. QCM</button>
+</nav>
+
+<main>
+
+<!-- ============ TAB 0 : EXPRESSIONS ============ -->
+<section class="tab-content active" id="tab0">
+  <div class="card">
+    <h2>Objectifs du chapitre</h2>
+    <p>À la fin de ce chapitre, tu dois savoir :</p>
+    <table>
+      <tr><th>Objectif</th><th>Onglet correspondant</th></tr>
+      <tr><td>Écrire une expression littérale avec les bonnes conventions</td><td>1. Expressions</td></tr>
+      <tr><td>Traduire une phrase en expression, et inversement</td><td>1. Expressions</td></tr>
+      <tr><td>Calculer la valeur d'une expression pour une valeur donnée</td><td>2. Substituer</td></tr>
+      <tr><td>Développer une expression avec la distributivité simple</td><td>3. Distributivité</td></tr>
+      <tr><td>Réduire une expression en regroupant les termes semblables</td><td>4. Réduire</td></tr>
+      <tr><td>Traduire et tester un programme de calcul</td><td>5. Programmes de calcul</td></tr>
+    </table>
+    <div class="info-box">
+      Ce chapitre est une <strong>introduction</strong> au calcul littéral. La double distributivité <span class="expr">(a+b)(c+d)</span> et la factorisation seront étudiées en 4ème et en 3ème.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Qu'est-ce qu'une expression littérale ?</h2>
+    <p>Une <strong>expression littérale</strong> est une expression mathématique dans laquelle une ou plusieurs lettres (souvent <span class="expr">x</span>, <span class="expr">a</span>, <span class="expr">n</span>...) représentent des nombres <em>inconnus</em> ou <em>variables</em>.</p>
+    <div class="info-box">
+      <strong>Exemple :</strong> <span class="expr">3x + 5</span> est une expression littérale où <span class="expr">x</span> désigne un nombre quelconque.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Conventions d'écriture</h2>
+    <p>Pour alléger les écritures, on utilise des règles précises :</p>
+    <table>
+      <tr><th>Règle</th><th>Exemple</th></tr>
+      <tr><td>On peut <strong>supprimer le signe ×</strong> entre un nombre et une lettre, ou entre deux lettres.</td><td><span class="expr">2 × a = 2a</span> &nbsp;&nbsp; <span class="expr">a × b = ab</span></td></tr>
+      <tr><td>On <strong>écrit le nombre en premier</strong>, devant la lettre.</td><td><span class="expr">a × 5 = 5a</span> (et non <span class="expr">a5</span>)</td></tr>
+      <tr><td><span class="expr">1 × a</span> s'écrit simplement <span class="expr">a</span></td><td><span class="expr">1 × a = a</span></td></tr>
+      <tr><td><span class="expr">a × a</span> s'écrit <span class="expr">a²</span> (« a au carré »)</td><td><span class="expr">a × a = a²</span></td></tr>
+      <tr><td>Le signe × reste devant un nombre.</td><td><span class="expr">5 × 3 = 15</span> (le × ne se supprime pas entre deux nombres)</td></tr>
+      <tr><td>Le signe <strong>÷ ne se supprime jamais</strong>, on utilise une fraction.</td><td><span class="expr">a ÷ 2 = a/2</span></td></tr>
+    </table>
+    <div class="method-box">
+      <strong>⚠️ Attention :</strong> <span class="expr">2a</span> signifie <span class="expr">2 × a</span>, jamais <span class="expr">2 + a</span> ! Ne confonds pas <span class="expr">3x</span> (trois fois x) avec <span class="expr">x³</span> (x au cube, c'est-à-dire x × x × x).
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Traduire une phrase en expression</h2>
+    <p>Le calcul littéral sert souvent à traduire une situation en langage mathématique.</p>
+    <table>
+      <tr><th>Phrase</th><th>Expression</th></tr>
+      <tr><td>« Le double d'un nombre x »</td><td><span class="expr">2x</span></td></tr>
+      <tr><td>« Un nombre x augmenté de 7 »</td><td><span class="expr">x + 7</span></td></tr>
+      <tr><td>« Le triple d'un nombre diminué de 4 »</td><td><span class="expr">3x − 4</span></td></tr>
+      <tr><td>« La somme d'un nombre et de son carré »</td><td><span class="expr">x + x²</span></td></tr>
+      <tr><td>« Le périmètre d'un carré de côté c »</td><td><span class="expr">4c</span></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Vocabulaire du calcul littéral</h2>
+    <table>
+      <tr><th>Mot</th><th>Signification</th></tr>
+      <tr><td><strong>Expression littérale</strong></td><td>Expression contenant au moins une lettre représentant un nombre.</td></tr>
+      <tr><td><strong>Variable</strong></td><td>La lettre qui peut prendre différentes valeurs numériques (souvent x).</td></tr>
+      <tr><td><strong>Terme</strong></td><td>Chaque partie d'une somme, séparée par + ou −. Dans <span class="expr">3x + 5</span>, les termes sont <span class="expr">3x</span> et <span class="expr">5</span>.</td></tr>
+      <tr><td><strong>Coefficient</strong></td><td>Le nombre qui multiplie la lettre. Dans <span class="expr">7x</span>, le coefficient est <span class="expr">7</span>.</td></tr>
+      <tr><td><strong>Constante</strong></td><td>Un terme sans lettre, qui ne change jamais de valeur.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Vrai ou faux ?</h2>
+    <details>
+      <summary>2a signifie la même chose que a + 2.</summary>
+      <p><strong>Faux.</strong> 2a signifie 2 × a (deux fois a), alors que a + 2 signifie « a plus deux ». Par exemple, pour a = 3 : 2a = 6, alors que a + 2 = 5.</p>
+    </details>
+    <details>
+      <summary>a × a s'écrit a².</summary>
+      <p><strong>Vrai.</strong> Par convention, on note a × a = a² (« a au carré »).</p>
+    </details>
+    <details>
+      <summary>1 × x peut s'écrire simplement x.</summary>
+      <p><strong>Vrai.</strong> Multiplier par 1 ne change pas la valeur, donc 1 × x = x.</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2>Erreurs fréquentes à éviter</h2>
+    <div class="method-box">
+      <strong>❌ Erreur :</strong> écrire <span class="expr">a2</span> au lieu de <span class="expr">2a</span> — le nombre doit toujours être écrit en premier.<br><br>
+      <strong>❌ Erreur :</strong> confondre <span class="expr">2a</span> (c'est-à-dire <span class="expr">2 × a</span>) avec <span class="expr">a + 2</span> — ce sont deux expressions totalement différentes !<br><br>
+      <strong>❌ Erreur :</strong> écrire <span class="expr">a × a = 2a</span> — c'est faux, on a <span class="expr">a × a = a²</span>, alors que <span class="expr">a + a = 2a</span>.<br><br>
+      <strong>❌ Erreur :</strong> supprimer le signe × entre deux nombres, par exemple écrire <span class="expr">53</span> pour <span class="expr">5 × 3</span> — cela n'a pas de sens, le × ne se supprime qu'avec des lettres.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Encore quelques traductions</h2>
+    <table>
+      <tr><th>Phrase</th><th>Expression</th></tr>
+      <tr><td>« La moitié d'un nombre x »</td><td><span class="expr">x ÷ 2</span> ou <span class="expr">x/2</span></td></tr>
+      <tr><td>« Le carré d'un nombre augmenté de 1 »</td><td><span class="expr">x² + 1</span></td></tr>
+      <tr><td>« La somme de deux nombres x et y »</td><td><span class="expr">x + y</span></td></tr>
+      <tr><td>« Le produit de deux nombres x et y »</td><td><span class="expr">xy</span></td></tr>
+      <tr><td>« L'aire d'un rectangle de longueur L et largeur l »</td><td><span class="expr">L × l = Ll</span></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>À toi de jouer !</h2>
+    <p>Complète chaque exercice puis clique sur « Vérifier ».</p>
+    <div id="exprExos"></div>
+  </div>
+</section>
+
+<!-- ============ TAB 1 : SUBSTITUER ============ -->
+<section class="tab-content" id="tab1">
+  <div class="card">
+    <h2>Calculer la valeur d'une expression</h2>
+    <p><strong>Substituer</strong> une lettre par une valeur, c'est remplacer cette lettre par un nombre donné, puis calculer le résultat en respectant les <strong>priorités opératoires</strong>.</p>
+    <div class="method-box">
+      <strong>Méthode :</strong>
+      <ol>
+        <li>Remplacer chaque lettre par sa valeur (entre parenthèses si le nombre est négatif).</li>
+        <li>Appliquer les priorités : parenthèses, puis puissances, puis × et ÷, puis + et −.</li>
+        <li>Calculer et donner le résultat.</li>
+      </ol>
+    </div>
+    <div class="info-box">
+      <strong>Exemple :</strong> Calculer <span class="expr">A = 3x + 2</span> pour <span class="expr">x = 5</span>.<br>
+      <span class="expr">A = 3 × 5 + 2 = 15 + 2 = 17</span>
+    </div>
+    <div class="info-box">
+      <strong>Exemple avec un nombre négatif :</strong> Calculer <span class="expr">B = 5x − 1</span> pour <span class="expr">x = −2</span>.<br>
+      <span class="expr">B = 5 × (−2) − 1 = −10 − 1 = −11</span>
+    </div>
+    <div class="info-box">
+      <strong>Exemple avec plusieurs termes :</strong> Calculer <span class="expr">C = 2x + 3x</span> pour <span class="expr">x = 4</span>.<br>
+      On peut d'abord réduire : <span class="expr">C = 5x</span>, puis substituer : <span class="expr">C = 5 × 4 = 20</span>.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Deux méthodes possibles</h2>
+    <p>Pour calculer la valeur d'une expression avec plusieurs termes semblables, on peut :</p>
+    <table>
+      <tr><th>Méthode</th><th>Exemple pour x = 4</th></tr>
+      <tr><td>1. Réduire d'abord, puis substituer</td><td><span class="expr">2x + 3x = 5x = 5 × 4 = 20</span></td></tr>
+      <tr><td>2. Substituer d'abord, puis calculer</td><td><span class="expr">2×4 + 3×4 = 8 + 12 = 20</span></td></tr>
+    </table>
+    <p>Les deux méthodes donnent le même résultat : c'est une bonne façon de <strong>vérifier</strong> son calcul !</p>
+  </div>
+
+  <div class="card">
+    <h2>Pourquoi respecter les priorités ?</h2>
+    <p>Sans règle commune, une même expression pourrait avoir plusieurs résultats différents selon la personne qui calcule. Les priorités opératoires garantissent qu'une expression a <strong>une seule valeur possible</strong>, quel que soit celui qui la calcule.</p>
+    <div class="info-box">
+      <strong>Piège classique :</strong> pour <span class="expr">A = 2 + 3x</span> avec <span class="expr">x = 4</span>, il ne faut <strong>pas</strong> calculer <span class="expr">2 + 3 = 5</span> puis <span class="expr">5 × 4 = 20</span> ! Il faut calculer <span class="expr">3 × 4 = 12</span> d'abord (priorité à la multiplication), puis <span class="expr">2 + 12 = 14</span>.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Machine à calculer</h2>
+    <p>Choisis une expression et une valeur de <span class="expr">x</span> : observe les étapes du calcul.</p>
+    <div>
+      Expression :
+      <select id="machExpr" onchange="drawMachine()">
+        <option value="0">2x + 3</option>
+        <option value="1">5x − 4</option>
+        <option value="2">x² + 1</option>
+        <option value="3">3x − 2x + 5</option>
+      </select>
+      x = <input type="number" id="machX" value="4" style="width:70px" oninput="drawMachine()">
+    </div>
+    <canvas id="machineCanvas" width="700" height="220"></canvas>
+    <p style="text-align:center; color:var(--muted); font-size:.9rem;">Chaque étape affiche le calcul intermédiaire, dans l'ordre des priorités opératoires.</p>
+  </div>
+
+  <div class="card">
+    <h2>Vrai ou faux ?</h2>
+    <p>Teste ta compréhension avant de passer aux exercices.</p>
+    <details>
+      <summary>Pour x = 2, l'expression 3x + 1 vaut 7.</summary>
+      <p><strong>Vrai.</strong> 3×2 + 1 = 6 + 1 = 7.</p>
+    </details>
+    <details>
+      <summary>Pour x = −3, l'expression x² vaut −9.</summary>
+      <p><strong>Faux.</strong> x² = (−3)² = (−3)×(−3) = 9 (un carré est toujours positif ou nul).</p>
+    </details>
+    <details>
+      <summary>Pour x = 5, l'expression 2 + 3x vaut 25.</summary>
+      <p><strong>Faux.</strong> Il faut calculer 3×5 = 15 d'abord (priorité à la multiplication), puis 2 + 15 = 17, et non (2+3)×5.</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2>Exercices</h2>
+    <div id="substExos"></div>
+  </div>
+</section>
+
+<!-- ============ TAB 2 : DISTRIBUTIVITÉ ============ -->
+<section class="tab-content" id="tab2">
+  <div class="card">
+    <h2>La distributivité simple</h2>
+    <p>Pour développer une expression du type <span class="expr">k(a + b)</span>, on distribue <span class="expr">k</span> sur chaque terme entre parenthèses :</p>
+    <div class="info-box" style="text-align:center; font-size:1.2rem;">
+      <span class="expr">k(a + b) = k × a + k × b = ka + kb</span><br><br>
+      <span class="expr">k(a − b) = k × a − k × b = ka − kb</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Pourquoi ça marche ? Interprétation géométrique</h2>
+    <p>On peut voir la distributivité comme le calcul de l'aire d'un grand rectangle, découpé en deux plus petits.</p>
+    <div>
+      k = <input type="number" id="distK" value="3" style="width:60px" oninput="drawDistrib()">
+      a = <input type="number" id="distA" value="4" style="width:60px" oninput="drawDistrib()">
+      b = <input type="number" id="distB" value="2" style="width:60px" oninput="drawDistrib()">
+    </div>
+    <canvas id="distribCanvas" width="700" height="260"></canvas>
+    <p id="distribFormula" style="text-align:center;"></p>
+    <p style="text-align:center; color:var(--muted); font-size:.9rem;">Le rectangle orange a pour aire k×a, le rectangle doré a pour aire k×b. Leur somme est égale à l'aire du grand rectangle k×(a+b).</p>
+  </div>
+
+  <div class="card">
+    <h2>Méthode</h2>
+    <div class="method-box">
+      <strong>Développer <span class="expr">5(x + 3)</span> :</strong><br>
+      <span class="expr">5(x + 3) = 5 × x + 5 × 3 = 5x + 15</span>
+    </div>
+    <div class="method-box">
+      <strong>Développer <span class="expr">4(2x − 1)</span> :</strong><br>
+      <span class="expr">4(2x − 1) = 4 × 2x − 4 × 1 = 8x − 4</span>
+    </div>
+    <div class="info-box">
+      <strong>⚠️ Attention au signe −</strong> devant la parenthèse : <span class="expr">−3(x + 2) = −3x − 6</span> (on distribue −3 sur chaque terme).
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Vérifier un développement</h2>
+    <p>On peut vérifier un développement en substituant une valeur simple, par exemple <span class="expr">x = 1</span>, dans l'expression de départ et dans l'expression développée : les deux doivent donner le même résultat.</p>
+    <div class="info-box">
+      <strong>Exemple :</strong> Vérifier que <span class="expr">3(x + 4) = 3x + 12</span> pour <span class="expr">x = 1</span>.<br>
+      Expression de départ : <span class="expr">3 × (1 + 4) = 3 × 5 = 15</span>.<br>
+      Expression développée : <span class="expr">3 × 1 + 12 = 3 + 12 = 15</span>. ✔ Les deux résultats coïncident.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Cas particulier : k = 1 ou k = −1</h2>
+    <table>
+      <tr><th>Cas</th><th>Exemple</th></tr>
+      <tr><td><span class="expr">1(a + b) = a + b</span></td><td><span class="expr">1(x + 5) = x + 5</span></td></tr>
+      <tr><td><span class="expr">−1(a + b) = −a − b</span></td><td><span class="expr">−(x + 5) = −x − 5</span></td></tr>
+    </table>
+    <p>On retrouve la règle déjà connue : <strong>ouvrir une parenthèse précédée d'un signe −</strong> change le signe de chaque terme à l'intérieur.</p>
+  </div>
+
+  <div class="card">
+    <h2>Quelques exemples numériques d'aires</h2>
+    <p>Voici plusieurs cas de figure pour t'entraîner à repérer la relation entre l'aire globale et la somme des deux aires.</p>
+    <table>
+      <tr><th>k</th><th>a</th><th>b</th><th>k(a+b)</th><th>ka + kb</th></tr>
+      <tr><td>2</td><td>3</td><td>5</td><td>2×8 = 16</td><td>6 + 10 = 16</td></tr>
+      <tr><td>4</td><td>2</td><td>6</td><td>4×8 = 32</td><td>8 + 24 = 32</td></tr>
+      <tr><td>3</td><td>7</td><td>1</td><td>3×8 = 24</td><td>21 + 3 = 24</td></tr>
+    </table>
+    <p>On constate à chaque fois que les deux calculs donnent le <strong>même résultat</strong> : c'est la propriété de distributivité.</p>
+  </div>
+
+  <div class="card">
+    <h2>Vrai ou faux ?</h2>
+    <details>
+      <summary>3(x + 2) = 3x + 2</summary>
+      <p><strong>Faux.</strong> Il faut distribuer le 3 sur les deux termes : 3(x + 2) = 3x + 6.</p>
+    </details>
+    <details>
+      <summary>−2(x − 4) = −2x + 8</summary>
+      <p><strong>Vrai.</strong> −2 × x = −2x, et −2 × (−4) = +8, donc −2(x − 4) = −2x + 8.</p>
+    </details>
+    <details>
+      <summary>5(x + 1) et 5x + 1 représentent la même expression.</summary>
+      <p><strong>Faux.</strong> 5(x+1) = 5x + 5, ce qui est différent de 5x + 1. On peut le vérifier avec x = 0 : 5(0+1) = 5, alors que 5×0 + 1 = 1.</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2>Exercices progressifs</h2>
+    <div id="distribExos"></div>
+  </div>
+</section>
+
+<!-- ============ TAB 3 : RÉDUIRE ============ -->
+<section class="tab-content" id="tab3">
+  <div class="card">
+    <h2>Termes semblables</h2>
+    <p>Deux termes sont <strong>semblables</strong> s'ils contiennent la même lettre affectée du même exposant (ou pas de lettre du tout).</p>
+    <table>
+      <tr><th>Termes semblables</th><th>Termes non semblables</th></tr>
+      <tr><td><span class="expr">3x</span> et <span class="expr">−5x</span></td><td><span class="expr">3x</span> et <span class="expr">3x²</span></td></tr>
+      <tr><td><span class="expr">2x²</span> et <span class="expr">7x²</span></td><td><span class="expr">2x</span> et <span class="expr">2</span></td></tr>
+      <tr><td><span class="expr">4</span> et <span class="expr">−9</span> (constantes)</td><td><span class="expr">ab</span> et <span class="expr">a</span></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Réduire une expression</h2>
+    <p><strong>Réduire</strong> une expression, c'est regrouper et additionner (ou soustraire) les termes semblables entre eux, pour obtenir une écriture la plus simple possible.</p>
+    <div class="method-box">
+      <strong>Méthode :</strong>
+      <ol>
+        <li>Repérer les termes en <span class="expr">x²</span>, les termes en <span class="expr">x</span>, et les termes constants.</li>
+        <li>Regrouper chaque catégorie (on peut réordonner grâce à la commutativité de l'addition).</li>
+        <li>Additionner les nombres de chaque catégorie.</li>
+      </ol>
+    </div>
+    <div class="info-box">
+      <strong>Exemple :</strong> Réduire <span class="expr">E = 5x + 3 − 2x + 7</span><br>
+      <span class="expr">E = 5x − 2x + 3 + 7 = 3x + 10</span>
+    </div>
+    <div class="info-box">
+      <strong>Exemple avec x² :</strong> Réduire <span class="expr">F = 3x² + 2x − x² + 5x − 1</span><br>
+      <span class="expr">F = (3x² − x²) + (2x + 5x) − 1 = 2x² + 7x − 1</span>
+    </div>
+    <div class="method-box">
+      ⚠️ <span class="expr">3x + 2</span> ne peut pas se réduire davantage : <span class="expr">3x</span> et <span class="expr">2</span> ne sont pas des termes semblables ! Le résultat final reste <span class="expr">3x + 2</span>.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Réduire après une distributivité</h2>
+    <p>Souvent, on développe d'abord une expression avec la distributivité, puis on la réduit.</p>
+    <div class="info-box">
+      <strong>Exemple :</strong> Réduire <span class="expr">G = 2(x + 3) + 4x</span><br>
+      Étape 1 (développer) : <span class="expr">G = 2x + 6 + 4x</span><br>
+      Étape 2 (réduire) : <span class="expr">G = 2x + 4x + 6 = 6x + 6</span>
+    </div>
+    <div class="info-box">
+      <strong>Autre exemple :</strong> Réduire <span class="expr">H = 3(2x − 1) − 5x</span><br>
+      Étape 1 : <span class="expr">H = 6x − 3 − 5x</span><br>
+      Étape 2 : <span class="expr">H = 6x − 5x − 3 = x − 3</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Tableau récapitulatif des signes</h2>
+    <table>
+      <tr><th>Opération</th><th>Résultat</th></tr>
+      <tr><td><span class="expr">3x + 5x</span></td><td><span class="expr">8x</span> (on additionne les coefficients)</td></tr>
+      <tr><td><span class="expr">3x − 5x</span></td><td><span class="expr">−2x</span></td></tr>
+      <tr><td><span class="expr">−3x − 5x</span></td><td><span class="expr">−8x</span></td></tr>
+      <tr><td><span class="expr">−3x + 5x</span></td><td><span class="expr">2x</span></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Étapes détaillées pas à pas</h2>
+    <p>Pour bien réussir un exercice de réduction, il est conseillé de souligner ou de colorier les termes semblables avant de les regrouper.</p>
+    <div class="method-box">
+      <strong>Exemple guidé :</strong> Réduire <span class="expr">I = 7x − 4 + 2x − 3x + 9</span><br>
+      1. Termes en x : <span class="expr">7x, 2x, −3x</span><br>
+      2. Termes constants : <span class="expr">−4, 9</span><br>
+      3. Somme des termes en x : <span class="expr">7x + 2x − 3x = 6x</span><br>
+      4. Somme des constantes : <span class="expr">−4 + 9 = 5</span><br>
+      5. Résultat : <span class="expr">I = 6x + 5</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Vrai ou faux ?</h2>
+    <details>
+      <summary>3x et 3x² sont des termes semblables.</summary>
+      <p><strong>Faux.</strong> Ils n'ont pas le même exposant : x n'est pas la même puissance que x².</p>
+    </details>
+    <details>
+      <summary>4x − x = 4</summary>
+      <p><strong>Faux.</strong> 4x − x = 4x − 1x = 3x (et non 4, qui serait le cas de 4 − 1).</p>
+    </details>
+    <details>
+      <summary>2x + 5 − x + 1 se réduit en x + 6.</summary>
+      <p><strong>Vrai.</strong> 2x − x = x, et 5 + 1 = 6, donc le résultat est bien x + 6.</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2>Exercices</h2>
+    <div id="reduireExos"></div>
+  </div>
+</section>
+
+<!-- ============ TAB 4 : PROGRAMMES DE CALCUL ============ -->
+<section class="tab-content" id="tab4">
+  <div class="card">
+    <h2>Qu'est-ce qu'un programme de calcul ?</h2>
+    <p>Un <strong>programme de calcul</strong> est une suite d'instructions à appliquer à un nombre de départ. Le calcul littéral permet de <strong>traduire</strong> ce programme par une expression, valable pour n'importe quel nombre de départ.</p>
+    <div class="info-box">
+      <strong>Exemple de programme :</strong>
+      <ol>
+        <li>Choisir un nombre</li>
+        <li>Ajouter 3</li>
+        <li>Multiplier le résultat par 2</li>
+      </ol>
+      Si on appelle <span class="expr">x</span> le nombre choisi, l'expression est <span class="expr">2(x + 3)</span>, qui se développe en <span class="expr">2x + 6</span>.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Teste le programme</h2>
+    <p>Nombre de départ : <input type="number" id="progX" value="5" oninput="testProgram()"></p>
+    <div class="method-box" id="progSteps"></div>
+    <div class="info-box">
+      Résultat avec l'expression développée <span class="expr">2x + 6</span> : <strong id="progCheck"></strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Émettre une conjecture</h2>
+    <p>En testant un programme de calcul avec plusieurs nombres, on peut observer une régularité et formuler une <strong>conjecture</strong> (une hypothèse). Le calcul littéral permet ensuite de la <strong>prouver</strong> pour tous les nombres.</p>
+    <div class="method-box">
+      <strong>Exemple type Brevet :</strong> « Choisis un nombre, ajoute 5, multiplie par lui-même, puis soustrais le carré du nombre de départ. »<br>
+      Avec <span class="expr">x</span> : <span class="expr">(x+5)² − x²</span>... En testant <span class="expr">x=1</span> puis <span class="expr">x=2</span>, on peut conjecturer un lien avec <span class="expr">10x+25</span>. (Ce développement complet sera vu en 4ème/3ème — en 5ème, on se contente de tester et d'observer.)
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Deux programmes donnent-ils le même résultat ?</h2>
+    <p>On peut comparer deux programmes de calcul en les traduisant tous les deux en expressions littérales, puis en les testant avec les mêmes nombres.</p>
+    <div class="info-box">
+      <strong>Programme A :</strong> « Choisir un nombre, ajouter 4, multiplier par 3. » → <span class="expr">3(x + 4)</span><br>
+      <strong>Programme B :</strong> « Choisir un nombre, multiplier par 3, ajouter 12. » → <span class="expr">3x + 12</span><br>
+      En développant le programme A : <span class="expr">3(x+4) = 3x + 12</span>. Les deux programmes donnent donc <strong>toujours le même résultat</strong>, quel que soit le nombre choisi !
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Méthode pour un exercice type Brevet</h2>
+    <div class="method-box">
+      <ol>
+        <li>Lire attentivement le programme et identifier chaque étape.</li>
+        <li>Appeler <span class="expr">x</span> le nombre de départ et traduire chaque étape en expression.</li>
+        <li>Tester le programme avec un ou deux nombres pour vérifier la traduction.</li>
+        <li>Développer et/ou réduire l'expression si demandé.</li>
+        <li>Répondre à la question posée (comparaison, conjecture, calcul pour une valeur donnée...).</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Vrai ou faux ?</h2>
+    <details>
+      <summary>Le programme « ajouter 2 puis multiplier par 5 » se traduit par 5x + 2.</summary>
+      <p><strong>Faux.</strong> Il faut d'abord ajouter 2 (x + 2) puis multiplier par 5 : l'expression correcte est 5(x + 2), qui se développe en 5x + 10.</p>
+    </details>
+    <details>
+      <summary>Tester un programme avec plusieurs valeurs suffit à prouver une conjecture pour tous les nombres.</summary>
+      <p><strong>Faux.</strong> Tester ne fait que suggérer une conjecture. Seul le calcul littéral (en utilisant une lettre x) permet de la prouver pour tous les nombres possibles.</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2>Exercices</h2>
+    <div id="progExos"></div>
+  </div>
+</section>
+
+<!-- ============ TAB 5 : EXERCICES ============ -->
+<section class="tab-content" id="tab5">
+  <div class="card"><h2>8 exercices progressifs</h2>
+  <p>Du plus simple (Appliquer) au plus complexe (Approfondir). Clique sur « Voir la correction » pour vérifier ta réponse.</p></div>
+
+  <div class="card">
+    <h2>Fiche mémo — Calcul littéral</h2>
+    <table>
+      <tr><th>Notion</th><th>Règle essentielle</th></tr>
+      <tr><td>Écriture</td><td><span class="expr">2 × a = 2a</span> &nbsp;·&nbsp; <span class="expr">1 × a = a</span> &nbsp;·&nbsp; <span class="expr">a × a = a²</span></td></tr>
+      <tr><td>Substituer</td><td>Remplacer la lettre par sa valeur, respecter les priorités opératoires.</td></tr>
+      <tr><td>Distributivité</td><td><span class="expr">k(a+b) = ka + kb</span> &nbsp;·&nbsp; <span class="expr">k(a−b) = ka − kb</span></td></tr>
+      <tr><td>Réduire</td><td>Regrouper les termes semblables (même lettre, même exposant) et les additionner.</td></tr>
+      <tr><td>Programme de calcul</td><td>Traduire chaque étape en une expression, avec <span class="expr">x</span> le nombre choisi.</td></tr>
+    </table>
+    <div class="method-box">
+      <strong>Ordre des opérations à retenir :</strong> 1) parenthèses — 2) puissances (x²) — 3) multiplications et divisions — 4) additions et soustractions.
+    </div>
+  </div>
+
+  <div id="mainExos"></div>
+</section>
+
+<!-- ============ TAB 6 : QCM ============ -->
+<section class="tab-content" id="tab6">
+  <div class="card">
+    <h2>QCM — 16 questions</h2>
+    <p>Réponds à toutes les questions puis clique sur « Valider le QCM » pour obtenir ton score.</p>
+    <div class="method-box">
+      <strong>Conseil :</strong> relis bien chaque expression avant de répondre — vérifie les signes et l'ordre des opérations. Tu peux revenir dans les onglets précédents à tout moment pour revoir une notion avant de valider.
+    </div>
+  </div>
+  <form id="qcmForm"></form>
+  <div class="card" style="text-align:center;">
+    <button class="action-btn" onclick="checkQCM()">Valider le QCM</button>
+  </div>
+  <div id="qcmResult"></div>
+
+  <div class="card">
+    <h2>Et après ?</h2>
+    <p>Bravo pour avoir terminé ce chapitre ! En 4ème, tu retrouveras le calcul littéral pour :</p>
+    <ul>
+      <li>Développer des expressions avec <strong>deux parenthèses</strong>, comme <span class="expr">(a+b)(c+d)</span></li>
+      <li>Apprendre à <strong>factoriser</strong> une expression (l'opération inverse du développement)</li>
+      <li>Résoudre des <strong>équations</strong> à l'aide du calcul littéral</li>
+    </ul>
+    <p>Continue à t'entraîner régulièrement : le calcul littéral est une compétence qui se construit avec la pratique !</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Cours de mathématiques — 5ème — Chapitre « Calcul littéral »
+</footer>
+
+<script>
+/* ============ THEME ============ */
+function toggleTheme() {
+  const root = document.documentElement;
+  const current = root.getAttribute('data-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  let next;
+  if (!current) next = prefersDark ? 'light' : 'dark';
+  else if (current === 'dark') next = 'light';
+  else next = 'dark';
+  root.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch(e) {}
+}
+try {
+  const saved = localStorage.getItem('theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+} catch(e) {}
+
+/* ============ TABS ============ */
+const initialized = [false,false,false,false,false,false,false];
+function showTab(i) {
+  document.querySelectorAll('.tab-content').forEach((el, idx) => el.classList.toggle('active', idx === i));
+  document.querySelectorAll('#tabNav button').forEach((btn, idx) => btn.classList.toggle('active', idx === i));
+  initSection(i);
+}
+function initSection(i) {
+  if (initialized[i]) return;
+  initialized[i] = true;
+  if (i === 0) buildExprExos();
+  if (i === 1) { buildSubstExos(); drawMachine(); }
+  if (i === 2) { buildDistribExos(); drawDistrib(); }
+  if (i === 3) buildReduireExos();
+  if (i === 4) { buildProgExos(); testProgram(); }
+  if (i === 5) buildMainExos();
+  if (i === 6) buildQCM();
+}
+
+/* ============ HELPERS ============ */
+function cssVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+function normalize(str) {
+  return str.toString().toLowerCase().replace(/\s+/g,'').replace(/×/g,'*').replace(/²/g,'^2').replace(/³/g,'^3');
+}
+function makeExoCheck(inputId, feedbackId, accepted, successMsg) {
+  const val = normalize(document.getElementById(inputId).value);
+  const fb = document.getElementById(feedbackId);
+  const ok = accepted.map(normalize).includes(val);
+  fb.textContent = ok ? ('✔ ' + (successMsg || 'Correct !')) : '✘ Essaie encore.';
+  fb.className = 'feedback ' + (ok ? 'ok' : 'ko');
+}
+
+/* ============ TAB 0: EXPRESSIONS EXERCISES ============ */
+function buildExprExos() {
+  const data = [
+    { q: "Traduis « le double d'un nombre x » :", accepted: ["2x","x*2"] },
+    { q: "Traduis « un nombre x diminué de 6 » :", accepted: ["x-6"] },
+    { q: "Simplifie l'écriture de 4 × y :", accepted: ["4y"] },
+    { q: "Simplifie l'écriture de a × a :", accepted: ["a^2","a²"] },
+    { q: "Simplifie l'écriture de 1 × x :", accepted: ["x"] },
+    { q: "Simplifie l'écriture de x × 8 :", accepted: ["8x"] },
+    { q: "Traduis « la somme d'un nombre x et de son double » :", accepted: ["x+2x"] },
+    { q: "Simplifie l'écriture de b × b × b :", accepted: ["b^3","b³"] }
+  ];
+  const container = document.getElementById('exprExos');
+  data.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'exo';
+    div.innerHTML = `
+      <p><strong>${idx+1}.</strong> ${item.q}
+      <input type="text" id="expr_in_${idx}">
+      <button class="check-btn" onclick="makeExoCheck('expr_in_${idx}','expr_fb_${idx}', ${JSON.stringify(item.accepted)})">Vérifier</button></p>
+      <div class="feedback" id="expr_fb_${idx}"></div>`;
+    container.appendChild(div);
+  });
+}
+
+/* ============ TAB 1: SUBSTITUER ============ */
+function drawMachine() {
+  const canvas = document.getElementById('machineCanvas');
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  const bg = cssVar('--surface2'), border = cssVar('--border'), text = cssVar('--text'), accent = cssVar('--accent');
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle = bg; ctx.fillRect(0,0,w,h);
+
+  const x = parseFloat(document.getElementById('machX').value) || 0;
+  const exprIdx = document.getElementById('machExpr').value;
+  let label, steps, result;
+  if (exprIdx === '0') {
+    label = '2x + 3';
+    const s1 = 2*x;
+    result = s1 + 3;
+    steps = [`x = ${x}`, `2 × ${x} = ${s1}`, `${s1} + 3 = ${result}`];
+  } else if (exprIdx === '1') {
+    label = '5x − 4';
+    const s1 = 5*x;
+    result = s1 - 4;
+    steps = [`x = ${x}`, `5 × ${x} = ${s1}`, `${s1} − 4 = ${result}`];
+  } else if (exprIdx === '2') {
+    label = 'x² + 1';
+    const s1 = x*x;
+    result = s1 + 1;
+    steps = [`x = ${x}`, `${x}² = ${s1}`, `${s1} + 1 = ${result}`];
+  } else {
+    label = '3x − 2x + 5';
+    const s1 = 3*x, s2 = 2*x;
+    result = s1 - s2 + 5;
+    steps = [`x = ${x}`, `3×${x} − 2×${x} = ${s1} − ${s2} = ${s1-s2}`, `${s1-s2} + 5 = ${result}`];
+  }
+
+  ctx.fillStyle = accent;
+  ctx.font = '600 22px Cormorant Garamond, serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Expression : ' + label, w/2, 35);
+
+  const boxW = w/steps.length - 20;
+  steps.forEach((s, i) => {
+    const bx = 20 + i*(boxW+20);
+    const by = 70;
+    ctx.strokeStyle = border;
+    ctx.fillStyle = cssVar('--surface');
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(bx, by, boxW, 100, 10); else ctx.rect(bx, by, boxW, 100);
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle = text;
+    ctx.font = '600 16px Nunito Sans, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Étape ' + (i+1), bx + boxW/2, by + 30);
+    ctx.font = '16px Nunito Sans, sans-serif';
+    ctx.fillText(s, bx + boxW/2, by + 65);
+    if (i < steps.length - 1) {
+      ctx.strokeStyle = accent;
+      ctx.beginPath();
+      ctx.moveTo(bx + boxW + 4, by + 50);
+      ctx.lineTo(bx + boxW + 16, by + 50);
+      ctx.stroke();
+    }
+  });
+
+  ctx.fillStyle = accent;
+  ctx.font = '700 24px Cormorant Garamond, serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Résultat = ' + result, w/2, 210);
+}
+
+function buildSubstExos() {
+  const data = [
+    { q: "Calcule A = 4x + 1 pour x = 3.", accepted: ["13"] },
+    { q: "Calcule B = 7 − 2x pour x = 5.", accepted: ["-3"] },
+    { q: "Calcule C = 3x pour x = −4.", accepted: ["-12"] },
+    { q: "Calcule D = x² pour x = 5.", accepted: ["25"] },
+    { q: "Calcule E = 2x + 3x pour x = 2.", accepted: ["10"] },
+    { q: "Calcule F = x² − 3 pour x = 4.", accepted: ["13"] },
+    { q: "Calcule G = 10 − 3x pour x = −1.", accepted: ["13"] },
+    { q: "Calcule H = 2x² pour x = 3.", accepted: ["18"] }
+  ];
+  const container = document.getElementById('substExos');
+  data.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'exo';
+    div.innerHTML = `
+      <p><strong>${idx+1}.</strong> ${item.q}
+      <input type="text" id="subst_in_${idx}">
+      <button class="check-btn" onclick="makeExoCheck('subst_in_${idx}','subst_fb_${idx}', ${JSON.stringify(item.accepted)})">Vérifier</button></p>
+      <div class="feedback" id="subst_fb_${idx}"></div>`;
+    container.appendChild(div);
+  });
+}
+
+/* ============ TAB 2: DISTRIBUTIVITÉ ============ */
+function drawDistrib() {
+  const canvas = document.getElementById('distribCanvas');
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  const k = Math.max(1, parseInt(document.getElementById('distK').value) || 1);
+  const a = Math.max(1, parseInt(document.getElementById('distA').value) || 1);
+  const b = Math.max(1, parseInt(document.getElementById('distB').value) || 1);
+
+  const border = cssVar('--border'), text = cssVar('--text'), accent = cssVar('--accent'), surface = cssVar('--surface'), surface2 = cssVar('--surface2');
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle = surface2; ctx.fillRect(0,0,w,h);
+
+  const unit = Math.min(28, 380 / (a+b), 140 / k);
+  const originX = 150, originY = 60;
+  const kH = k * unit, aW = a * unit, bW = b * unit;
+
+  // rectangle a (k x a)
+  ctx.fillStyle = accent + '55';
+  ctx.strokeStyle = accent;
+  ctx.lineWidth = 2;
+  ctx.fillRect(originX, originY, aW, kH);
+  ctx.strokeRect(originX, originY, aW, kH);
+
+  // rectangle b (k x b)
+  ctx.fillStyle = cssVar('--heading') + '55';
+  ctx.strokeStyle = cssVar('--heading');
+  ctx.fillRect(originX + aW, originY, bW, kH);
+  ctx.strokeRect(originX + aW, originY, bW, kH);
+
+  ctx.fillStyle = text;
+  ctx.font = '600 14px Nunito Sans, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('k = ' + k, originX - 30, originY + kH/2);
+  ctx.fillText('a = ' + a, originX + aW/2, originY - 10);
+  ctx.fillText('b = ' + b, originX + aW + bW/2, originY - 10);
+  ctx.fillText('k×a = ' + (k*a), originX + aW/2, originY + kH/2);
+  ctx.fillText('k×b = ' + (k*b), originX + aW + bW/2, originY + kH/2);
+
+  ctx.font = '600 15px Nunito Sans, sans-serif';
+  ctx.fillText('Aire totale = k × (a + b) = k×a + k×b', w/2, originY + kH + 40);
+
+  document.getElementById('distribFormula').innerHTML =
+    `<span class="expr">${k}(${a} + ${b}) = ${k}×${a} + ${k}×${b} = ${k*a} + ${k*b} = ${k*a+k*b}</span>`;
+}
+
+function buildDistribExos() {
+  const data = [
+    { tag:'appliquer', q: "Développe A = 3(x + 2).", accepted: ["3x+6"] },
+    { tag:'appliquer', q: "Développe B = 5(x − 4).", accepted: ["5x-20"] },
+    { tag:'comprendre', q: "Développe C = 2(3x + 1).", accepted: ["6x+2"] },
+    { tag:'comprendre', q: "Développe D = −4(x + 3).", accepted: ["-4x-12"] },
+    { tag:'approfondir', q: "Développe E = −2(5x − 3).", accepted: ["-10x+6"] },
+    { tag:'approfondir', q: "Développe F = −(x + 7).", accepted: ["-x-7"] },
+    { tag:'approfondir', q: "Développe G = 6(2x − 5).", accepted: ["12x-30"] }
+  ];
+  const container = document.getElementById('distribExos');
+  data.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'exo';
+    div.innerHTML = `
+      <span class="tag ${item.tag}">${item.tag}</span>
+      <p><strong>${idx+1}.</strong> ${item.q}
+      <input type="text" id="distrib_in_${idx}" placeholder="ex: 3x+6">
+      <button class="check-btn" onclick="makeExoCheck('distrib_in_${idx}','distrib_fb_${idx}', ${JSON.stringify(item.accepted)})">Vérifier</button></p>
+      <div class="feedback" id="distrib_fb_${idx}"></div>`;
+    container.appendChild(div);
+  });
+}
+
+/* ============ TAB 3: RÉDUIRE ============ */
+function buildReduireExos() {
+  const data = [
+    { q: "Réduis A = 3x + 5x.", accepted: ["8x"] },
+    { q: "Réduis B = 7x − 2x + 4.", accepted: ["5x+4"] },
+    { q: "Réduis C = 2x + 3 + 5x − 1.", accepted: ["7x+2"] },
+    { q: "Réduis D = 4x² + 2x − x² + 3x.", accepted: ["3x^2+5x","3x²+5x"] },
+    { q: "Réduis E = 6 − 3x + 2 + x.", accepted: ["8-2x","-2x+8"] },
+    { q: "Réduis F = 2(x + 3) + 4x (développe puis réduis).", accepted: ["6x+6"] },
+    { q: "Réduis G = 3(2x − 1) − 5x (développe puis réduis).", accepted: ["x-3"] }
+  ];
+  const container = document.getElementById('reduireExos');
+  data.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'exo';
+    div.innerHTML = `
+      <p><strong>${idx+1}.</strong> ${item.q}
+      <input type="text" id="reduire_in_${idx}">
+      <button class="check-btn" onclick="makeExoCheck('reduire_in_${idx}','reduire_fb_${idx}', ${JSON.stringify(item.accepted)})">Vérifier</button></p>
+      <div class="feedback" id="reduire_fb_${idx}"></div>`;
+    container.appendChild(div);
+  });
+}
+
+/* ============ TAB 4: PROGRAMMES DE CALCUL ============ */
+function testProgram() {
+  const x = parseFloat(document.getElementById('progX').value) || 0;
+  const step1 = x + 3;
+  const step2 = step1 * 2;
+  document.getElementById('progSteps').innerHTML = `
+    <strong>Nombre choisi :</strong> ${x}<br>
+    <strong>Étape 1</strong> — Ajouter 3 : ${x} + 3 = ${step1}<br>
+    <strong>Étape 2</strong> — Multiplier par 2 : ${step1} × 2 = ${step2}
+  `;
+  const viaExpr = 2*x + 6;
+  document.getElementById('progCheck').textContent = viaExpr + (viaExpr === step2 ? ' ✔ (les deux méthodes concordent !)' : '');
+}
+
+function buildProgExos() {
+  const data = [
+    { q: "Programme : « Choisir un nombre x, le multiplier par 3, puis ajouter 2. » Écris l'expression.", accepted: ["3x+2"] },
+    { q: "Programme : « Choisir un nombre x, ajouter 5, puis multiplier par 3. » Écris l'expression (non développée).", accepted: ["3(x+5)","3*(x+5)"] },
+    { q: "Reprends la question précédente : développe l'expression 3(x + 5).", accepted: ["3x+15"] },
+    { q: "Avec le programme « ajouter 4 puis multiplier par 2 », quel est le résultat si le nombre de départ est 6 ?", accepted: ["20"] },
+    { q: "Programme A : « multiplier par 3 puis ajouter 12 ». Écris l'expression.", accepted: ["3x+12"] },
+    { q: "Programme B : « ajouter 4 puis multiplier par 3 ». Écris l'expression développée (les deux programmes A et B donnent-ils le même résultat ?).", accepted: ["3x+12"] }
+  ];
+  const container = document.getElementById('progExos');
+  data.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'exo';
+    div.innerHTML = `
+      <p><strong>${idx+1}.</strong> ${item.q}
+      <input type="text" id="prog_in_${idx}">
+      <button class="check-btn" onclick="makeExoCheck('prog_in_${idx}','prog_fb_${idx}', ${JSON.stringify(item.accepted)})">Vérifier</button></p>
+      <div class="feedback" id="prog_fb_${idx}"></div>`;
+    container.appendChild(div);
+  });
+}
+
+/* ============ TAB 5: 8 EXERCICES AVEC CORRECTION ============ */
+const mainExosData = [
+  { tag:'appliquer', title:"Exercice 1 — Écriture", stmt:"Simplifie l'écriture des expressions suivantes : a) 7 × x   b) x × x   c) 1 × y   d) y × 3",
+    correction:"<ol><li>a) 7 × x = 7x</li><li>b) x × x = x²</li><li>c) 1 × y = y</li><li>d) y × 3 = 3y (le nombre s'écrit devant la lettre)</li></ol>" },
+  { tag:'appliquer', title:"Exercice 2 — Traduire une phrase", stmt:"Traduis en expression littérale : « la somme du triple d'un nombre x et de 8 ».",
+    correction:"<ol><li>Le triple d'un nombre x se traduit par 3x.</li><li>La somme de cette quantité et de 8 se traduit par 3x + 8.</li></ol>Réponse : <span class=\"expr\">3x + 8</span>" },
+  { tag:'appliquer', title:"Exercice 3 — Substitution", stmt:"Calcule la valeur de A = 6x − 5 pour x = 3, puis pour x = −1.",
+    correction:"<ol><li>Pour x = 3 : A = 6×3 − 5 = 18 − 5 = 13.</li><li>Pour x = −1 : A = 6×(−1) − 5 = −6 − 5 = −11.</li></ol>" },
+  { tag:'comprendre', title:"Exercice 4 — Distributivité", stmt:"Développe puis réduis si possible : B = 4(2x + 3) et C = −5(x − 2).",
+    correction:"<ol><li>B = 4×2x + 4×3 = 8x + 12. Les termes 8x et 12 ne sont pas semblables, B est déjà réduite.</li><li>C = −5×x − (−5×2) = −5x + 10.</li></ol>" },
+  { tag:'comprendre', title:"Exercice 5 — Réduire", stmt:"Réduis l'expression D = 5x + 2 − 3x + 7 − x.",
+    correction:"<ol><li>Termes en x : 5x, −3x, −x</li><li>Termes constants : 2, 7</li><li>5x − 3x − x = x</li><li>2 + 7 = 9</li><li>Résultat : D = x + 9</li></ol>" },
+  { tag:'comprendre', title:"Exercice 6 — Programme de calcul", stmt:"On donne le programme : « Choisir un nombre, lui ajouter 2, multiplier le résultat par 4. » Écris l'expression correspondante, développe-la, puis calcule le résultat pour un nombre de départ égal à 3.",
+    correction:"<ol><li>Expression non développée : 4(x + 2)</li><li>Développement : 4x + 8</li><li>Pour x = 3 : 4×3 + 8 = 12 + 8 = 20</li><li>Vérification directe avec le programme : (3+2)×4 = 5×4 = 20 ✔</li></ol>" },
+  { tag:'approfondir', title:"Exercice 7 — Périmètre littéral", stmt:"Un rectangle a pour longueur (x + 3) et pour largeur 5. Exprime littéralement son périmètre P, développe l'expression, puis calcule P pour x = 4.",
+    correction:"<ol><li>Périmètre = 2 × (longueur + largeur) = 2 × [(x+3) + 5]</li><li>P = 2(x + 8)</li><li>Développement : P = 2x + 16</li><li>Pour x = 4 : P = 2×4 + 16 = 8 + 16 = 24</li><li>Vérification : longueur = 4+3 = 7, périmètre = 2×(7+5) = 2×12 = 24 ✔</li></ol>" },
+  { tag:'approfondir', title:"Exercice 8 — Type Brevet", stmt:"On considère le programme de calcul suivant : « Choisir un nombre, ajouter 3, multiplier le résultat par 2, puis soustraire le double du nombre de départ. » Teste ce programme avec 5, puis avec 10. Que remarques-tu ? Prouve-le en utilisant le calcul littéral (avec x le nombre de départ).",
+    correction:"<ol><li>Avec 5 : (5+3)×2 − 2×5 = 16 − 10 = 6</li><li>Avec 10 : (10+3)×2 − 2×10 = 26 − 20 = 6</li><li>Conjecture : le résultat semble toujours égal à 6, quel que soit le nombre choisi.</li><li>Traduction en expression : 2(x+3) − 2x</li><li>Développement : 2x + 6 − 2x</li><li>Réduction : 2x − 2x + 6 = 6</li><li>Conclusion : le nombre x s'élimine, le résultat est bien toujours 6. La conjecture est prouvée.</li></ol>" }
+];
+function buildMainExos() {
+  const container = document.getElementById('mainExos');
+  mainExosData.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerHTML = `
+      <span class="tag ${item.tag}">${item.tag}</span>
+      <h3>${item.title}</h3>
+      <p>${item.stmt}</p>
+      <details>
+        <summary>Voir la correction</summary>
+        <p>${item.correction}</p>
+      </details>`;
+    container.appendChild(div);
+  });
+}
+
+/* ============ TAB 6: QCM ============ */
+const qcmData = [
+  { q: "Comment s'écrit simplement 6 × a ?", options: ["6a","a6","6+a"], correct: 0 },
+  { q: "Que vaut 1 × x ?", options: ["1x","x","0"], correct: 1 },
+  { q: "Comment s'écrit a × a ?", options: ["2a","a²","aa"], correct: 1 },
+  { q: "Quelle expression traduit « le double d'un nombre x » ?", options: ["x + 2","2x","x²"], correct: 1 },
+  { q: "Pour x = 4, combien vaut 3x + 1 ?", options: ["12","13","34"], correct: 1 },
+  { q: "Pour x = −2, combien vaut 5x ?", options: ["10","−10","−7"], correct: 1 },
+  { q: "Pour x = 3, combien vaut x² ?", options: ["6","9","3"], correct: 1 },
+  { q: "Développe 4(x + 2).", options: ["4x + 2","4x + 8","x + 8"], correct: 1 },
+  { q: "Développe 3(x − 5).", options: ["3x − 15","3x − 5","3x + 15"], correct: 0 },
+  { q: "Développe −2(x + 3).", options: ["−2x + 3","−2x − 6","2x − 6"], correct: 1 },
+  { q: "Parmi ces termes, lesquels sont semblables à 5x ?", options: ["5x²","−3x","5"], correct: 1 },
+  { q: "Réduis 4x + 3x.", options: ["7x","7x²","12x"], correct: 0 },
+  { q: "Réduis 6x − 2x + 5.", options: ["4x + 5","4x","9x"], correct: 0 },
+  { q: "Réduis 3x + 4 − x + 1.", options: ["2x + 5","4x + 5","2x + 3"], correct: 0 },
+  { q: "Un programme dit « ajouter 5 puis multiplier par 2 ». Quelle est l'expression pour un nombre x ?", options: ["2x + 5","2(x + 5)","5(x + 2)"], correct: 1 },
+  { q: "En développant 2(x + 5), on obtient :", options: ["2x + 5","2x + 10","x + 10"], correct: 1 }
+];
+function buildQCM() {
+  const form = document.getElementById('qcmForm');
+  qcmData.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'card qcm-q';
+    let optsHtml = item.options.map((opt, oi) => `
+      <label><input type="radio" name="q${idx}" value="${oi}"> ${opt}</label>
+    `).join('');
+    div.innerHTML = `<h3>${idx+1}. ${item.q}</h3><div class="qcm-options">${optsHtml}</div>`;
+    form.appendChild(div);
+  });
+}
+function checkQCM() {
+  let score = 0;
+  qcmData.forEach((item, idx) => {
+    const selected = document.querySelector(`input[name="q${idx}"]:checked`);
+    const labels = document.querySelectorAll(`input[name="q${idx}"]`);
+    labels.forEach(lbl => lbl.closest('label').style.borderColor = 'var(--border)');
+    if (selected) {
+      const val = parseInt(selected.value);
+      if (val === item.correct) {
+        score++;
+        selected.closest('label').style.borderColor = 'var(--good)';
+      } else {
+        selected.closest('label').style.borderColor = 'var(--bad)';
+      }
+    }
+  });
+  const result = document.getElementById('qcmResult');
+  result.style.display = 'block';
+  let msg;
+  if (score === qcmData.length) msg = "🎉 Score parfait !";
+  else if (score >= qcmData.length * 0.7) msg = "👍 Très bon travail !";
+  else if (score >= qcmData.length * 0.5) msg = "🙂 Pas mal, continue à t'entraîner.";
+  else msg = "💪 Revois le cours et réessaie.";
+  result.innerHTML = `Score : ${score} / ${qcmData.length}<br>${msg}`;
+  result.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+/* init first tab */
+initSection(0);
+</script>
+</body>
+</html>

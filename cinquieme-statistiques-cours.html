@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistiques — Cours 5ème</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f2ed; --surface:#ffffff; --surface2:#ebe6de; --text:#2c2418;
+  --heading:#8b4513; --muted:#6b5a48; --border:#d4c8b8; --accent:#a0522d; --accent-light:#faf5ef;
+  --good:#3d7a4f; --bad:#b33a3a;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161210; --surface:#221c18; --surface2:#302820; --text:#ddd0c0;
+    --heading:#e0a868; --muted:#9a8878; --border:#403428; --accent:#d08840; --accent-light:#1e1610;
+    --good:#6fbf82; --bad:#e08585;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161210; --surface:#221c18; --surface2:#302820; --text:#ddd0c0;
+  --heading:#e0a868; --muted:#9a8878; --border:#403428; --accent:#d08840; --accent-light:#1e1610;
+  --good:#6fbf82; --bad:#e08585;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:'Nunito Sans', sans-serif; line-height:1.6;
+  transition:background .2s, color .2s;
+}
+h1,h2,h3,h4{font-family:'Cormorant Garamond', serif; color:var(--heading); font-weight:700; margin-top:0;}
+h1{font-size:2.1em;} h2{font-size:1.6em; border-bottom:2px solid var(--border); padding-bottom:.3em;}
+h3{font-size:1.25em; color:var(--accent);}
+header{
+  background:var(--surface); border-bottom:1px solid var(--border);
+  padding:16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  position:sticky; top:0; z-index:10;
+}
+.badge{
+  background:var(--accent); color:var(--accent-light); font-weight:700;
+  padding:4px 12px; border-radius:20px; font-size:.85em; letter-spacing:.03em;
+}
+.header-title{font-family:'Cormorant Garamond',serif; font-weight:700; font-size:1.4em; color:var(--heading); flex:1;}
+.theme-btn{
+  background:var(--surface2); border:1px solid var(--border); color:var(--text);
+  padding:8px 14px; border-radius:8px; cursor:pointer; font-family:inherit; font-weight:600;
+}
+.theme-btn:hover{background:var(--accent); color:var(--accent-light);}
+nav.tabs{
+  display:flex; gap:4px; overflow-x:auto; background:var(--surface);
+  border-bottom:2px solid var(--border); padding:0 16px; position:sticky; top:65px; z-index:9;
+}
+nav.tabs button{
+  background:none; border:none; color:var(--muted); padding:12px 16px;
+  font-family:inherit; font-weight:600; font-size:.95em; cursor:pointer;
+  border-bottom:3px solid transparent; white-space:nowrap; transition:.15s;
+}
+nav.tabs button:hover{color:var(--accent);}
+nav.tabs button.active{color:var(--accent); border-bottom-color:var(--accent);}
+main{max-width:900px; margin:0 auto; padding:24px 16px 60px;}
+.section{display:none;}
+.section.active{display:block; animation:fade .25s ease;}
+@keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+.card{
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:20px; margin:18px 0;
+}
+.definition{
+  background:var(--accent-light); border-left:4px solid var(--accent);
+  padding:14px 18px; border-radius:0 8px 8px 0; margin:16px 0;
+}
+.definition strong{color:var(--heading);}
+.example{
+  background:var(--surface2); border-radius:8px; padding:14px 18px; margin:14px 0;
+  border:1px dashed var(--border);
+}
+.example::before{content:"Exemple"; display:block; font-weight:700; color:var(--accent); margin-bottom:6px; font-family:'Cormorant Garamond',serif; font-size:1.1em;}
+.methode{
+  background:var(--surface); border:2px solid var(--accent); border-radius:8px; padding:14px 18px; margin:16px 0;
+}
+.methode::before{content:"Méthode"; display:block; font-weight:700; color:var(--accent); margin-bottom:6px; font-family:'Cormorant Garamond',serif; font-size:1.1em;}
+table{border-collapse:collapse; width:100%; margin:14px 0;}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:center;}
+th{background:var(--surface2); color:var(--heading); font-family:'Cormorant Garamond',serif; font-size:1.05em;}
+.frac{display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 3px; font-size:.95em;}
+.frac .num{border-bottom:1.5px solid var(--text); padding:0 4px;}
+.frac .den{padding:0 4px;}
+.exo{
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  padding:16px 18px; margin:20px 0;
+}
+.exo h4{margin-bottom:8px;}
+details{
+  margin-top:10px; background:var(--accent-light); border-radius:8px; padding:8px 12px;
+}
+summary{
+  cursor:pointer; font-weight:700; color:var(--accent); padding:6px 0; font-family:'Cormorant Garamond',serif; font-size:1.1em;
+}
+details[open] summary{margin-bottom:8px;}
+.correction-body{padding:6px 4px 10px;}
+input[type="text"], input[type="number"]{
+  background:var(--bg); border:1px solid var(--border); color:var(--text);
+  padding:6px 10px; border-radius:6px; font-family:inherit; font-size:1em; width:90px;
+}
+button.check-btn{
+  background:var(--accent); color:var(--accent-light); border:none; padding:8px 16px;
+  border-radius:6px; cursor:pointer; font-family:inherit; font-weight:700; margin-left:8px;
+}
+button.check-btn:hover{opacity:.85;}
+.feedback{margin-top:8px; font-weight:700;}
+.feedback.ok{color:var(--good);}
+.feedback.no{color:var(--bad);}
+canvas{background:var(--surface); border:1px solid var(--border); border-radius:8px; max-width:100%; display:block; margin:12px 0;}
+.qcm-q{background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 18px; margin:16px 0;}
+.qcm-opts label{display:block; padding:6px 10px; margin:4px 0; border-radius:6px; cursor:pointer; border:1px solid transparent;}
+.qcm-opts label:hover{background:var(--surface2);}
+.qcm-opts input{margin-right:8px;}
+.qcm-result{font-weight:700; margin-top:6px;}
+#qcm-score{
+  text-align:center; padding:20px; font-size:1.3em; font-family:'Cormorant Garamond',serif;
+  color:var(--heading); background:var(--surface); border-radius:12px; border:2px solid var(--accent); margin-top:20px; display:none;
+}
+.diagram-controls{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:10px 0;}
+.diagram-controls label{font-weight:600; font-size:.9em;}
+.color-tag{display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:6px; vertical-align:middle;}
+ul{padding-left:22px;}
+li{margin:4px 0;}
+.formula{
+  text-align:center; font-size:1.2em; background:var(--surface2); padding:14px; border-radius:8px; margin:14px 0; font-family:'Cormorant Garamond',serif;
+}
+@media (max-width:600px){
+  h1{font-size:1.6em;} h2{font-size:1.3em;}
+  .header-title{font-size:1.15em;}
+  nav.tabs{top:60px;}
+  main{padding:16px 16px 50px;}
+  table{font-size:.85em;}
+}
+footer{text-align:center; color:var(--muted); font-size:.85em; padding:20px; }
+</style>
+</head>
+<body>
+<header>
+  <span class="badge">5ème</span>
+  <span class="header-title">Statistiques</span>
+  <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">🌓 Thème</button>
+</header>
+
+<nav class="tabs" id="tabNav">
+  <button onclick="showTab(0)" class="active">1. Vocabulaire</button>
+  <button onclick="showTab(1)">2. Fréquences</button>
+  <button onclick="showTab(2)">3. Moyenne</button>
+  <button onclick="showTab(3)">4. Médiane</button>
+  <button onclick="showTab(4)">5. Diagrammes</button>
+  <button onclick="showTab(5)">6. Exercices</button>
+  <button onclick="showTab(6)">7. QCM</button>
+</nav>
+
+<main>
+
+<!-- SECTION 0 : VOCABULAIRE -->
+<section class="section active" id="section0">
+  <h1>Vocabulaire des statistiques</h1>
+
+  <div class="definition">
+    <strong>Une statistique</strong> est une étude portant sur un ensemble d'individus, appelé la <strong>population</strong>, à propos d'une caractéristique appelée le <strong>caractère</strong>.
+  </div>
+
+  <div class="card">
+    <h3>Les mots essentiels</h3>
+    <ul>
+      <li><strong>Population</strong> : l'ensemble des individus étudiés (élèves d'une classe, habitants d'une ville...).</li>
+      <li><strong>Individu</strong> : chaque élément de la population (un élève, un habitant...).</li>
+      <li><strong>Caractère</strong> : la propriété étudiée (la couleur des yeux, la taille, la note obtenue...).</li>
+      <li><strong>Caractère qualitatif</strong> : le caractère s'exprime avec des mots (couleur, sport pratiqué...).</li>
+      <li><strong>Caractère quantitatif</strong> : le caractère s'exprime avec des nombres (taille, note, âge...).</li>
+      <li><strong>Valeur</strong> ou <strong>modalité</strong> : chaque valeur possible du caractère.</li>
+      <li><strong>Effectif</strong> : le nombre d'individus correspondant à une valeur donnée.</li>
+      <li><strong>Effectif total</strong> : la somme de tous les effectifs (= taille de la population).</li>
+    </ul>
+  </div>
+
+  <div class="example">
+    On interroge les 28 élèves d'une classe de 5ème sur leur sport préféré. Voici les résultats :
+    <table>
+      <tr><th>Sport</th><th>Football</th><th>Natation</th><th>Basket</th><th>Danse</th></tr>
+      <tr><th>Effectif</th><td>10</td><td>6</td><td>7</td><td>5</td></tr>
+    </table>
+    <p>Ici : la <strong>population</strong> est les 28 élèves ; le <strong>caractère</strong> étudié est « le sport préféré » (qualitatif) ; les <strong>valeurs</strong> sont Football, Natation, Basket, Danse ; l'<strong>effectif total</strong> est 10+6+7+5 = 28.</p>
+  </div>
+
+  <div class="methode">
+    <p><strong>Vérifier un tableau d'effectifs</strong> : la somme des effectifs de chaque valeur doit toujours être égale à l'effectif total de la population. C'est une bonne façon de vérifier qu'on n'a rien oublié !</p>
+  </div>
+
+  <div class="card">
+    <h3>Exemple de caractère quantitatif</h3>
+    <p>On relève les notes sur 20 obtenues par 10 élèves à un contrôle :</p>
+    <table>
+      <tr><th>Note</th><td>8</td><td>10</td><td>10</td><td>12</td><td>12</td><td>12</td><td>14</td><td>15</td><td>16</td><td>18</td></tr>
+    </table>
+    <p>On peut regrouper ces données dans un tableau d'effectifs :</p>
+    <table>
+      <tr><th>Note</th><th>8</th><th>10</th><th>12</th><th>14</th><th>15</th><th>16</th><th>18</th></tr>
+      <tr><th>Effectif</th><td>1</td><td>2</td><td>3</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+    </table>
+    <p>Effectif total : 1+2+3+1+1+1+1 = 10, ce qui correspond bien aux 10 élèves.</p>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice de lecture</h4>
+    <p>D'après le tableau des sports préférés ci-dessus, combien d'élèves préfèrent le football ou la natation ?</p>
+    <input type="number" id="voc-ex1"> élèves
+    <button class="check-btn" onclick="checkVoc1()">Vérifier</button>
+    <div id="voc-ex1-fb" class="feedback"></div>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice</h4>
+    <p>Une enquête sur la couleur des yeux de 25 personnes donne : Bleu (8), Marron (12), Vert (5). Quel est l'effectif total ? Ce nombre correspond-il bien à la population étudiée ?</p>
+    <input type="number" id="voc-ex2">
+    <button class="check-btn" onclick="checkVoc2()">Vérifier</button>
+    <div id="voc-ex2-fb" class="feedback"></div>
+  </div>
+
+  <div class="card">
+    <h3>Distinguer les deux types de caractères</h3>
+    <p>Il est important de savoir reconnaître si un caractère est qualitatif ou quantitatif, car cela conditionne la façon dont on va traiter les données.</p>
+    <table>
+      <tr><th>Caractère étudié</th><th>Type</th></tr>
+      <tr><td>Moyen de transport pour aller au collège</td><td>Qualitatif</td></tr>
+      <tr><td>Nombre de frères et sœurs</td><td>Quantitatif</td></tr>
+      <tr><td>Groupe sanguin</td><td>Qualitatif</td></tr>
+      <tr><td>Taille en centimètres</td><td>Quantitatif</td></tr>
+      <tr><td>Mois de naissance</td><td>Qualitatif</td></tr>
+      <tr><td>Note obtenue à un devoir</td><td>Quantitatif</td></tr>
+    </table>
+    <p>Un caractère quantitatif peut être <strong>discret</strong> (il ne prend que certaines valeurs isolées, comme le nombre d'enfants dans une famille) ou <strong>continu</strong> (il peut prendre n'importe quelle valeur dans un intervalle, comme une taille ou une durée).</p>
+  </div>
+
+  <div class="methode">
+    <p><strong>Construire un tableau d'effectifs à partir d'une liste de données :</strong></p>
+    <p>1) Lister toutes les valeurs différentes qui apparaissent, sans les répéter, dans l'ordre croissant si elles sont numériques.<br>
+    2) Pour chaque valeur, compter combien de fois elle apparaît dans la liste : c'est son effectif. On peut s'aider d'un bâtonnage (barres verticales groupées par 5).<br>
+    3) Vérifier que la somme des effectifs correspond bien au nombre total de données de départ.</p>
+  </div>
+
+  <div class="example">
+    <p>Un professeur relève le nombre de bonnes réponses (sur 10) obtenues par 15 élèves à un quiz :</p>
+    <p>7, 5, 8, 7, 9, 6, 7, 8, 5, 10, 7, 6, 8, 9, 7</p>
+    <p>Après bâtonnage, on obtient le tableau :</p>
+    <table>
+      <tr><th>Bonnes réponses</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr>
+      <tr><th>Effectif</th><td>2</td><td>2</td><td>5</td><td>3</td><td>2</td><td>1</td></tr>
+    </table>
+    <p>Vérification : 2+2+5+3+2+1 = 15, ce qui correspond bien aux 15 élèves interrogés.</p>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice</h4>
+    <p>On relève les couleurs de 12 voitures sur un parking : Bleu, Rouge, Rouge, Blanc, Noir, Bleu, Blanc, Blanc, Noir, Rouge, Bleu, Blanc. Combien de voitures sont blanches ?</p>
+    <input type="number" id="voc-ex3">
+    <button class="check-btn" onclick="checkVoc3()">Vérifier</button>
+    <div id="voc-ex3-fb" class="feedback"></div>
+  </div>
+</section>
+
+<!-- SECTION 1 : FREQUENCES -->
+<section class="section" id="section1">
+  <h1>Les fréquences</h1>
+
+  <div class="definition">
+    <strong>La fréquence</strong> d'une valeur est le quotient de son effectif par l'effectif total. Elle indique la proportion d'individus concernés par cette valeur.
+  </div>
+
+  <div class="formula">
+    fréquence = <span class="frac"><span class="num">effectif</span><span class="den">effectif total</span></span>
+  </div>
+
+  <div class="card">
+    <p>La fréquence peut s'exprimer :</p>
+    <ul>
+      <li>sous forme de <strong>fraction</strong> (ex : <span class="frac"><span class="num">7</span><span class="den">28</span></span>)</li>
+      <li>sous forme de <strong>nombre décimal</strong> (ex : 0,25)</li>
+      <li>sous forme de <strong>pourcentage</strong> (ex : 25 %), en multipliant le nombre décimal par 100</li>
+    </ul>
+    <p>La somme de toutes les fréquences d'un tableau est toujours égale à <strong>1</strong> (ou 100 %).</p>
+  </div>
+
+  <div class="example">
+    <p>Reprenons le tableau des sports préférés (28 élèves) :</p>
+    <table>
+      <tr><th>Sport</th><th>Football</th><th>Natation</th><th>Basket</th><th>Danse</th></tr>
+      <tr><th>Effectif</th><td>10</td><td>6</td><td>7</td><td>5</td></tr>
+      <tr><th>Fréquence</th><td>10/28 ≈ 0,357</td><td>6/28 ≈ 0,214</td><td>7/28 = 0,25</td><td>5/28 ≈ 0,179</td></tr>
+      <tr><th>Pourcentage</th><td>≈ 35,7 %</td><td>≈ 21,4 %</td><td>25 %</td><td>≈ 17,9 %</td></tr>
+    </table>
+    <p>Vérification : 0,357 + 0,214 + 0,25 + 0,179 ≈ 1 ✓</p>
+  </div>
+
+  <div class="methode">
+    <p><strong>Calculer une fréquence en pourcentage :</strong></p>
+    <p>1) On calcule la fréquence décimale : effectif ÷ effectif total.<br>
+    2) On multiplie par 100 pour obtenir un pourcentage.<br>
+    Exemple : 7 ÷ 28 = 0,25 puis 0,25 × 100 = 25 %.</p>
+  </div>
+
+  <h2>Fréquences cumulées</h2>
+  <div class="definition">
+    <strong>La fréquence cumulée croissante</strong> d'une valeur est la somme de sa fréquence et de toutes les fréquences des valeurs qui lui sont inférieures. Elle indique la proportion d'individus dont le caractère est inférieur ou égal à cette valeur.
+  </div>
+
+  <div class="example">
+    <p>Notes obtenues par 20 élèves à un devoir :</p>
+    <table>
+      <tr><th>Note</th><td>5</td><td>8</td><td>10</td><td>12</td><td>15</td></tr>
+      <tr><th>Effectif</th><td>2</td><td>3</td><td>6</td><td>5</td><td>4</td></tr>
+      <tr><th>Fréquence</th><td>0,10</td><td>0,15</td><td>0,30</td><td>0,25</td><td>0,20</td></tr>
+      <tr><th>Fréq. cumulée croissante</th><td>0,10</td><td>0,25</td><td>0,55</td><td>0,80</td><td>1,00</td></tr>
+    </table>
+    <p>On lit par exemple que 55 % des élèves ont une note inférieure ou égale à 10.</p>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice interactif</h4>
+    <p>Dans une classe de 30 élèves, 12 sont des filles. Quelle est la fréquence des filles, exprimée en pourcentage (arrondie à l'unité) ?</p>
+    <input type="text" id="freq-ex1" placeholder="ex: 40">%
+    <button class="check-btn" onclick="checkFreq1()">Vérifier</button>
+    <div id="freq-ex1-fb" class="feedback"></div>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice interactif</h4>
+    <p>Un tableau donne les effectifs suivants pour la couleur préférée de 40 personnes : Bleu 18, Rouge 10, Vert 12. Calcule la fréquence cumulée croissante jusqu'à « Rouge » inclus (dans l'ordre Bleu, Rouge, Vert), en pourcentage.</p>
+    <input type="text" id="freq-ex2" placeholder="ex: 70">%
+    <button class="check-btn" onclick="checkFreq2()">Vérifier</button>
+    <div id="freq-ex2-fb" class="feedback"></div>
+  </div>
+
+  <div class="card">
+    <h3>Pourquoi utiliser une fréquence plutôt qu'un effectif ?</h3>
+    <p>L'effectif dépend de la taille de la population étudiée : il est difficile de comparer un effectif de 10 dans une classe de 25 élèves avec un effectif de 10 dans une classe de 35 élèves. La fréquence, elle, permet de <strong>comparer des populations de tailles différentes</strong>, car elle exprime toujours une proportion, indépendamment de l'effectif total.</p>
+  </div>
+
+  <div class="example">
+    <p>Deux classes ont répondu à un sondage sur la pratique d'un instrument de musique :</p>
+    <table>
+      <tr><th></th><th>Effectif « Oui »</th><th>Effectif total</th><th>Fréquence</th></tr>
+      <tr><td>Classe A</td><td>9</td><td>24</td><td>9/24 = 0,375 = 37,5 %</td></tr>
+      <tr><td>Classe B</td><td>12</td><td>30</td><td>12/30 = 0,40 = 40 %</td></tr>
+    </table>
+    <p>Bien que la classe B ait un effectif plus élevé (12 contre 9), c'est en réalité dans la classe B que la <strong>proportion</strong> d'élèves musiciens est la plus grande : les fréquences permettent cette comparaison, contrairement aux effectifs bruts.</p>
+  </div>
+
+  <div class="methode">
+    <p><strong>Retrouver un effectif à partir d'une fréquence :</strong></p>
+    <p>Si l'on connaît la fréquence f et l'effectif total N, alors l'effectif correspondant est : effectif = f × N.</p>
+    <p>Exemple : dans une classe de 32 élèves, la fréquence des filles est 0,5625. Effectif de filles = 0,5625 × 32 = 18 filles.</p>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice</h4>
+    <p>Dans un club sportif de 80 adhérents, la fréquence des adultes est de 0,65. Combien y a-t-il d'adultes dans ce club ?</p>
+    <input type="number" id="freq-ex3">
+    <button class="check-btn" onclick="checkFreq3()">Vérifier</button>
+    <div id="freq-ex3-fb" class="feedback"></div>
+  </div>
+</section>
+
+<!-- SECTION 2 : MOYENNE -->
+<section class="section" id="section2">
+  <h1>La moyenne</h1>
+
+  <div class="definition">
+    <strong>La moyenne</strong> d'une série statistique, notée <span style="text-decoration:overline">x</span>, est la somme de toutes les valeurs de la série divisée par l'effectif total.
+  </div>
+
+  <div class="formula">
+    <span style="text-decoration:overline">x</span> = <span class="frac"><span class="num">somme des valeurs</span><span class="den">nombre de valeurs</span></span>
+  </div>
+
+  <h3>Moyenne simple</h3>
+  <div class="example">
+    <p>Un élève obtient les notes suivantes : 12, 15, 8, 14, 16.</p>
+    <p><span style="text-decoration:overline">x</span> = (12 + 15 + 8 + 14 + 16) ÷ 5 = 65 ÷ 5 = <strong>13</strong></p>
+  </div>
+
+  <h3>Moyenne pondérée</h3>
+  <div class="definition">
+    Quand certaines valeurs sont associées à un <strong>effectif</strong> (ou un <strong>coefficient</strong>), on parle de <strong>moyenne pondérée</strong>. Chaque valeur compte alors « plusieurs fois » selon son poids.
+  </div>
+  <div class="formula">
+    <span style="text-decoration:overline">x</span> = <span class="frac"><span class="num">n₁×v₁ + n₂×v₂ + ... + nₖ×vₖ</span><span class="den">n₁ + n₂ + ... + nₖ</span></span>
+  </div>
+
+  <div class="methode">
+    <p><strong>Calculer une moyenne pondérée, étape par étape :</strong></p>
+    <p>1) Multiplier chaque valeur par son effectif (ou coefficient).<br>
+    2) Additionner tous ces produits : c'est la somme pondérée.<br>
+    3) Diviser cette somme par l'effectif total (ou la somme des coefficients).</p>
+  </div>
+
+  <div class="example">
+    <p>Notes obtenues par une classe à un contrôle :</p>
+    <table>
+      <tr><th>Note</th><th>8</th><th>10</th><th>12</th><th>16</th></tr>
+      <tr><th>Effectif</th><td>3</td><td>5</td><td>10</td><td>2</td></tr>
+    </table>
+    <p>Effectif total : 3+5+10+2 = 20</p>
+    <p>Somme pondérée : 8×3 + 10×5 + 12×10 + 16×2 = 24 + 50 + 120 + 32 = 226</p>
+    <p><span style="text-decoration:overline">x</span> = 226 ÷ 20 = <strong>11,3</strong></p>
+  </div>
+
+  <div class="example">
+    <p>Moyenne pondérée avec coefficients (moyenne trimestrielle) : Un élève a 14 en devoir (coefficient 1), 12 au contrôle (coefficient 2) et 16 à l'oral (coefficient 1).</p>
+    <p><span style="text-decoration:overline">x</span> = (14×1 + 12×2 + 16×1) ÷ (1+2+1) = (14+24+16) ÷ 4 = 54 ÷ 4 = <strong>13,5</strong></p>
+  </div>
+
+  <div class="card">
+    <h3>Propriétés de la moyenne</h3>
+    <ul>
+      <li>La moyenne n'est pas toujours une valeur de la série (elle peut être « entre deux notes »).</li>
+      <li>La moyenne est sensible aux valeurs extrêmes (une très mauvaise ou très bonne note la modifie beaucoup).</li>
+      <li>Si on ajoute le même nombre à toutes les valeurs, la moyenne augmente de ce nombre.</li>
+      <li>Si on multiplie toutes les valeurs par un même nombre, la moyenne est multipliée par ce nombre.</li>
+    </ul>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice pas à pas — Moyenne simple</h4>
+    <p>Calcule la moyenne des valeurs : 6, 9, 12, 13.</p>
+    <p>Étape 1 — Somme des valeurs : <input type="number" id="moy-ex1-s"></p>
+    <p>Étape 2 — Moyenne (somme ÷ 4) : <input type="text" id="moy-ex1-m"></p>
+    <button class="check-btn" onclick="checkMoy1()">Vérifier</button>
+    <div id="moy-ex1-fb" class="feedback"></div>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice pas à pas — Moyenne pondérée</h4>
+    <p>Un tableau donne : Valeur 5 (effectif 2), Valeur 10 (effectif 3), Valeur 15 (effectif 5).</p>
+    <p>Étape 1 — Effectif total : <input type="number" id="moy-ex2-n"></p>
+    <p>Étape 2 — Somme pondérée : <input type="number" id="moy-ex2-s"></p>
+    <p>Étape 3 — Moyenne : <input type="text" id="moy-ex2-m"></p>
+    <button class="check-btn" onclick="checkMoy2()">Vérifier</button>
+    <div id="moy-ex2-fb" class="feedback"></div>
+  </div>
+
+  <div class="card">
+    <h3>Moyenne et fréquences</h3>
+    <p>On peut aussi calculer la moyenne à partir des fréquences plutôt que des effectifs, en multipliant chaque valeur par sa fréquence, puis en additionnant tous ces produits. Cette méthode est utile lorsque les effectifs ne sont pas connus, mais les proportions oui.</p>
+  </div>
+
+  <div class="formula">
+    <span style="text-decoration:overline">x</span> = f₁×v₁ + f₂×v₂ + ... + fₖ×vₖ (avec f₁+f₂+...+fₖ = 1)
+  </div>
+
+  <div class="example">
+    <p>Répartition des notes d'une classe en fréquences : Note 8 (fréquence 0,2), Note 12 (fréquence 0,5), Note 16 (fréquence 0,3).</p>
+    <p><span style="text-decoration:overline">x</span> = 8×0,2 + 12×0,5 + 16×0,3 = 1,6 + 6 + 4,8 = <strong>12,4</strong></p>
+  </div>
+
+  <div class="card">
+    <h3>Piège classique à éviter</h3>
+    <p>Pour calculer la moyenne de plusieurs groupes réunis (par exemple deux classes), il ne faut <strong>pas</strong> faire simplement la moyenne des deux moyennes si les groupes n'ont pas le même effectif : il faut repondérer chaque moyenne par l'effectif de son groupe.</p>
+  </div>
+
+  <div class="example">
+    <p>La classe A (24 élèves) a une moyenne de 12 ; la classe B (16 élèves) a une moyenne de 15. Quelle est la moyenne générale des deux classes réunies ?</p>
+    <p>On ne fait pas (12+15)÷2 = 13,5 car les effectifs sont différents !</p>
+    <p>Moyenne générale = (24×12 + 16×15) ÷ (24+16) = (288+240) ÷ 40 = 528 ÷ 40 = <strong>13,2</strong></p>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice</h4>
+    <p>Un groupe A de 10 personnes a une moyenne d'âge de 20 ans ; un groupe B de 5 personnes a une moyenne d'âge de 32 ans. Quelle est la moyenne d'âge de l'ensemble des 15 personnes ?</p>
+    <input type="text" id="moy-ex3">
+    <button class="check-btn" onclick="checkMoy3()">Vérifier</button>
+    <div id="moy-ex3-fb" class="feedback"></div>
+  </div>
+</section>
+
+<!-- SECTION 3 : MEDIANE -->
+<section class="section" id="section3">
+  <h1>La médiane</h1>
+
+  <div class="definition">
+    <strong>La médiane</strong> d'une série statistique ordonnée est une valeur qui partage la série en deux groupes de même effectif : autant de valeurs inférieures ou égales à la médiane que de valeurs supérieures ou égales.
+  </div>
+
+  <div class="methode">
+    <p><strong>Méthode pour trouver la médiane :</strong></p>
+    <p>1) Ranger toutes les valeurs de la série dans l'<strong>ordre croissant</strong>.<br>
+    2) Compter le nombre de valeurs n.<br>
+    3) Si n est <strong>impair</strong>, la médiane est la valeur du milieu (à la position (n+1)/2).<br>
+    4) Si n est <strong>pair</strong>, la médiane est la <strong>moyenne des deux valeurs centrales</strong> (positions n/2 et n/2+1).</p>
+  </div>
+
+  <div class="example">
+    <p><strong>Cas d'un effectif impair.</strong> Série ordonnée : 4, 7, 9, 12, 15 (5 valeurs).</p>
+    <p>La valeur du milieu (3ème position) est <strong>9</strong>. C'est la médiane : Me = 9.</p>
+    <p>Il y a bien 2 valeurs avant (4, 7) et 2 valeurs après (12, 15).</p>
+  </div>
+
+  <div class="example">
+    <p><strong>Cas d'un effectif pair.</strong> Série ordonnée : 3, 6, 8, 10, 13, 14 (6 valeurs).</p>
+    <p>Les deux valeurs centrales (3ème et 4ème position) sont 8 et 10.</p>
+    <p>Me = (8 + 10) ÷ 2 = <strong>9</strong>.</p>
+  </div>
+
+  <div class="card">
+    <h3>Attention !</h3>
+    <ul>
+      <li>Il faut absolument ranger la série dans l'ordre croissant <strong>avant</strong> de chercher la médiane.</li>
+      <li>La médiane n'est pas forcément égale à la moyenne : ce sont deux indicateurs différents.</li>
+      <li>La médiane est peu sensible aux valeurs extrêmes, contrairement à la moyenne.</li>
+    </ul>
+  </div>
+
+  <div class="example">
+    <p>Comparaison moyenne / médiane. Série : 2, 3, 4, 5, 40.</p>
+    <p>Moyenne = (2+3+4+5+40) ÷ 5 = 54 ÷ 5 = 10,8</p>
+    <p>Médiane = 4 (valeur du milieu de la série ordonnée)</p>
+    <p>La valeur 40 « tire » la moyenne vers le haut, mais n'influence pas la médiane : c'est pourquoi la médiane est parfois un indicateur plus représentatif.</p>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice — Effectif impair</h4>
+    <p>Trouve la médiane de la série : 11, 3, 8, 15, 6 (attention, elle n'est pas ordonnée !).</p>
+    <input type="text" id="med-ex1">
+    <button class="check-btn" onclick="checkMed1()">Vérifier</button>
+    <div id="med-ex1-fb" class="feedback"></div>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice — Effectif pair</h4>
+    <p>Trouve la médiane de la série : 7, 2, 9, 4, 12, 5.</p>
+    <input type="text" id="med-ex2">
+    <button class="check-btn" onclick="checkMed2()">Vérifier</button>
+    <div id="med-ex2-fb" class="feedback"></div>
+  </div>
+
+  <div class="card">
+    <h3>Médiane à partir d'un tableau d'effectifs</h3>
+    <p>Quand les données sont déjà regroupées dans un tableau d'effectifs, on peut trouver la médiane sans réécrire toute la liste : il suffit de suivre les effectifs cumulés jusqu'à dépasser (ou atteindre) la moitié de l'effectif total.</p>
+  </div>
+
+  <div class="methode">
+    <p><strong>Trouver la médiane à l'aide des effectifs cumulés :</strong></p>
+    <p>1) Calculer l'effectif total N.<br>
+    2) Calculer les effectifs cumulés croissants.<br>
+    3) Repérer la première valeur pour laquelle l'effectif cumulé atteint ou dépasse N/2 : c'est (ou c'est autour de) la médiane.</p>
+  </div>
+
+  <div class="example">
+    <p>Notes d'une classe de 25 élèves :</p>
+    <table>
+      <tr><th>Note</th><th>6</th><th>9</th><th>11</th><th>13</th><th>17</th></tr>
+      <tr><th>Effectif</th><td>3</td><td>6</td><td>8</td><td>5</td><td>3</td></tr>
+      <tr><th>Effectif cumulé</th><td>3</td><td>9</td><td>17</td><td>22</td><td>25</td></tr>
+    </table>
+    <p>N = 25, donc N/2 = 12,5. La première valeur pour laquelle l'effectif cumulé dépasse 12,5 est <strong>11</strong> (effectif cumulé 17). La médiane est donc Me = 11.</p>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice</h4>
+    <p>Voici un tableau d'effectifs pour une série de 16 valeurs :</p>
+    <table>
+      <tr><th>Valeur</th><th>2</th><th>4</th><th>6</th><th>8</th></tr>
+      <tr><th>Effectif</th><td>3</td><td>5</td><td>4</td><td>4</td></tr>
+    </table>
+    <p>Détermine la médiane de cette série (attention, l'effectif total est pair : il faudra peut-être faire une moyenne de deux valeurs centrales).</p>
+    <input type="text" id="med-ex3">
+    <button class="check-btn" onclick="checkMed3()">Vérifier</button>
+    <div id="med-ex3-fb" class="feedback"></div>
+  </div>
+</section>
+
+<!-- SECTION 4 : DIAGRAMMES -->
+<section class="section" id="section4">
+  <h1>Diagrammes statistiques</h1>
+
+  <div class="card">
+    <h3>Le diagramme en barres</h3>
+    <p>Chaque valeur du caractère est représentée par une barre (ou un bâton) dont la <strong>hauteur est proportionnelle à l'effectif</strong> (ou à la fréquence). Les barres sont espacées et de même largeur.</p>
+  </div>
+
+  <div class="card">
+    <h3>Le diagramme circulaire (camembert)</h3>
+    <p>Chaque valeur est représentée par une <strong>part de disque</strong> (secteur angulaire) dont l'angle est proportionnel à l'effectif ou à la fréquence.</p>
+  </div>
+
+  <div class="methode">
+    <p><strong>Calculer l'angle d'un secteur circulaire :</strong></p>
+    <p>angle = fréquence × 360°, soit angle = (effectif ÷ effectif total) × 360°</p>
+  </div>
+
+  <div class="example">
+    <p>Sports préférés (28 élèves) : Football 10, Natation 6, Basket 7, Danse 5.</p>
+    <table>
+      <tr><th>Sport</th><th>Effectif</th><th>Fréquence</th><th>Angle</th></tr>
+      <tr><td>Football</td><td>10</td><td>10/28</td><td>10/28 × 360 ≈ 129°</td></tr>
+      <tr><td>Natation</td><td>6</td><td>6/28</td><td>6/28 × 360 ≈ 77°</td></tr>
+      <tr><td>Basket</td><td>7</td><td>7/28</td><td>7/28 × 360 = 90°</td></tr>
+      <tr><td>Danse</td><td>5</td><td>5/28</td><td>5/28 × 360 ≈ 64°</td></tr>
+    </table>
+    <p>Vérification : 129 + 77 + 90 + 64 = 360° ✓</p>
+  </div>
+
+  <h2>Atelier interactif — Diagramme circulaire</h2>
+  <div class="card">
+    <p>Modifie les effectifs ci-dessous puis clique sur « Construire » pour voir le diagramme circulaire et les angles calculés automatiquement.</p>
+    <div class="diagram-controls" id="pie-controls">
+      <label><span class="color-tag" style="background:#a0522d"></span>Football : <input type="number" id="pie-v0" value="10" min="0"></label>
+      <label><span class="color-tag" style="background:#c98a4b"></span>Natation : <input type="number" id="pie-v1" value="6" min="0"></label>
+      <label><span class="color-tag" style="background:#8b4513"></span>Basket : <input type="number" id="pie-v2" value="7" min="0"></label>
+      <label><span class="color-tag" style="background:#d4a373"></span>Danse : <input type="number" id="pie-v3" value="5" min="0"></label>
+    </div>
+    <button class="check-btn" onclick="drawPie()">Construire le diagramme</button>
+    <canvas id="pieCanvas" width="420" height="340"></canvas>
+    <div id="pieAngles"></div>
+  </div>
+
+  <h2>Atelier interactif — Diagramme en barres</h2>
+  <div class="card">
+    <p>Modifie les effectifs puis clique sur « Construire » pour tracer le diagramme en barres.</p>
+    <div class="diagram-controls" id="bar-controls">
+      <label>Note 8 : <input type="number" id="bar-v0" value="2" min="0"></label>
+      <label>Note 10 : <input type="number" id="bar-v1" value="5" min="0"></label>
+      <label>Note 12 : <input type="number" id="bar-v2" value="8" min="0"></label>
+      <label>Note 14 : <input type="number" id="bar-v3" value="6" min="0"></label>
+      <label>Note 16 : <input type="number" id="bar-v4" value="3" min="0"></label>
+    </div>
+    <button class="check-btn" onclick="drawBar()">Construire le diagramme</button>
+    <canvas id="barCanvas" width="500" height="320"></canvas>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice</h4>
+    <p>Un tableau donne les effectifs 20, 30, 50 pour trois valeurs (effectif total 100). Quel est l'angle, en degrés, du secteur correspondant à l'effectif 30 ?</p>
+    <input type="text" id="diag-ex1">°
+    <button class="check-btn" onclick="checkDiag1()">Vérifier</button>
+    <div id="diag-ex1-fb" class="feedback"></div>
+  </div>
+</section>
+
+<!-- SECTION 5 : EXERCICES -->
+<section class="section" id="section5">
+  <h1>Exercices progressifs</h1>
+
+  <div class="exo">
+    <h4>Exercice 1 — Vocabulaire</h4>
+    <p>Dans une étude sur la pointure de chaussure de 50 élèves, quel est le caractère étudié ? Est-il qualitatif ou quantitatif ?</p>
+    <details><summary>Voir la correction</summary>
+      <div class="correction-body">
+        <p>Le caractère étudié est « la pointure de chaussure ». C'est un caractère <strong>quantitatif</strong>, car il s'exprime par un nombre.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice 2 — Lecture de tableau</h4>
+    <p>Le tableau ci-dessous donne le nombre d'enfants par famille dans un immeuble de 20 familles :</p>
+    <table>
+      <tr><th>Nombre d'enfants</th><th>0</th><th>1</th><th>2</th><th>3</th></tr>
+      <tr><th>Effectif</th><td>4</td><td>7</td><td>6</td><td>3</td></tr>
+    </table>
+    <p>a) Vérifie que l'effectif total correspond bien à 20 familles. b) Combien de familles ont au moins 2 enfants ?</p>
+    <details><summary>Voir la correction</summary>
+      <div class="correction-body">
+        <p>a) 4+7+6+3 = 20 ✓, cela correspond bien aux 20 familles.</p>
+        <p>b) Familles avec au moins 2 enfants : 6 (2 enfants) + 3 (3 enfants) = <strong>9 familles</strong>.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice 3 — Fréquences</h4>
+    <p>Reprends le tableau de l'exercice 2. Calcule la fréquence des familles ayant 1 enfant, sous forme de pourcentage arrondi à l'unité.</p>
+    <details><summary>Voir la correction</summary>
+      <div class="correction-body">
+        <p>Fréquence = 7 ÷ 20 = 0,35 = <strong>35 %</strong>.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice 4 — Fréquences cumulées</h4>
+    <p>Toujours avec le même tableau, quelle est la fréquence cumulée croissante (en %) des familles ayant 0, 1 ou 2 enfants ?</p>
+    <details><summary>Voir la correction</summary>
+      <div class="correction-body">
+        <p>Effectif cumulé : 4+7+6 = 17 familles sur 20.</p>
+        <p>Fréquence cumulée = 17 ÷ 20 = 0,85 = <strong>85 %</strong>.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice 5 — Moyenne simple</h4>
+    <p>Un cycliste parcourt en 5 jours : 42 km, 38 km, 55 km, 47 km, 33 km. Calcule la distance moyenne parcourue par jour.</p>
+    <details><summary>Voir la correction</summary>
+      <div class="correction-body">
+        <p>Somme = 42+38+55+47+33 = 215 km</p>
+        <p><span style="text-decoration:overline">x</span> = 215 ÷ 5 = <strong>43 km</strong> par jour.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice 6 — Moyenne pondérée</h4>
+    <p>Un magasin vend des tee-shirts : 15 à 8 €, 20 à 12 €, 5 à 20 €. Calcule le prix de vente moyen d'un tee-shirt.</p>
+    <details><summary>Voir la correction</summary>
+      <div class="correction-body">
+        <p>Effectif total = 15+20+5 = 40 tee-shirts</p>
+        <p>Somme pondérée = 15×8 + 20×12 + 5×20 = 120+240+100 = 460 €</p>
+        <p><span style="text-decoration:overline">x</span> = 460 ÷ 40 = <strong>11,5 €</strong></p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice 7 — Médiane</h4>
+    <p>Les tailles (en cm) de 9 plants de tomates sont : 34, 28, 41, 25, 38, 30, 45, 33, 29. Détermine la médiane de cette série.</p>
+    <details><summary>Voir la correction</summary>
+      <div class="correction-body">
+        <p>Série ordonnée : 25, 28, 29, 30, 33, 34, 38, 41, 45 (9 valeurs, effectif impair)</p>
+        <p>La valeur du milieu (5ème position) est <strong>33 cm</strong>.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice 8 — Diagramme circulaire</h4>
+    <p>Une enquête auprès de 60 élèves sur leur moyen de transport donne : Bus 25, Vélo 15, À pied 20. Calcule l'angle du secteur « Vélo ».</p>
+    <details><summary>Voir la correction</summary>
+      <div class="correction-body">
+        <p>Fréquence Vélo = 15 ÷ 60 = 0,25</p>
+        <p>Angle = 0,25 × 360° = <strong>90°</strong></p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- SECTION 6 : QCM -->
+<section class="section" id="section6">
+  <h1>QCM — Teste tes connaissances</h1>
+  <p>Réponds aux 16 questions puis clique sur « Voir mon score » en bas de page.</p>
+  <div id="qcm-container"></div>
+  <button class="check-btn" onclick="computeQcmScore()">Voir mon score</button>
+  <div id="qcm-score"></div>
+</section>
+
+</main>
+
+<footer>Cours de mathématiques — Statistiques — Niveau 5ème</footer>
+
+<script>
+/* ---------- THEME ---------- */
+function toggleTheme(){
+  var root = document.documentElement;
+  var current = root.getAttribute('data-theme');
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if(current === 'dark'){
+    root.setAttribute('data-theme','light');
+  } else if(current === 'light'){
+    root.removeAttribute('data-theme');
+  } else {
+    root.setAttribute('data-theme', prefersDark ? 'light' : 'dark');
+  }
+  try{ localStorage.setItem('stat5-theme', root.getAttribute('data-theme') || 'auto'); }catch(e){}
+}
+(function(){
+  try{
+    var saved = localStorage.getItem('stat5-theme');
+    if(saved && saved !== 'auto'){ document.documentElement.setAttribute('data-theme', saved); }
+  }catch(e){}
+})();
+
+/* ---------- TABS ---------- */
+var initialized = [false,false,false,false,false,false,false];
+function showTab(i){
+  var sections = document.querySelectorAll('.section');
+  var buttons = document.querySelectorAll('#tabNav button');
+  for(var k=0;k<sections.length;k++){ sections[k].classList.remove('active'); }
+  for(var k=0;k<buttons.length;k++){ buttons[k].classList.remove('active'); }
+  document.getElementById('section'+i).classList.add('active');
+  buttons[i].classList.add('active');
+  initSection(i);
+}
+function initSection(i){
+  if(initialized[i]) return;
+  initialized[i] = true;
+  if(i === 4){ drawPie(); drawBar(); }
+  if(i === 6){ buildQcm(); }
+}
+
+/* ---------- VOCABULAIRE EXERCICES ---------- */
+function checkVoc1(){
+  var v = parseInt(document.getElementById('voc-ex1').value, 10);
+  var fb = document.getElementById('voc-ex1-fb');
+  if(v === 16){
+    fb.textContent = 'Correct ! 10 + 6 = 16 élèves.';
+    fb.className = 'feedback ok';
+  } else {
+    fb.textContent = 'Pas tout à fait. Additionne les effectifs de football (10) et natation (6).';
+    fb.className = 'feedback no';
+  }
+}
+function checkVoc2(){
+  var v = parseInt(document.getElementById('voc-ex2').value, 10);
+  var fb = document.getElementById('voc-ex2-fb');
+  if(v === 25){
+    fb.textContent = 'Correct ! 8+12+5 = 25, cela correspond bien aux 25 personnes étudiées.';
+    fb.className = 'feedback ok';
+  } else {
+    fb.textContent = 'Additionne les trois effectifs : 8 + 12 + 5.';
+    fb.className = 'feedback no';
+  }
+}
+function checkVoc3(){
+  var v = parseInt(document.getElementById('voc-ex3').value, 10);
+  var fb = document.getElementById('voc-ex3-fb');
+  if(v === 4){
+    fb.textContent = 'Correct ! On compte 4 voitures blanches dans la liste.';
+    fb.className = 'feedback ok';
+  } else {
+    fb.textContent = 'Recompte soigneusement le nombre de fois où « Blanc » apparaît dans la liste.';
+    fb.className = 'feedback no';
+  }
+}
+
+/* ---------- FREQUENCES EXERCICES ---------- */
+function checkFreq1(){
+  var v = parseFloat(document.getElementById('freq-ex1').value.replace('%','').replace(',','.'));
+  var fb = document.getElementById('freq-ex1-fb');
+  if(v === 40){
+    fb.textContent = 'Correct ! 12 ÷ 30 = 0,40 = 40 %.';
+    fb.className = 'feedback ok';
+  } else {
+    fb.textContent = 'Calcule 12 ÷ 30 puis convertis en pourcentage.';
+    fb.className = 'feedback no';
+  }
+}
+function checkFreq2(){
+  var v = parseFloat(document.getElementById('freq-ex2').value.replace('%','').replace(',','.'));
+  var fb = document.getElementById('freq-ex2-fb');
+  if(v === 70){
+    fb.textContent = 'Correct ! (18+10) ÷ 40 = 0,70 = 70 %.';
+    fb.className = 'feedback ok';
+  } else {
+    fb.textContent = 'Additionne les effectifs de Bleu et Rouge (18+10), puis divise par 40.';
+    fb.className = 'feedback no';
+  }
+}
+function checkFreq3(){
+  var v = parseInt(document.getElementById('freq-ex3').value, 10);
+  var fb = document.getElementById('freq-ex3-fb');
+  if(v === 52){
+    fb.textContent = 'Correct ! 0,65 × 80 = 52 adultes.';
+    fb.className = 'feedback ok';
+  } else {
+    fb.textContent = 'Multiplie la fréquence (0,65) par l\'effectif total (80).';
+    fb.className = 'feedback no';
+  }
+}
+
+/* ---------- MOYENNE EXERCICES ---------- */
+function checkMoy1(){
+  var s = parseFloat(document.getElementById('moy-ex1-s').value);
+  var m = parseFloat(document.getElementById('moy-ex1-m').value.replace(',','.'));
+  var fb = document.getElementById('moy-ex1-fb');
+  if(s === 40 && m === 10){
+    fb.textContent = 'Correct ! Somme = 40, moyenne = 40÷4 = 10.';
+    fb.className = 'feedback ok';
+  } else {
+    fb.textContent = 'Vérifie : 6+9+12+13 = ? puis divise par 4.';
+    fb.className = 'feedback no';
+  }
+}
+function checkMoy2(){
+  var n = parseFloat(document.getElementById('moy-ex2-n').value);
+  var s = parseFloat(document.getElementById('moy-ex2-s').value);
+  var m = parseFloat(document.getElementById('moy-ex2-m').value.replace(',','.'));
+  var fb = document.getElementById('moy-ex2-fb');
+  if(n === 10 && s === 105 && m === 10.5){
+    fb.textContent = 'Correct ! Effectif total=10, somme pondérée=5×2+10×3+15×5=105, moyenne=105÷10=10,5.';
+    fb.className = 'feedback ok';
+  } else {
+    fb.textContent = 'Effectif total = 2+3+5 = 10 ; somme pondérée = 5×2+10×3+15×5 ; moyenne = somme÷10.';
+    fb.className = 'feedback no';
+  }
+}
+function checkMoy3(){
+  var v = parseFloat(document.getElementById('moy-ex3').value.replace(',','.'));
+  var fb = document.getElementById('moy-ex3-fb');
+  if(v === 24){
+    fb.textContent = 'Correct ! (10×20 + 5×32) ÷ 15 = (200+160) ÷ 15 = 360 ÷ 15 = 24 ans.';
+    fb.className = 'feedback ok';
+  } else {
+    fb.textContent = 'Attention, il ne faut pas faire (20+32)÷2 ! Pondère chaque moyenne par son effectif : (10×20+5×32)÷15.';
+    fb.className = 'feedback no';
+  }
+}
+
+/* ---------- MEDIANE EXERCICES ---------- */
+function checkMed1(){
+  var v = parseFloat(document.getElementById('med-ex1').value.replace(',','.'));
+  var fb = document.getElementById('med-ex1-fb');
+  if(v === 8){
+    fb.textContent = 'Correct ! Ordonnée : 3, 6, 8, 11, 15 → médiane = 8.';
+    fb.className = 'feedback ok';
+  } else {
+    fb.textContent = 'Range d\'abord la série dans l\'ordre croissant, puis prends la valeur du milieu.';
+    fb.className = 'feedback no';
+  }
+}
+function checkMed2(){
+  var v = parseFloat(document.getElementById('med-ex2').value.replace(',','.'));
+  var fb = document.getElementById('med-ex2-fb');
+  if(v === 6){
+    fb.textContent = 'Correct ! Ordonnée : 2, 4, 5, 7, 9, 12 → (5+7)÷2 = 6.';
+    fb.className = 'feedback ok';
+  } else {
+    fb.textContent = 'Range la série puis fais la moyenne des deux valeurs centrales.';
+    fb.className = 'feedback no';
+  }
+}
+function checkMed3(){
+  var v = parseFloat(document.getElementById('med-ex3').value.replace(',','.'));
+  var fb = document.getElementById('med-ex3-fb');
+  if(v === 5){
+    fb.textContent = 'Correct ! En développant la série (16 valeurs), les 8ème et 9ème valeurs sont 4 et 6 : Me = (4+6)÷2 = 5.';
+    fb.className = 'feedback ok';
+  } else {
+    fb.textContent = 'Effectif total = 16 (pair). Repère les 8ème et 9ème valeurs à l\'aide des effectifs cumulés (3, 8, 12, 16), puis fais leur moyenne.';
+    fb.className = 'feedback no';
+  }
+}
+
+/* ---------- DIAGRAMMES EXERCICE ---------- */
+function checkDiag1(){
+  var v = parseFloat(document.getElementById('diag-ex1').value.replace(',','.'));
+  var fb = document.getElementById('diag-ex1-fb');
+  if(v === 108){
+    fb.textContent = 'Correct ! 30÷100 × 360° = 108°.';
+    fb.className = 'feedback ok';
+  } else {
+    fb.textContent = 'Calcule la fréquence (30÷100) puis multiplie par 360°.';
+    fb.className = 'feedback no';
+  }
+}
+
+/* ---------- CANVAS : DIAGRAMME CIRCULAIRE ---------- */
+function drawPie(){
+  var canvas = document.getElementById('pieCanvas');
+  var ctx = canvas.getContext('2d');
+  var style = getComputedStyle(document.documentElement);
+  var labels = ['Football','Natation','Basket','Danse'];
+  var colors = [style.getPropertyValue('--accent').trim() || '#a0522d', '#c98a4b', style.getPropertyValue('--heading').trim() || '#8b4513', '#d4a373'];
+  var values = [];
+  for(var i=0;i<4;i++){
+    var v = parseFloat(document.getElementById('pie-v'+i).value) || 0;
+    values.push(v);
+  }
+  var total = values.reduce(function(a,b){return a+b;},0);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  var bg = style.getPropertyValue('--surface').trim();
+  ctx.fillStyle = bg || '#ffffff';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  var angleInfo = document.getElementById('pieAngles');
+  if(total <= 0){
+    angleInfo.innerHTML = '<p>Renseigne au moins un effectif supérieur à 0.</p>';
+    return;
+  }
+  var cx = 150, cy = 160, r = 110;
+  var start = -Math.PI/2;
+  var textColor = style.getPropertyValue('--text').trim() || '#2c2418';
+  var html = '<table><tr><th>Valeur</th><th>Effectif</th><th>Fréquence</th><th>Angle</th></tr>';
+  for(var i=0;i<4;i++){
+    var frac = values[i] / total;
+    var angle = frac * 2 * Math.PI;
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,start,start+angle);
+    ctx.closePath();
+    ctx.fillStyle = colors[i];
+    ctx.fill();
+    ctx.strokeStyle = bg || '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    start += angle;
+    var deg = (frac*360);
+    html += '<tr><td>'+labels[i]+'</td><td>'+values[i]+'</td><td>'+(frac*100).toFixed(1)+' %</td><td>'+deg.toFixed(0)+'°</td></tr>';
+  }
+  html += '</table>';
+  angleInfo.innerHTML = html;
+  ctx.fillStyle = textColor;
+  ctx.font = '13px Nunito Sans, sans-serif';
+  var legendY = 30;
+  for(var i=0;i<4;i++){
+    ctx.fillStyle = colors[i];
+    ctx.fillRect(300, legendY-10, 12, 12);
+    ctx.fillStyle = textColor;
+    ctx.fillText(labels[i], 318, legendY);
+    legendY += 22;
+  }
+}
+
+/* ---------- CANVAS : DIAGRAMME EN BARRES ---------- */
+function drawBar(){
+  var canvas = document.getElementById('barCanvas');
+  var ctx = canvas.getContext('2d');
+  var style = getComputedStyle(document.documentElement);
+  var labels = ['8','10','12','14','16'];
+  var values = [];
+  for(var i=0;i<5;i++){
+    values.push(parseFloat(document.getElementById('bar-v'+i).value) || 0);
+  }
+  var maxV = Math.max.apply(null, values.concat([1]));
+  var bg = style.getPropertyValue('--surface').trim() || '#fff';
+  var border = style.getPropertyValue('--border').trim() || '#ccc';
+  var accent = style.getPropertyValue('--accent').trim() || '#a0522d';
+  var textColor = style.getPropertyValue('--text').trim() || '#2c2418';
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = bg;
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  var marginLeft = 50, marginBottom = 40, marginTop = 20;
+  var chartH = canvas.height - marginBottom - marginTop;
+  var chartW = canvas.width - marginLeft - 20;
+  ctx.strokeStyle = border;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(marginLeft, marginTop);
+  ctx.lineTo(marginLeft, marginTop+chartH);
+  ctx.lineTo(marginLeft+chartW, marginTop+chartH);
+  ctx.stroke();
+  ctx.fillStyle = textColor;
+  ctx.font = '11px Nunito Sans, sans-serif';
+  var gridSteps = 5;
+  for(var g=0; g<=gridSteps; g++){
+    var yv = Math.round(maxV * g / gridSteps);
+    var y = marginTop + chartH - (chartH * g/gridSteps);
+    ctx.strokeStyle = border;
+    ctx.beginPath();
+    ctx.moveTo(marginLeft, y);
+    ctx.lineTo(marginLeft+chartW, y);
+    ctx.stroke();
+    ctx.fillText(yv, 20, y+4);
+  }
+  var n = values.length;
+  var slot = chartW / n;
+  var barW = slot * 0.5;
+  ctx.textAlign = 'center';
+  for(var i=0;i<n;i++){
+    var h = maxV > 0 ? (values[i]/maxV) * chartH : 0;
+    var x = marginLeft + slot*i + (slot-barW)/2;
+    var y = marginTop + chartH - h;
+    ctx.fillStyle = accent;
+    ctx.fillRect(x, y, barW, h);
+    ctx.fillStyle = textColor;
+    ctx.fillText(labels[i], x + barW/2, marginTop+chartH+18);
+    ctx.fillText(values[i], x + barW/2, y-6);
+  }
+  ctx.textAlign = 'left';
+  ctx.font = '12px Nunito Sans, sans-serif';
+  ctx.fillText('Effectif en fonction de la note', marginLeft, 14);
+}
+
+/* ---------- QCM ---------- */
+var qcmQuestions = [
+  {q:"Comment appelle-t-on l'ensemble des individus étudiés dans une statistique ?", opts:["La population","L'effectif","La fréquence","Le caractère"], correct:0},
+  {q:"« La couleur préférée » est un caractère...", opts:["Quantitatif","Qualitatif","Numérique","Continu"], correct:1},
+  {q:"Que représente l'effectif d'une valeur ?", opts:["Le pourcentage d'individus","Le nombre d'individus ayant cette valeur","La moyenne des valeurs","L'angle du secteur"], correct:1},
+  {q:"La somme des effectifs d'un tableau est égale à...", opts:["100","1","L'effectif total de la population","La moyenne"], correct:2},
+  {q:"Comment calcule-t-on une fréquence ?", opts:["effectif × effectif total","effectif ÷ effectif total","effectif total ÷ effectif","effectif + effectif total"], correct:1},
+  {q:"La somme de toutes les fréquences d'un tableau est égale à...", opts:["360","100","1","0"], correct:2},
+  {q:"Un effectif de 15 sur un total de 60 correspond à une fréquence de...", opts:["15 %","25 %","60 %","4 %"], correct:1},
+  {q:"La formule de la moyenne d'une série est :", opts:["somme des valeurs × effectif","somme des valeurs ÷ nombre de valeurs","valeur du milieu","effectif ÷ fréquence"], correct:1},
+  {q:"Dans une moyenne pondérée, chaque valeur est multipliée par...", opts:["Son rang","La moyenne générale","Son effectif (ou coefficient)","360°"], correct:2},
+  {q:"La moyenne de 4, 6, 8 est :", opts:["6","18","4","8"], correct:0},
+  {q:"Pour trouver la médiane, il faut d'abord...", opts:["Calculer la moyenne","Ranger la série dans l'ordre croissant","Faire un diagramme","Calculer les fréquences"], correct:1},
+  {q:"Pour une série de 7 valeurs ordonnées, la médiane est...", opts:["La 1ère valeur","La 4ème valeur","La 7ème valeur","La moyenne de toutes les valeurs"], correct:1},
+  {q:"Pour une série de 8 valeurs ordonnées, la médiane est...", opts:["La 4ème valeur","La 5ème valeur","La moyenne des 4ème et 5ème valeurs","La moyenne des 3ème et 6ème valeurs"], correct:2},
+  {q:"Dans un diagramme circulaire, l'angle d'un secteur se calcule par...", opts:["fréquence × 360°","fréquence × 100°","effectif × 360°","effectif ÷ 360°"], correct:0},
+  {q:"Un effectif de 90 sur un total de 360 donne un angle de secteur de...", opts:["90°","25°","360°","4°"], correct:1},
+  {q:"Dans un diagramme en barres, la hauteur de chaque barre est proportionnelle à...", opts:["La fréquence cumulée","L'effectif (ou la fréquence)","La médiane","L'angle"], correct:1}
+];
+function buildQcm(){
+  var container = document.getElementById('qcm-container');
+  var html = '';
+  for(var i=0;i<qcmQuestions.length;i++){
+    var q = qcmQuestions[i];
+    html += '<div class="qcm-q"><p><strong>Question '+(i+1)+'.</strong> '+q.q+'</p><div class="qcm-opts">';
+    for(var j=0;j<q.opts.length;j++){
+      html += '<label><input type="radio" name="qcm'+i+'" value="'+j+'"> '+q.opts[j]+'</label>';
+    }
+    html += '</div><div class="qcm-result" id="qcm-result-'+i+'"></div></div>';
+  }
+  container.innerHTML = html;
+}
+function computeQcmScore(){
+  var score = 0;
+  for(var i=0;i<qcmQuestions.length;i++){
+    var q = qcmQuestions[i];
+    var radios = document.getElementsByName('qcm'+i);
+    var chosen = -1;
+    for(var j=0;j<radios.length;j++){ if(radios[j].checked){ chosen = parseInt(radios[j].value,10); } }
+    var resultDiv = document.getElementById('qcm-result-'+i);
+    if(chosen === -1){
+      resultDiv.textContent = 'Pas de réponse sélectionnée.';
+      resultDiv.style.color = 'var(--muted)';
+    } else if(chosen === q.correct){
+      score++;
+      resultDiv.textContent = 'Bonne réponse !';
+      resultDiv.style.color = 'var(--good)';
+    } else {
+      resultDiv.textContent = 'Faux. Bonne réponse : ' + q.opts[q.correct];
+      resultDiv.style.color = 'var(--bad)';
+    }
+  }
+  var scoreDiv = document.getElementById('qcm-score');
+  scoreDiv.style.display = 'block';
+  scoreDiv.textContent = 'Score : ' + score + ' / ' + qcmQuestions.length;
+  scoreDiv.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+/* ---------- INIT ---------- */
+initSection(0);
+</script>
+</body>
+</html>

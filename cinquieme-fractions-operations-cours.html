@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5ème — Fractions : opérations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f2ed; --surface:#ffffff; --surface2:#ebe6de; --text:#2c2418; --heading:#8b4513;
+  --muted:#6b5a48; --border:#d4c8b8; --accent:#a0522d; --accent-light:#faf5ef;
+  --good:#3a7d44; --bad:#b5453f;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161210; --surface:#221c18; --surface2:#302820; --text:#ddd0c0; --heading:#e0a868;
+    --muted:#9a8878; --border:#403428; --accent:#d08840; --accent-light:#1e1610;
+    --good:#5fbf6d; --bad:#e07a72;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161210; --surface:#221c18; --surface2:#302820; --text:#ddd0c0; --heading:#e0a868;
+  --muted:#9a8878; --border:#403428; --accent:#d08840; --accent-light:#1e1610;
+  --good:#5fbf6d; --bad:#e07a72;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:'Nunito Sans',sans-serif; line-height:1.6;
+  transition:background .2s,color .2s;
+}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif; color:var(--heading); font-weight:700; margin:.3em 0 .4em}
+header{
+  background:var(--surface); border-bottom:2px solid var(--border);
+  padding:14px 16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  position:sticky; top:0; z-index:20;
+}
+header h1{font-size:1.5rem; margin:0; flex:1 1 auto}
+.badge{
+  background:var(--accent); color:#fff; font-family:'Nunito Sans',sans-serif; font-weight:700;
+  font-size:.8rem; padding:4px 12px; border-radius:20px; letter-spacing:.03em;
+}
+.theme-btn{
+  background:var(--surface2); border:1px solid var(--border); color:var(--text);
+  border-radius:8px; padding:8px 12px; cursor:pointer; font-size:1rem;
+}
+.theme-btn:hover{background:var(--accent-light)}
+nav.tabs{
+  display:flex; gap:4px; overflow-x:auto; background:var(--surface);
+  border-bottom:2px solid var(--border); padding:0 8px; position:sticky; top:62px; z-index:19;
+}
+nav.tabs button{
+  background:none; border:none; color:var(--muted); font-family:'Nunito Sans',sans-serif;
+  font-weight:700; font-size:.85rem; padding:12px 14px; cursor:pointer; white-space:nowrap;
+  border-bottom:3px solid transparent;
+}
+nav.tabs button.active{color:var(--accent); border-bottom-color:var(--accent)}
+main{max-width:900px; margin:0 auto; padding:20px 16px 60px}
+.panel{display:none}
+.panel.active{display:block; animation:fadein .25s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.card{
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:16px 18px; margin:16px 0;
+}
+.card.tip{border-left:4px solid var(--accent); background:var(--accent-light)}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 3px;font-weight:700}
+.frac .num{border-bottom:1.5px solid currentColor;padding:0 4px 2px}
+.frac .den{padding:2px 4px 0}
+canvas{max-width:100%; background:var(--surface2); border-radius:8px; display:block; margin:10px auto}
+.controls{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:10px 0}
+input[type=range]{accent-color:var(--accent)}
+button.btn{
+  background:var(--accent); color:#fff; border:none; border-radius:8px;
+  padding:8px 16px; font-weight:700; cursor:pointer; font-family:'Nunito Sans',sans-serif;
+}
+button.btn:hover{opacity:.9}
+button.btn.secondary{background:var(--surface2); color:var(--text); border:1px solid var(--border)}
+input[type=text],input[type=number]{
+  background:var(--surface); color:var(--text); border:1px solid var(--border);
+  border-radius:6px; padding:6px 10px; font-family:inherit; width:70px; text-align:center;
+}
+table{border-collapse:collapse; width:100%; margin:10px 0}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:center}
+th{background:var(--surface2)}
+details{
+  background:var(--surface2); border:1px solid var(--border); border-radius:8px;
+  padding:8px 12px; margin:10px 0;
+}
+summary{cursor:pointer; font-weight:700; color:var(--accent)}
+.exo{border-top:1px dashed var(--border); padding-top:14px; margin-top:14px}
+.result{font-weight:700; margin-top:6px}
+.result.ok{color:var(--good)}
+.result.no{color:var(--bad)}
+.qcm-opt{
+  display:block; width:100%; text-align:left; background:var(--surface2);
+  border:1px solid var(--border); border-radius:8px; padding:8px 12px; margin:5px 0;
+  cursor:pointer; color:var(--text); font-family:inherit;
+}
+.qcm-opt.correct{background:var(--good); color:#fff; border-color:var(--good)}
+.qcm-opt.wrong{background:var(--bad); color:#fff; border-color:var(--bad)}
+#qcmScore{font-size:1.2rem; font-weight:700; margin-top:14px}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+@media (max-width:600px){
+  header h1{font-size:1.2rem}
+  .grid2{grid-template-columns:1fr}
+  nav.tabs{top:56px}
+  main{padding:16px 12px 50px}
+}
+.step{margin:4px 0; padding-left:10px; border-left:3px solid var(--accent-light)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Fractions : opérations</h1>
+  <span class="badge">5ème</span>
+  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌓</button>
+</header>
+<nav class="tabs" id="tabsNav"></nav>
+<main>
+  <div class="panel active" id="panel0"></div>
+  <div class="panel" id="panel1"></div>
+  <div class="panel" id="panel2"></div>
+  <div class="panel" id="panel3"></div>
+  <div class="panel" id="panel4"></div>
+  <div class="panel" id="panel5"></div>
+  <div class="panel" id="panel6"></div>
+</main>
+
+<script>
+/* ===================== THEME ===================== */
+function toggleTheme(){
+  const root=document.documentElement;
+  const cur=root.getAttribute('data-theme');
+  if(cur==='dark'){root.setAttribute('data-theme','light');}
+  else if(cur==='light'){root.removeAttribute('data-theme');}
+  else{
+    const prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+    root.setAttribute('data-theme', prefersDark?'light':'dark');
+  }
+}
+
+/* ===================== FRACTION HELPER ===================== */
+function frac(n,d){return '<span class="frac"><span class="num">'+n+'</span><span class="den">'+d+'</span></span>';}
+function pgcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;}
+
+/* ===================== TABS ===================== */
+const TAB_NAMES=["Rappels","Fractions égales","Comparer","Additionner / Soustraire","Multiplier","Exercices","QCM"];
+const initFns=[initSection0,initSection1,initSection2,initSection3,initSection4,initSection5,initSection6];
+const loaded=[false,false,false,false,false,false,false];
+
+function buildNav(){
+  const nav=document.getElementById('tabsNav');
+  TAB_NAMES.forEach((name,i)=>{
+    const b=document.createElement('button');
+    b.textContent=name;
+    b.onclick=()=>showTab(i);
+    if(i===0)b.classList.add('active');
+    nav.appendChild(b);
+  });
+}
+function showTab(i){
+  document.querySelectorAll('nav.tabs button').forEach((b,idx)=>b.classList.toggle('active',idx===i));
+  document.querySelectorAll('.panel').forEach((p,idx)=>p.classList.toggle('active',idx===i));
+  if(!loaded[i]){ loaded[i]=true; initFns[i](); }
+}
+
+/* ===================== SECTION 0 : RAPPELS ===================== */
+function initSection0(){
+  const p=document.getElementById('panel0');
+  p.innerHTML=`
+  <h2>1. Rappels sur les fractions</h2>
+  <div class="card">
+    <p>Une <strong>fraction</strong> représente le partage d'une unité (ou d'une quantité) en parts égales.</p>
+    <p>La fraction ${frac('a','b')} se lit « a sur b » (ou « a b-ièmes ») :</p>
+    <ul>
+      <li><strong>b</strong> est le <strong>dénominateur</strong> : il indique en combien de parts égales on partage l'unité.</li>
+      <li><strong>a</strong> est le <strong>numérateur</strong> : il indique combien de parts on prend.</li>
+    </ul>
+    <p>Exemple : ${frac('3','5')} signifie « on partage en 5 parts égales et on en prend 3 ».</p>
+  </div>
+  <div class="card tip">
+    <h3>Fraction d'une quantité</h3>
+    <p>Pour calculer ${frac('a','b')} d'une quantité <em>Q</em>, on calcule Q × a ÷ b (ou Q ÷ b × a).</p>
+    <p>Exemple : ${frac('2','3')} de 90 élèves = 90 ÷ 3 × 2 = 30 × 2 = <strong>60 élèves</strong>.</p>
+  </div>
+  <div class="card">
+    <h3>Visualisation : disque et barre</h3>
+    <p>Choisis le nombre total de parts, puis le nombre de parts coloriées.</p>
+    <div class="controls">
+      <label>Parts totales (dénominateur) : <input type="range" id="r0-den" min="2" max="12" value="6"></label>
+      <span id="r0-denval">6</span>
+    </div>
+    <div class="controls">
+      <label>Parts coloriées (numérateur) : <input type="range" id="r0-num" min="0" max="6" value="2"></label>
+      <span id="r0-numval">2</span>
+    </div>
+    <canvas id="cv0" width="700" height="260"></canvas>
+    <p id="r0-txt" style="text-align:center;font-weight:700"></p>
+  </div>`;
+  const denR=document.getElementById('r0-den'), numR=document.getElementById('r0-num');
+  function draw(){
+    const den=+denR.value; let num=+numR.value;
+    numR.max=den; if(num>den){num=den; numR.value=den;}
+    document.getElementById('r0-denval').textContent=den;
+    document.getElementById('r0-numval').textContent=num;
+    document.getElementById('r0-txt').innerHTML='Fraction coloriée : '+frac(num,den);
+    drawDiskAndBar('cv0',num,den);
+  }
+  denR.oninput=draw; numR.oninput=draw; draw();
+}
+
+function drawDiskAndBar(id,num,den){
+  const cv=document.getElementById(id); const ctx=cv.getContext('2d');
+  const cs=getComputedStyle(document.documentElement);
+  const accent=cs.getPropertyValue('--accent').trim();
+  const surface2=cs.getPropertyValue('--surface2').trim();
+  const border=cs.getPropertyValue('--border').trim();
+  const text=cs.getPropertyValue('--text').trim();
+  ctx.clearRect(0,0,cv.width,cv.height);
+  // disque
+  const cx=170, cy=130, r=100;
+  const angleStep=2*Math.PI/den;
+  for(let i=0;i<den;i++){
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,-Math.PI/2+i*angleStep,-Math.PI/2+(i+1)*angleStep);
+    ctx.closePath();
+    ctx.fillStyle = i<num ? accent : surface2;
+    ctx.fill();
+    ctx.strokeStyle=border; ctx.lineWidth=1.5; ctx.stroke();
+  }
+  // barre
+  const bx=380, by=90, bw=290, bh=80;
+  const segW=bw/den;
+  for(let i=0;i<den;i++){
+    ctx.fillStyle = i<num ? accent : surface2;
+    ctx.fillRect(bx+i*segW, by, segW, bh);
+    ctx.strokeStyle=border; ctx.lineWidth=1.5;
+    ctx.strokeRect(bx+i*segW, by, segW, bh);
+  }
+  ctx.strokeStyle=text; ctx.lineWidth=2; ctx.strokeRect(bx,by,bw,bh);
+  ctx.fillStyle=text; ctx.font='14px Nunito Sans'; ctx.textAlign='center';
+  ctx.fillText('Disque', cx, 250);
+  ctx.fillText('Barre', bx+bw/2, 250);
+}
+
+/* ===================== SECTION 1 : FRACTIONS EGALES ===================== */
+function initSection1(){
+  const p=document.getElementById('panel1');
+  p.innerHTML=`
+  <h2>2. Fractions égales et simplification</h2>
+  <div class="card">
+    <h3>Règle du produit en croix / multiplication</h3>
+    <p>On ne change pas la valeur d'une fraction si on multiplie (ou divise) le numérateur ET le dénominateur par le même nombre non nul.</p>
+    <p>${frac('a','b')} = ${frac('a×k','b×k')} pour tout k ≠ 0.</p>
+    <p>Exemple : ${frac('2','3')} = ${frac('4','6')} = ${frac('10','15')} (on a multiplié par 2 puis par 5).</p>
+  </div>
+  <div class="card tip">
+    <h3>Critères de divisibilité utiles</h3>
+    <table>
+      <tr><th>Par</th><th>Critère</th></tr>
+      <tr><td>2</td><td>Le nombre se termine par 0, 2, 4, 6, 8</td></tr>
+      <tr><td>3</td><td>La somme des chiffres est divisible par 3</td></tr>
+      <tr><td>5</td><td>Le nombre se termine par 0 ou 5</td></tr>
+      <tr><td>9</td><td>La somme des chiffres est divisible par 9</td></tr>
+      <tr><td>10</td><td>Le nombre se termine par 0</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>Fraction irréductible</h3>
+    <p>Une fraction est <strong>irréductible</strong> quand on ne peut plus la simplifier : le numérateur et le dénominateur n'ont plus de diviseur commun (autre que 1).</p>
+    <p>Méthode : diviser petit à petit par 2, 3, 5, 7... jusqu'à ce que ce ne soit plus possible.</p>
+  </div>
+  <div class="card">
+    <h3>Exercice interactif : simplifie la fraction</h3>
+    <div id="simpZone"></div>
+    <button class="btn" onclick="newSimp()">Nouvelle fraction</button>
+  </div>`;
+  newSimp();
+}
+let simpCurrent={};
+function newSimp(){
+  const bases=[[3,4],[2,5],[5,7],[3,8],[4,9],[2,3],[5,6],[3,7]];
+  const factor=2+Math.floor(Math.random()*4);
+  const base=bases[Math.floor(Math.random()*bases.length)];
+  const n=base[0]*factor, d=base[1]*factor;
+  simpCurrent={n,d,in:base[0],id:base[1]};
+  const z=document.getElementById('simpZone');
+  z.innerHTML=`
+    <p>Simplifie ${frac(n,d)} jusqu'à la fraction irréductible.</p>
+    <div class="controls">
+      Numérateur : <input type="number" id="simpN">
+      Dénominateur : <input type="number" id="simpD">
+      <button class="btn" onclick="checkSimp()">Valider</button>
+    </div>
+    <div id="simpResult"></div>`;
+}
+function checkSimp(){
+  const n=+document.getElementById('simpN').value;
+  const d=+document.getElementById('simpD').value;
+  const res=document.getElementById('simpResult');
+  if(!n||!d){res.innerHTML='<p class="result no">Complète les deux champs.</p>';return;}
+  if(n===simpCurrent.in && d===simpCurrent.id){
+    const g=pgcd(simpCurrent.n,simpCurrent.d);
+    res.innerHTML=`<p class="result ok">Bravo ! ${frac(simpCurrent.n,simpCurrent.d)} = ${frac(simpCurrent.in,simpCurrent.id)} (on a divisé par PGCD = ${g})</p>`;
+  } else if(n*simpCurrent.id===d*simpCurrent.in){
+    res.innerHTML='<p class="result no">La fraction est correcte mais pas encore irréductible, continue à simplifier !</p>';
+  } else {
+    res.innerHTML=`<p class="result no">Pas tout à fait. Indice : cherche un diviseur commun à ${simpCurrent.n} et ${simpCurrent.d}. La réponse était ${frac(simpCurrent.in,simpCurrent.id)}.</p>`;
+  }
+}
+
+/* ===================== SECTION 2 : COMPARER ===================== */
+function initSection2(){
+  const p=document.getElementById('panel2');
+  p.innerHTML=`
+  <h2>3. Comparer des fractions</h2>
+  <div class="card">
+    <h3>Même dénominateur</h3>
+    <p>Quand deux fractions ont le même dénominateur, la plus grande est celle qui a le plus grand numérateur.</p>
+    <p>Exemple : ${frac('5','8')} &gt; ${frac('3','8')} car 5 &gt; 3.</p>
+  </div>
+  <div class="card">
+    <h3>Dénominateurs différents</h3>
+    <p>On réduit les fractions au même dénominateur (en utilisant un multiple commun), puis on compare les numérateurs.</p>
+    <p>Exemple : comparer ${frac('2','3')} et ${frac('3','4')}.</p>
+    <div class="step">Dénominateur commun : 12 (multiple de 3 et 4)</div>
+    <div class="step">${frac('2','3')} = ${frac('8','12')} et ${frac('3','4')} = ${frac('9','12')}</div>
+    <div class="step">Comme 9 &gt; 8, alors ${frac('3','4')} &gt; ${frac('2','3')}</div>
+  </div>
+  <div class="card">
+    <h3>Droite graduée</h3>
+    <div class="controls">
+      Fraction 1 : <input type="number" id="cmpN1" value="2" style="width:50px"> / <input type="number" id="cmpD1" value="3" style="width:50px">
+      Fraction 2 : <input type="number" id="cmpN2" value="3" style="width:50px"> / <input type="number" id="cmpD2" value="4" style="width:50px">
+      <button class="btn" onclick="drawCompareLine()">Afficher</button>
+    </div>
+    <canvas id="cv2" width="700" height="140"></canvas>
+    <p id="cmpResultTxt" style="text-align:center;font-weight:700"></p>
+  </div>
+  <div class="card">
+    <h3>Exercice : ranger dans l'ordre croissant</h3>
+    <p>Range ${frac('1','2')}, ${frac('3','5')}, ${frac('2','10')} dans l'ordre croissant.</p>
+    <div class="controls">
+      <input type="text" id="rangeAns" placeholder="ex: a < b < c">
+      <button class="btn" onclick="checkRange()">Valider</button>
+    </div>
+    <div id="rangeResult"></div>
+  </div>`;
+  drawCompareLine();
+}
+function drawCompareLine(){
+  const n1=+document.getElementById('cmpN1').value, d1=+document.getElementById('cmpD1').value;
+  const n2=+document.getElementById('cmpN2').value, d2=+document.getElementById('cmpD2').value;
+  const cv=document.getElementById('cv2'); const ctx=cv.getContext('2d');
+  const cs=getComputedStyle(document.documentElement);
+  const accent=cs.getPropertyValue('--accent').trim();
+  const heading=cs.getPropertyValue('--heading').trim();
+  const text=cs.getPropertyValue('--text').trim();
+  ctx.clearRect(0,0,cv.width,cv.height);
+  const x0=40,x1=660,y=70;
+  ctx.strokeStyle=text; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(x0,y); ctx.lineTo(x1,y); ctx.stroke();
+  for(let i=0;i<=1;i+=1){
+    const x=x0+(x1-x0)*i;
+    ctx.beginPath(); ctx.moveTo(x,y-8); ctx.lineTo(x,y+8); ctx.stroke();
+    ctx.fillStyle=text; ctx.font='13px Nunito Sans'; ctx.textAlign='center';
+    ctx.fillText(i, x, y+26);
+  }
+  function plot(n,d,color,label,yoff){
+    if(!d) return;
+    const v=n/d;
+    const x=x0+(x1-x0)*Math.min(Math.max(v,0),1);
+    ctx.beginPath(); ctx.arc(x,y,6,0,2*Math.PI); ctx.fillStyle=color; ctx.fill();
+    ctx.fillStyle=color; ctx.font='bold 13px Nunito Sans'; ctx.textAlign='center';
+    ctx.fillText(label, x, y+yoff);
+  }
+  plot(n1,d1,accent,n1+'/'+d1,-16);
+  plot(n2,d2,heading,n2+'/'+d2,44);
+  const v1=n1/d1, v2=n2/d2;
+  let txt='';
+  if(d1&&d2){
+    txt = v1<v2 ? (n1+'/'+d1+' < '+n2+'/'+d2) : (v1>v2 ? (n1+'/'+d1+' > '+n2+'/'+d2) : (n1+'/'+d1+' = '+n2+'/'+d2));
+  }
+  document.getElementById('cmpResultTxt').textContent=txt;
+}
+function checkRange(){
+  const ans=document.getElementById('rangeAns').value.replace(/\s/g,'').toLowerCase();
+  const res=document.getElementById('rangeResult');
+  // 2/10=0.2, 1/2=0.5, 3/5=0.6 → correct order 2/10 < 1/2 < 3/5
+  const correctPatterns=['2/10<1/2<3/5'];
+  if(correctPatterns.includes(ans)){
+    res.innerHTML='<p class="result ok">Exact ! 2/10 = 0,2 &lt; 1/2 = 0,5 &lt; 3/5 = 0,6</p>';
+  } else {
+    res.innerHTML='<p class="result no">Pas encore. Indice : convertis chaque fraction en nombre décimal pour comparer facilement. Réponse : 2/10 &lt; 1/2 &lt; 3/5</p>';
+  }
+}
+
+/* ===================== SECTION 3 : ADDITIONNER / SOUSTRAIRE ===================== */
+function initSection3(){
+  const p=document.getElementById('panel3');
+  p.innerHTML=`
+  <h2>4. Additionner et soustraire des fractions</h2>
+  <div class="card">
+    <h3>Même dénominateur</h3>
+    <p>On additionne (ou soustrait) les numérateurs et on garde le même dénominateur :</p>
+    <p>${frac('a','c')} + ${frac('b','c')} = ${frac('a+b','c')}</p>
+    <p>Exemple : ${frac('2','7')} + ${frac('3','7')} = ${frac('5','7')}</p>
+  </div>
+  <div class="card tip">
+    <h3>Dénominateurs différents : méthode pas à pas</h3>
+    <div class="step"><strong>1.</strong> Trouver un dénominateur commun (souvent un multiple des deux dénominateurs)</div>
+    <div class="step"><strong>2.</strong> Réduire chaque fraction à ce dénominateur commun</div>
+    <div class="step"><strong>3.</strong> Additionner (ou soustraire) les numérateurs</div>
+    <div class="step"><strong>4.</strong> Simplifier le résultat si possible</div>
+    <p>Exemple : ${frac('1','4')} + ${frac('1','6')}</p>
+    <div class="step">Dénominateur commun : 12</div>
+    <div class="step">${frac('1','4')} = ${frac('3','12')} et ${frac('1','6')} = ${frac('2','12')}</div>
+    <div class="step">${frac('3','12')} + ${frac('2','12')} = ${frac('5','12')}</div>
+  </div>
+  <div class="card">
+    <h3>Visualiser avec des barres</h3>
+    <div class="controls">
+      <input type="number" id="addN1" value="1" style="width:50px">/<input type="number" id="addD1" value="4" style="width:50px">
+      +
+      <input type="number" id="addN2" value="1" style="width:50px">/<input type="number" id="addD2" value="6" style="width:50px">
+      <button class="btn" onclick="drawAddBars()">Afficher</button>
+    </div>
+    <canvas id="cv3" width="700" height="220"></canvas>
+    <p id="addTxt" style="text-align:center;font-weight:700"></p>
+  </div>
+  <div class="card">
+    <h3>Exercices interactifs</h3>
+    <div id="addExoZone"></div>
+    <button class="btn" onclick="newAddExo()">Nouvel exercice</button>
+  </div>`;
+  drawAddBars();
+  newAddExo();
+}
+function drawAddBars(){
+  const n1=+document.getElementById('addN1').value, d1=+document.getElementById('addD1').value;
+  const n2=+document.getElementById('addN2').value, d2=+document.getElementById('addD2').value;
+  const cv=document.getElementById('cv3'); const ctx=cv.getContext('2d');
+  const cs=getComputedStyle(document.documentElement);
+  const accent=cs.getPropertyValue('--accent').trim();
+  const heading=cs.getPropertyValue('--heading').trim();
+  const surface2=cs.getPropertyValue('--surface2').trim();
+  const border=cs.getPropertyValue('--border').trim();
+  const text=cs.getPropertyValue('--text').trim();
+  ctx.clearRect(0,0,cv.width,cv.height);
+  if(!d1||!d2){return;}
+  const g=pgcd(d1,d2); const commonD=(d1*d2)/g;
+  const m1=commonD/d1, m2=commonD/d2;
+  const nn1=n1*m1, nn2=n2*m2;
+  const bx=40, bw=620, bh=50;
+  function bar(y,num,den,color,label){
+    const seg=bw/den;
+    for(let i=0;i<den;i++){
+      ctx.fillStyle = i<num ? color : surface2;
+      ctx.fillRect(bx+i*seg,y,seg,bh);
+      ctx.strokeStyle=border; ctx.strokeRect(bx+i*seg,y,seg,bh);
+    }
+    ctx.strokeStyle=text; ctx.lineWidth=2; ctx.strokeRect(bx,y,bw,bh);
+    ctx.fillStyle=text; ctx.font='13px Nunito Sans'; ctx.textAlign='left';
+    ctx.fillText(label, bx+bw+10, y+bh/2+4);
+  }
+  bar(10, nn1, commonD, accent, n1+'/'+d1+' = '+nn1+'/'+commonD);
+  bar(80, nn2, commonD, heading, n2+'/'+d2+' = '+nn2+'/'+commonD);
+  bar(150, nn1+nn2, commonD, accent, 'Somme = '+(nn1+nn2)+'/'+commonD);
+  const sumN=nn1+nn2; const g2=pgcd(sumN,commonD);
+  document.getElementById('addTxt').textContent =
+    n1+'/'+d1+' + '+n2+'/'+d2+' = '+sumN+'/'+commonD + (g2>1 ? (' = '+(sumN/g2)+'/'+(commonD/g2)+' (simplifiée)') : '');
+}
+let addExoCurrent={};
+function newAddExo(){
+  const pairs=[[1,3,1,6,'+'],[2,5,1,10,'+'],[3,4,1,8,'-'],[1,2,1,3,'+'],[5,6,1,4,'-'],[2,3,1,5,'+']];
+  const pick=pairs[Math.floor(Math.random()*pairs.length)];
+  const [n1,d1,n2,d2,op]=pick;
+  const g=pgcd(d1,d2); const cd=(d1*d2)/g;
+  const m1=cd/d1, m2=cd/d2;
+  let resN = op==='+' ? n1*m1+n2*m2 : n1*m1-n2*m2;
+  const g2=pgcd(Math.abs(resN),cd);
+  addExoCurrent={simpN:resN/g2, simpD:cd/g2, rawN:resN, rawD:cd};
+  const z=document.getElementById('addExoZone');
+  z.innerHTML=`
+    <p>Calcule et simplifie si possible : ${frac(n1,d1)} ${op} ${frac(n2,d2)}</p>
+    <div class="controls">
+      Résultat : <input type="number" id="addAnsN"> / <input type="number" id="addAnsD">
+      <button class="btn" onclick="checkAddExo()">Valider</button>
+    </div>
+    <div id="addExoResult"></div>`;
+}
+function checkAddExo(){
+  const n=+document.getElementById('addAnsN').value;
+  const d=+document.getElementById('addAnsD').value;
+  const res=document.getElementById('addExoResult');
+  if(!d){res.innerHTML='<p class="result no">Complète les deux champs.</p>';return;}
+  if(n===addExoCurrent.simpN && d===addExoCurrent.simpD){
+    res.innerHTML='<p class="result ok">Bravo, c\'est correct et bien simplifié !</p>';
+  } else if(n*addExoCurrent.simpD===d*addExoCurrent.simpN){
+    res.innerHTML='<p class="result no">La valeur est correcte mais pas encore simplifiée. Continue à réduire.</p>';
+  } else {
+    res.innerHTML='<p class="result no">Pas encore correct. Réponse attendue : '+frac(addExoCurrent.simpN,addExoCurrent.simpD)+'</p>';
+  }
+}
+
+/* ===================== SECTION 4 : MULTIPLIER ===================== */
+function initSection4(){
+  const p=document.getElementById('panel4');
+  p.innerHTML=`
+  <h2>5. Multiplier des fractions</h2>
+  <div class="card">
+    <h3>Prendre une fraction d'une quantité</h3>
+    <p>« Prendre ${frac('a','b')} d'une quantité » revient à multiplier cette quantité par ${frac('a','b')}.</p>
+    <p>Exemple : ${frac('3','4')} de 20 = 20 × ${frac('3','4')} = 15</p>
+  </div>
+  <div class="card tip">
+    <h3>Produit de deux fractions</h3>
+    <p>${frac('a','b')} × ${frac('c','d')} = ${frac('a×c','b×d')}</p>
+    <p>On multiplie les numérateurs entre eux, et les dénominateurs entre eux.</p>
+    <p><strong>Astuce :</strong> il est souvent plus simple de simplifier <em>avant</em> de multiplier (simplification en croix).</p>
+    <p>Exemple : ${frac('4','9')} × ${frac('3','8')} = ${frac('4×3','9×8')} = ${frac('12','72')} = ${frac('1','6')}</p>
+    <p>Plus rapide : on simplifie 4 et 8 par 4, puis 3 et 9 par 3 → ${frac('1','3')} × ${frac('1','2')} = ${frac('1','6')}</p>
+  </div>
+  <div class="card">
+    <p><em>Remarque :</em> la division de fractions n'est pas encore au programme de 5ème, elle sera vue en 4ème.</p>
+  </div>
+  <div class="card">
+    <h3>Visualiser : aire d'un rectangle</h3>
+    <div class="controls">
+      ${frac('a','b')} : <input type="number" id="mulN1" value="2" style="width:50px">/<input type="number" id="mulD1" value="3" style="width:50px">
+      ×
+      ${frac('c','d')} : <input type="number" id="mulN2" value="3" style="width:50px">/<input type="number" id="mulD2" value="5" style="width:50px">
+      <button class="btn" onclick="drawMulRect()">Afficher</button>
+    </div>
+    <canvas id="cv4" width="500" height="320"></canvas>
+    <p id="mulTxt" style="text-align:center;font-weight:700"></p>
+  </div>
+  <div class="card">
+    <h3>Exercices</h3>
+    <div id="mulExoZone"></div>
+    <button class="btn" onclick="newMulExo()">Nouvel exercice</button>
+  </div>`;
+  drawMulRect();
+  newMulExo();
+}
+function drawMulRect(){
+  const n1=+document.getElementById('mulN1').value, d1=+document.getElementById('mulD1').value;
+  const n2=+document.getElementById('mulN2').value, d2=+document.getElementById('mulD2').value;
+  const cv=document.getElementById('cv4'); const ctx=cv.getContext('2d');
+  const cs=getComputedStyle(document.documentElement);
+  const accent=cs.getPropertyValue('--accent').trim();
+  const surface2=cs.getPropertyValue('--surface2').trim();
+  const border=cs.getPropertyValue('--border').trim();
+  const text=cs.getPropertyValue('--text').trim();
+  ctx.clearRect(0,0,cv.width,cv.height);
+  if(!d1||!d2)return;
+  const size=260, ox=60, oy=20;
+  const cw=size/d2, ch=size/d1;
+  for(let i=0;i<d1;i++){
+    for(let j=0;j<d2;j++){
+      const inside = i<n1 && j<n2;
+      ctx.fillStyle = inside ? accent : surface2;
+      ctx.fillRect(ox+j*cw, oy+i*ch, cw, ch);
+      ctx.strokeStyle=border;
+      ctx.strokeRect(ox+j*cw, oy+i*ch, cw, ch);
+    }
+  }
+  ctx.strokeStyle=text; ctx.lineWidth=2.5; ctx.strokeRect(ox,oy,size,size);
+  ctx.fillStyle=text; ctx.font='14px Nunito Sans'; ctx.textAlign='center';
+  ctx.fillText('largeur = '+n2+'/'+d2, ox+size/2, oy+size+22);
+  ctx.save();
+  ctx.translate(ox-30, oy+size/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText('hauteur = '+n1+'/'+d1, 0, 0);
+  ctx.restore();
+  const g=pgcd(n1*n2, d1*d2);
+  document.getElementById('mulTxt').innerHTML =
+    n1+'/'+d1+' × '+n2+'/'+d2+' = '+(n1*n2)+'/'+(d1*d2) + (g>1 ? ' = '+((n1*n2)/g)+'/'+((d1*d2)/g)+' (simplifiée)' : '') +
+    ' — c\'est l\'aire de la partie colorée.';
+}
+let mulExoCurrent={};
+function newMulExo(){
+  const pairs=[[2,3,3,4],[4,9,3,8],[5,6,2,5],[3,7,7,9],[2,5,5,6]];
+  const [n1,d1,n2,d2]=pairs[Math.floor(Math.random()*pairs.length)];
+  const rawN=n1*n2, rawD=d1*d2; const g=pgcd(rawN,rawD);
+  mulExoCurrent={n:rawN/g, d:rawD/g};
+  const z=document.getElementById('mulExoZone');
+  z.innerHTML=`
+    <p>Calcule et simplifie : ${frac(n1,d1)} × ${frac(n2,d2)}</p>
+    <div class="controls">
+      Résultat : <input type="number" id="mulAnsN"> / <input type="number" id="mulAnsD">
+      <button class="btn" onclick="checkMulExo()">Valider</button>
+    </div>
+    <div id="mulExoResult"></div>`;
+}
+function checkMulExo(){
+  const n=+document.getElementById('mulAnsN').value;
+  const d=+document.getElementById('mulAnsD').value;
+  const res=document.getElementById('mulExoResult');
+  if(!d){res.innerHTML='<p class="result no">Complète les deux champs.</p>';return;}
+  if(n===mulExoCurrent.n && d===mulExoCurrent.d){
+    res.innerHTML='<p class="result ok">Parfait, c\'est la fraction irréductible attendue !</p>';
+  } else if(n*mulExoCurrent.d===d*mulExoCurrent.n){
+    res.innerHTML='<p class="result no">Correct mais pas simplifié au maximum.</p>';
+  } else {
+    res.innerHTML='<p class="result no">Ce n\'est pas correct. Réponse : '+frac(mulExoCurrent.n,mulExoCurrent.d)+'</p>';
+  }
+}
+
+/* ===================== SECTION 5 : EXERCICES ===================== */
+function initSection5(){
+  const p=document.getElementById('panel5');
+  const exos=[
+    {niv:'Appliquer', q:'Simplifie la fraction ' + frac(18,24) + ' jusqu\'à la forme irréductible.',
+     corr:'PGCD(18,24) = 6. ' + frac(18,24) + ' = ' + frac(3,4) + '.'},
+    {niv:'Appliquer', q:'Calcule ' + frac(3,5) + ' de 45.',
+     corr:'45 ÷ 5 × 3 = 9 × 3 = 27.'},
+    {niv:'Appliquer', q:'Compare ' + frac(5,9) + ' et ' + frac(7,9) + '.',
+     corr:'Même dénominateur : 5 < 7 donc ' + frac(5,9) + ' < ' + frac(7,9) + '.'},
+    {niv:'Comprendre', q:'Calcule ' + frac(2,3) + ' + ' + frac(1,4) + ' (résultat simplifié).',
+     corr:'Dénominateur commun 12 : ' + frac(8,12) + ' + ' + frac(3,12) + ' = ' + frac(11,12) + ' (déjà irréductible).'},
+    {niv:'Comprendre', q:'Calcule ' + frac(5,6) + ' − ' + frac(1,4) + ' (résultat simplifié).',
+     corr:'Dénominateur commun 12 : ' + frac(10,12) + ' − ' + frac(3,12) + ' = ' + frac(7,12) + ' (déjà irréductible).'},
+    {niv:'Comprendre', q:'Calcule ' + frac(3,10) + ' × ' + frac(5,9) + ' en simplifiant avant de multiplier.',
+     corr:'On simplifie 3 et 9 par 3, puis 5 et 10 par 5 : ' + frac(1,2) + ' × ' + frac(1,3) + ' = ' + frac(1,6) + '.'},
+    {niv:'Approfondir', q:'Range dans l\'ordre croissant : ' + frac(3,4) + ', ' + frac(5,8) + ', ' + frac(1,2) + '.',
+     corr:'Dénominateur commun 8 : ' + frac(6,8) + ', ' + frac(5,8) + ', ' + frac(4,8) + '. Ordre croissant : ' + frac(1,2) + ' &lt; ' + frac(5,8) + ' &lt; ' + frac(3,4) + '.'},
+    {niv:'Approfondir', q:'Un jardinier plante des fleurs sur ' + frac(2,5) + ' de son terrain, puis des légumes sur ' + frac(1,3) + ' du terrain. Quelle fraction du terrain reste libre ?',
+     corr:'Fleurs + légumes = ' + frac(2,5) + ' + ' + frac(1,3) + ' = ' + frac(6,15) + ' + ' + frac(5,15) + ' = ' + frac(11,15) + '. Terrain libre = ' + frac(15,15) + ' − ' + frac(11,15) + ' = ' + frac(4,15) + '.'}
+  ];
+  let html='<h2>6. Exercices progressifs</h2>';
+  exos.forEach((e,i)=>{
+    html+=`<div class="card exo">
+      <p><strong>Exercice ${i+1}</strong> — <em>${e.niv}</em></p>
+      <p>${e.q}</p>
+      <details><summary>Voir la correction</summary><p>${e.corr}</p></details>
+    </div>`;
+  });
+  p.innerHTML=html;
+}
+
+/* ===================== SECTION 6 : QCM ===================== */
+const qcmData=[
+  {q:'Dans '+frac(3,7)+', quel est le dénominateur ?', opts:['3','7','10'], correct:1},
+  {q:frac(2,3)+' de 24, cela vaut :', opts:['8','16','18'], correct:1},
+  {q:'Laquelle de ces fractions est égale à '+frac(2,3)+' ?', opts:[frac(4,9),frac(6,9),frac(4,6)], correct:2},
+  {q:'La forme irréductible de '+frac(12,18)+' est :', opts:[frac(6,9),frac(2,3),frac(4,6)], correct:1},
+  {q:'Un nombre est divisible par 3 si :', opts:['il est pair','la somme de ses chiffres est divisible par 3','il se termine par 3'], correct:1},
+  {q:'Comparer '+frac(3,8)+' et '+frac(5,8)+' :', opts:[frac(3,8)+' &gt; '+frac(5,8), frac(3,8)+' &lt; '+frac(5,8), 'égales'], correct:1},
+  {q:'Pour comparer '+frac(1,2)+' et '+frac(2,5)+', on peut les réduire au dénominateur :', opts:['7','10','2'], correct:1},
+  {q:frac(1,4)+' + '+frac(1,4)+' = ', opts:[frac(2,8),frac(1,2),frac(2,4)], correct:1},
+  {q:frac(2,3)+' + '+frac(1,6)+' = ', opts:[frac(3,9),frac(5,6),frac(1,2)], correct:1},
+  {q:frac(3,4)+' − '+frac(1,4)+' = ', opts:[frac(2,4),frac(1,2),'les deux réponses précédentes'], correct:2},
+  {q:frac(5,6)+' − '+frac(1,3)+' = ', opts:[frac(1,2),frac(4,3),frac(4,6)], correct:0},
+  {q:frac(1,2)+' × '+frac(2,3)+' = ', opts:[frac(3,6),frac(1,3),frac(2,6)], correct:1},
+  {q:frac(4,9)+' × '+frac(3,8)+' simplifié donne :', opts:[frac(1,6),frac(12,72),frac(2,3)], correct:0},
+  {q:'La division de fractions est au programme de :', opts:['5ème','4ème','6ème'], correct:1},
+  {q:'PGCD(24,36) = ', opts:['6','12','8'], correct:1},
+  {q:'Un dénominateur commun à 4 et 6 est :', opts:['10','12','24'], correct:1}
+];
+function initSection6(){
+  const p=document.getElementById('panel6');
+  let html='<h2>7. QCM — Fractions : opérations</h2><div class="card"><p>Réponds aux 16 questions. Ton score s\'affiche à la fin.</p></div>';
+  qcmData.forEach((item,i)=>{
+    html+=`<div class="card">
+      <p><strong>Question ${i+1}.</strong> ${item.q}</p>
+      <div id="qcmOpts${i}"></div>
+    </div>`;
+  });
+  html+='<div class="card"><button class="btn" onclick="computeQcmScore()">Voir mon score</button><div id="qcmScore"></div></div>';
+  p.innerHTML=html;
+  qcmData.forEach((item,i)=>{
+    const zone=document.getElementById('qcmOpts'+i);
+    item.opts.forEach((opt,j)=>{
+      const btn=document.createElement('button');
+      btn.className='qcm-opt';
+      btn.innerHTML=opt;
+      btn.onclick=()=>selectQcm(i,j);
+      zone.appendChild(btn);
+    });
+  });
+}
+const qcmAnswers={};
+function selectQcm(qi,oi){
+  qcmAnswers[qi]=oi;
+  const zone=document.getElementById('qcmOpts'+qi);
+  const btns=zone.querySelectorAll('.qcm-opt');
+  btns.forEach((b,j)=>{
+    b.classList.remove('correct','wrong');
+    if(j===qcmData[qi].correct) b.classList.add('correct');
+    else if(j===oi) b.classList.add('wrong');
+  });
+}
+function computeQcmScore(){
+  let score=0;
+  qcmData.forEach((item,i)=>{ if(qcmAnswers[i]===item.correct) score++; });
+  const el=document.getElementById('qcmScore');
+  const total=qcmData.length;
+  const answered=Object.keys(qcmAnswers).length;
+  let msg=`Score : ${score} / ${total}`;
+  if(answered<total) msg += ` (attention, ${total-answered} question(s) non répondue(s))`;
+  if(score===total) msg += ' — Excellent, sans faute !';
+  else if(score>=total*0.7) msg += ' — Très bien !';
+  else if(score>=total*0.5) msg += ' — Pas mal, continue à t\'entraîner.';
+  else msg += ' — Revois le cours et réessaie.';
+  el.textContent=msg;
+}
+
+/* ===================== INIT ===================== */
+buildNav();
+initSection0();
+loaded[0]=true;
+</script>
+</body>
+</html>

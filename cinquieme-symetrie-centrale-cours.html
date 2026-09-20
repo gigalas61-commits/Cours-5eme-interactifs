@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Symétrie centrale — 5ème</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f5f2ed; --surface:#ffffff; --surface2:#ebe6de; --text:#2c2418;
+  --heading:#8b4513; --muted:#6b5a48; --border:#d4c8b8; --accent:#a0522d; --accent-light:#faf5ef;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:#161210; --surface:#221c18; --surface2:#302820; --text:#ddd0c0;
+    --heading:#e0a868; --muted:#9a8878; --border:#403428; --accent:#d08840; --accent-light:#1e1610;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:#161210; --surface:#221c18; --surface2:#302820; --text:#ddd0c0;
+  --heading:#e0a868; --muted:#9a8878; --border:#403428; --accent:#d08840; --accent-light:#1e1610;
+}
+* { box-sizing: border-box; }
+body {
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:'Nunito Sans', sans-serif; line-height:1.6;
+  transition: background .2s, color .2s;
+}
+h1,h2,h3,h4 { font-family:'Cormorant Garamond', serif; color:var(--heading); font-weight:700; margin-top:0; }
+h1 { font-size:2.1rem; } h2 { font-size:1.6rem; } h3 { font-size:1.3rem; }
+header {
+  padding:20px 16px; background:var(--surface); border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+  position:sticky; top:0; z-index:50;
+}
+.header-left { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+.badge {
+  background:var(--accent); color:#fff; font-weight:700; font-size:.85rem;
+  padding:4px 12px; border-radius:20px; font-family:'Nunito Sans',sans-serif;
+}
+.theme-btn {
+  background:var(--surface2); border:1px solid var(--border); color:var(--text);
+  border-radius:10px; padding:8px 14px; cursor:pointer; font-size:1rem; font-family:inherit;
+}
+.theme-btn:hover { border-color:var(--accent); }
+nav.tabs {
+  display:flex; overflow-x:auto; gap:6px; padding:10px 16px; background:var(--surface);
+  border-bottom:2px solid var(--border); position:sticky; top:78px; z-index:40;
+}
+.tab-btn {
+  flex:0 0 auto; background:var(--surface2); border:1px solid var(--border); color:var(--muted);
+  padding:9px 16px; border-radius:10px 10px 0 0; cursor:pointer; font-family:'Nunito Sans',sans-serif;
+  font-weight:600; font-size:.9rem; white-space:nowrap;
+}
+.tab-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+main { max-width:960px; margin:0 auto; padding:20px 16px 60px; }
+.panel { display:none; animation:fade .25s ease; }
+.panel.active { display:block; }
+@keyframes fade { from{opacity:0;transform:translateY(4px);} to{opacity:1;transform:translateY(0);} }
+.card {
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+  padding:18px 20px; margin-bottom:18px;
+}
+.def-box {
+  background:var(--accent-light); border-left:4px solid var(--accent); border-radius:8px;
+  padding:14px 18px; margin:14px 0;
+}
+.def-box strong { color:var(--heading); }
+.tip-box {
+  background:var(--surface2); border:1px dashed var(--border); border-radius:8px;
+  padding:12px 16px; margin:14px 0; font-size:.95rem;
+}
+canvas {
+  background:var(--surface2); border:1px solid var(--border); border-radius:10px;
+  display:block; margin:14px auto; max-width:100%; touch-action:none;
+}
+.controls { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:10px 0; }
+button.action {
+  background:var(--accent); color:#fff; border:none; border-radius:8px; padding:8px 16px;
+  cursor:pointer; font-family:'Nunito Sans',sans-serif; font-weight:600; font-size:.9rem;
+}
+button.action:hover { opacity:.88; }
+button.action.secondary { background:var(--surface2); color:var(--text); border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; margin:14px 0; font-size:.93rem; }
+th, td { border:1px solid var(--border); padding:8px 10px; text-align:left; }
+th { background:var(--surface2); color:var(--heading); font-family:'Cormorant Garamond',serif; font-size:1.05rem; }
+details {
+  background:var(--surface2); border:1px solid var(--border); border-radius:8px;
+  padding:8px 14px; margin:10px 0;
+}
+summary {
+  cursor:pointer; font-weight:700; color:var(--accent); padding:6px 0; list-style:revert;
+}
+details[open] summary { margin-bottom:8px; }
+.exo-num {
+  display:inline-block; background:var(--accent); color:#fff; border-radius:50%;
+  width:26px; height:26px; text-align:center; line-height:26px; font-weight:700; margin-right:8px;
+}
+.diff-tag {
+  font-size:.75rem; padding:2px 9px; border-radius:12px; margin-left:8px; font-weight:700;
+  background:var(--surface); border:1px solid var(--border); color:var(--muted); vertical-align:middle;
+}
+.diff-1 { color:#3a8b4a; border-color:#3a8b4a55; }
+.diff-2 { color:#c98a1e; border-color:#c98a1e55; }
+.diff-3 { color:#c0392b; border-color:#c0392b55; }
+ul, ol { padding-left:22px; }
+li { margin-bottom:6px; }
+.qcm-q { border-bottom:1px solid var(--border); padding:14px 0; }
+.qcm-q:last-child { border-bottom:none; }
+.qcm-opts { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+.qcm-opt {
+  background:var(--surface2); border:1px solid var(--border); border-radius:8px;
+  padding:9px 14px; cursor:pointer; font-size:.92rem;
+}
+.qcm-opt:hover { border-color:var(--accent); }
+.qcm-opt.correct { background:#2e7d3220; border-color:#2e7d32; }
+.qcm-opt.wrong { background:#c0392b20; border-color:#c0392b; }
+.qcm-opt.disabled { pointer-events:none; opacity:.85; }
+#qcm-score {
+  text-align:center; font-family:'Cormorant Garamond',serif; font-size:1.5rem;
+  color:var(--heading); margin-top:16px; padding:14px; background:var(--accent-light); border-radius:10px;
+  display:none;
+}
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media (max-width:600px) {
+  h1 { font-size:1.5rem; } h2 { font-size:1.25rem; }
+  .grid-2 { grid-template-columns:1fr; }
+  nav.tabs { top:70px; }
+  main { padding:14px 12px 50px; }
+  .card { padding:14px; }
+}
+.legend { font-size:.85rem; color:var(--muted); text-align:center; margin-top:-6px; }
+.footer-note { text-align:center; color:var(--muted); font-size:.85rem; margin-top:30px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1 style="margin:0;">Symétrie centrale</h1>
+    <span class="badge">5ème</span>
+  </div>
+  <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">🌓 Thème</button>
+</header>
+
+<nav class="tabs" id="tabsNav">
+  <button class="tab-btn active" onclick="showTab(0)">1. Définition</button>
+  <button class="tab-btn" onclick="showTab(1)">2. Construire</button>
+  <button class="tab-btn" onclick="showTab(2)">3. Propriétés</button>
+  <button class="tab-btn" onclick="showTab(3)">4. Figures</button>
+  <button class="tab-btn" onclick="showTab(4)">5. Comparaison</button>
+  <button class="tab-btn" onclick="showTab(5)">6. Exercices</button>
+  <button class="tab-btn" onclick="showTab(6)">7. QCM</button>
+</nav>
+
+<main>
+
+<!-- ===================== TAB 0 : DEFINITION ===================== -->
+<section class="panel active" id="panel-0">
+  <div class="card">
+    <h2>Le symétrique d'un point par rapport à un centre</h2>
+    <p>En 6ème, tu as appris la <strong>symétrie axiale</strong> : on plie la feuille le long d'un axe. Cette année, on découvre une nouvelle transformation : la <strong>symétrie centrale</strong>. Cette fois, on ne plie plus la feuille : on la fait tourner d'un demi-tour (180°) autour d'un point appelé <strong>centre</strong>.</p>
+    <div class="def-box">
+      <strong>Définition.</strong> Soit O un point du plan. Le <strong>symétrique</strong> d'un point M par rapport au centre O est le point M' tel que <strong>O soit le milieu du segment [MM']</strong>.
+      <br>On dit aussi que M' est <strong>l'image de M</strong> par la symétrie de centre O.
+    </div>
+    <p>Trois points M, O et M' sont donc toujours <strong>alignés</strong>, et on a OM = OM'.</p>
+    <div class="tip-box">💡 Retiens la phrase clé : « O est le milieu de [MM'] » résume toute la définition. Si tu sais placer un milieu, tu sais construire un symétrique !</div>
+    <p>Une autre façon de voir les choses : si tu poses ton crayon sur M, que tu tournes ta feuille d'un demi-tour (180°) exactement autour du point O, la pointe de ton crayon retombe exactement sur M'. C'est pour cela qu'on parle parfois de « symétrie par demi-tour » ou de « retournement de la figure autour d'un point ».</p>
+    <p>Le vocabulaire à connaître par cœur :</p>
+    <ul>
+      <li>
+        <strong>Centre de symétrie</strong> :
+        le point O, qui reste fixe pendant la transformation.
+      </li>
+      <li>
+        <strong>Symétrique</strong> (ou <strong>image</strong>) :
+        le point obtenu après la transformation, noté M'.
+      </li>
+      <li>
+        <strong>Antécédent</strong> :
+        le point de départ, ici M (on dit que M est l'antécédent de M').
+      </li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Cas particulier : le symétrique de O</h3>
+    <p>Le symétrique du point O par rapport à lui-même est... O lui-même ! En effet, O est le milieu de [OO]. On dit que O est un <strong>point invariant</strong> (ou point fixe) de la symétrie centrale de centre O : c'est le <strong>seul</strong> point du plan qui ne bouge pas lors de la transformation.</p>
+    <p>C'est une différence importante avec la symétrie axiale, où <strong>tous</strong> les points de l'axe restent fixes (une droite entière de points invariants), alors qu'ici il n'y a qu'un seul point invariant : le centre O.</p>
+    <p>Cette idée de « point fixe unique » est très utile pour repérer rapidement, sur une figure, quelle transformation a été utilisée : si un seul point n'a pas bougé, c'est une symétrie centrale (ou une rotation) ; si toute une droite de points n'a pas bougé, c'est une symétrie axiale.</p>
+  </div>
+
+  <div class="card">
+    <h3>Petit historique</h3>
+    <p>L'idée de symétrie centrale remonte à la géométrie grecque antique, mais c'est surtout avec le développement de la géométrie analytique (Descartes, XVIIe siècle) et plus tard des « groupes de transformations » que cette notion a été formalisée. En classe de 5ème, on la voit comme une transformation géométrique simple, mais elle est à la base de nombreuses notions étudiées plus tard : les rotations (la symétrie centrale est en fait une rotation de 180°), les vecteurs, et certaines propriétés des fonctions (parité).</p>
+    <p>On retrouve d'ailleurs la symétrie centrale dans la nature et dans l'art : les motifs de certains flocons de neige, les logos de nombreuses marques, ou encore certains motifs de pavage utilisent cette transformation pour créer un effet d'équilibre autour d'un point central.</p>
+  </div>
+
+  <div class="card">
+    <h3>Premiers exercices d'application directe</h3>
+    <p><span class="exo-num">A</span>O est un point. M est un point tel que OM = 3,5 cm. On appelle M' le symétrique de M par rapport à O. Que vaut la longueur OM' ? Que vaut la longueur MM' ?</p>
+    <details>
+      <summary>Correction</summary>
+      <p>Puisque O est le milieu de [MM'], on a OM' = OM = 3,5 cm. La longueur totale MM' = OM + OM' = 3,5 + 3,5 = 7 cm.</p>
+    </details>
+    <p><span class="exo-num">B</span>P et Q sont deux points tels que P soit le symétrique de Q par rapport à un point R. Peut-on dire que Q est le symétrique de P par rapport à R ?</p>
+    <details>
+      <summary>Correction</summary>
+      <p>Oui. La symétrie centrale est une transformation <strong>réciproque</strong> : si R est le milieu de [QP], alors R est aussi le milieu de [PQ] (c'est le même segment !). Donc Q est bien le symétrique de P par rapport à R.</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>Exemple détaillé pas à pas</h3>
+    <p>Reprenons l'exemple du quadrillage : le centre O est repéré sur une feuille, et M est un point situé à 4 carreaux à droite et 3 carreaux au-dessus de O. Cherchons la position de M'.</p>
+    <ol>
+      <li><strong>Étape 1</strong> — On repère la position de M par rapport à O : « 4 carreaux à droite, 3 carreaux au-dessus ».</li>
+      <li><strong>Étape 2</strong> — On applique la définition : M' doit être placé de sorte que O soit le milieu de [MM']. Il faut donc aller « dans la direction opposée », avec la même distance.</li>
+      <li><strong>Étape 3</strong> — On place M' à « 4 carreaux à gauche, 3 carreaux en dessous » de O.</li>
+      <li><strong>Étape 4</strong> — On vérifie : la distance horizontale de O à M (4 carreaux) est bien égale à la distance horizontale de O à M' (4 carreaux), et de même verticalement (3 carreaux). O est donc bien le milieu de [MM'].</li>
+    </ol>
+    <div class="tip-box">💡 Cette méthode « en carreaux » ne fonctionne que sur quadrillage, mais elle permet de vérifier très rapidement une construction faite au compas.</div>
+  </div>
+
+  <div class="card">
+    <h3>Explore : déplace le point M</h3>
+    <p>Clique-glisse le point <strong>M</strong> (en bleu) sur le quadrillage. Le point <strong>M'</strong> (en vert), symétrique de M par rapport au centre O (en rouge), se met à jour automatiquement.</p>
+    <canvas id="canvasDef" width="560" height="420"></canvas>
+    <p class="legend">O est fixe au centre. Fais glisser M avec la souris ou le doigt.</p>
+    <div class="controls">
+      <button class="action secondary" onclick="resetDef()">Réinitialiser M</button>
+    </div>
+    <div id="defCoords" class="tip-box" style="text-align:center;"></div>
+  </div>
+
+  <div class="card">
+    <h3>À retenir</h3>
+    <ul>
+      <li>M' est le symétrique de M par rapport à O ⇔ O est le milieu de [MM'].</li>
+      <li>Si M' est le symétrique de M par rapport à O, alors M est le symétrique de M' par rapport à O (la transformation est réciproque).</li>
+      <li>Le symétrique de O par rapport à O est O.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== TAB 1 : CONSTRUIRE ===================== -->
+<section class="panel" id="panel-1">
+  <div class="card">
+    <h2>Construire le symétrique d'un point</h2>
+    <p>Pour construire M', symétrique de M par rapport à O, deux méthodes sont possibles.</p>
+    <h3>Méthode 1 : à la règle graduée</h3>
+    <ol>
+      <li>Tracer la demi-droite [MO).</li>
+      <li>Mesurer la longueur MO.</li>
+      <li>Placer M' sur la demi-droite [MO), de l'autre côté de O, tel que OM' = OM.</li>
+    </ol>
+    <h3>Méthode 2 : au compas</h3>
+    <ol>
+      <li>Tracer la droite (MO).</li>
+      <li>Pointer le compas en O, écartement OM.</li>
+      <li>Tracer un arc de cercle qui coupe la droite (MO) de l'autre côté de O : c'est le point M'.</li>
+    </ol>
+    <div class="tip-box">💡 Sur un quadrillage, c'est souvent plus rapide : on compte le nombre de carreaux entre M et O horizontalement et verticalement, puis on reporte le même nombre de carreaux de l'autre côté de O.</div>
+    <h3>Matériel nécessaire</h3>
+    <p>Pour ces constructions, il te faut : une règle graduée, un compas, un crayon bien taillé et, si possible, une feuille quadrillée ou blanche selon l'exercice. Voici quelques conseils pratiques :</p>
+    <ul>
+      <li>Trace toujours tes traits de construction (droites, arcs) <strong>légèrement</strong>, au crayon, car certains ne sont pas destinés à rester sur la figure finale.</li>
+      <li>Repasse en <strong>plus foncé</strong> (ou en couleur) les éléments importants : les points, le segment [MM'] final.</li>
+      <li>Un compas bien réglé ne doit pas « glisser » : vérifie que l'écartement ne bouge pas pendant que tu traces l'arc.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Animation : étapes de construction</h3>
+    <canvas id="canvasConstruct" width="560" height="420"></canvas>
+    <div class="controls">
+      <button class="action" onclick="nextStepConstruct()">Étape suivante ▶</button>
+      <button class="action secondary" onclick="resetStepConstruct()">Recommencer</button>
+    </div>
+    <p class="legend" id="constructLegend">Étape 0 : point M et centre O placés.</p>
+  </div>
+
+  <div class="card">
+    <h3>Construction sur quadrillage — méthode des carreaux</h3>
+    <p>Exemple : M est à 3 carreaux à droite et 2 carreaux au-dessus de O.</p>
+    <p>Pour trouver M', on part de O et on compte <strong>3 carreaux à gauche et 2 carreaux en dessous</strong> (le contraire, car M' est de l'autre côté de O).</p>
+    <canvas id="canvasGrid" width="560" height="360"></canvas>
+  </div>
+
+  <div class="card">
+    <h3>Exercice guidé</h3>
+    <p>Sur une feuille quadrillée, place un point O. Place un point A à 4 carreaux à droite et 1 carreau en dessous de O.</p>
+    <ol>
+      <li>Où se trouve A' par rapport à O ? (à combien de carreaux, dans quelle direction ?)</li>
+      <li>Construis A' au compas.</li>
+    </ol>
+    <details>
+      <summary>Voir la correction</summary>
+      <p>A' se trouve à <strong>4 carreaux à gauche et 1 carreau au-dessus</strong> de O (symétrie des déplacements : droite ↔ gauche, dessous ↔ dessus).</p>
+      <p>Construction au compas : tracer la droite (AO), pointer en O avec un écartement OA, tracer l'arc qui coupe la droite de l'autre côté de O : on obtient A'.</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>Erreurs fréquentes à éviter</h3>
+    <ul>
+      <li><strong>Erreur n°1</strong> : placer M' du même côté de O que M. Non ! M' doit toujours être de l'<strong>autre côté</strong> du centre O par rapport à M.</li>
+      <li><strong>Erreur n°2</strong> : oublier de vérifier l'alignement M, O, M'. Après la construction, ces trois points doivent toujours être sur une même droite.</li>
+      <li><strong>Erreur n°3</strong> : confondre avec le milieu d'un segment déjà existant. Ici on <strong>construit</strong> M' à partir de M et O ; ce n'est donné qu'après coup que O apparaît comme le milieu de [MM'].</li>
+    </ul>
+    <div class="tip-box">💡 Une bonne habitude : après avoir construit M', mesure OM et OM' avec ta règle pour vérifier qu'elles sont bien égales. Cela permet de repérer une erreur de construction.</div>
+  </div>
+
+  <div class="card">
+    <h3>Exercice supplémentaire</h3>
+    <p><span class="exo-num">C</span>Trace un segment [BC] de 8 cm. Place le point O, milieu de [BC]. Que peux-tu dire de B et C par rapport à la symétrie de centre O ?</p>
+    <details>
+      <summary>Correction</summary>
+      <p>Puisque O est le milieu de [BC] par construction, B et C sont symétriques l'un de l'autre par rapport à O : C est le symétrique de B (et réciproquement).</p>
+    </details>
+  </div>
+</section>
+
+<!-- ===================== TAB 2 : PROPRIETES ===================== -->
+<section class="panel" id="panel-2">
+  <div class="card">
+    <h2>Propriétés de conservation</h2>
+    <p>La symétrie centrale est une transformation qui <strong>conserve</strong> beaucoup de choses. C'est ce qui la rend si utile en géométrie.</p>
+    <div class="def-box">
+      La symétrie centrale conserve :
+      <ul style="margin-bottom:0;">
+        <li>les <strong>longueurs</strong> (les distances) ;</li>
+        <li>les <strong>angles</strong> (leur mesure) ;</li>
+        <li>l'<strong>alignement</strong> des points ;</li>
+        <li>les <strong>aires</strong> et les <strong>périmètres</strong> ;</li>
+        <li>le <strong>parallélisme</strong> des droites.</li>
+      </ul>
+    </div>
+    <p>Autrement dit, l'image d'une figure par une symétrie centrale est <strong>superposable</strong> à la figure de départ (même taille, mêmes angles), simplement retournée d'un demi-tour autour du centre O. On dit que la symétrie centrale est une transformation qui conserve les <strong>distances</strong> : c'est ce qu'on appelle une <strong>isométrie</strong> (terme que tu reverras au lycée).</p>
+  </div>
+
+  <div class="card">
+    <h3>Image d'un segment</h3>
+    <p>Le symétrique d'un segment [AB] par rapport à O est le segment [A'B'] avec A'B' = AB.</p>
+    <p><strong>Astuce de construction</strong> : pour construire l'image d'un segment, il suffit de construire les images de ses deux extrémités, puis de les relier !</p>
+    <h3>Image d'une droite</h3>
+    <p>Le symétrique d'une droite (d) par rapport à O est une droite (d') <strong>parallèle</strong> à (d).</p>
+    <h3>Image d'un cercle</h3>
+    <p>Le symétrique d'un cercle de centre I et de rayon r est un cercle de <strong>même rayon r</strong>, dont le centre est le symétrique I' de I.</p>
+  </div>
+
+  <div class="card">
+    <h3>Visualisation : image d'un triangle</h3>
+    <canvas id="canvasProp" width="560" height="420"></canvas>
+    <p class="legend">Le triangle ABC (bleu) et son image A'B'C' (vert) par la symétrie de centre O.</p>
+  </div>
+
+  <div class="card">
+    <h3>Pourquoi la symétrie centrale conserve-t-elle les longueurs ?</h3>
+    <p>On peut le justifier ainsi : soient M et N deux points, M' et N' leurs images respectives par la symétrie de centre O. On admet (résultat démontré au lycée à l'aide des vecteurs) que le segment [M'N'] a la même longueur que [MN], et qu'il lui est de plus <strong>parallèle</strong>. C'est cette propriété fondamentale qui entraîne ensuite la conservation des angles, des aires et du parallélisme : toute la figure est transportée « telle quelle », seulement retournée d'un demi-tour autour de O.</p>
+  </div>
+
+  <div class="card">
+    <h3>Exercices</h3>
+    <p><span class="exo-num">1</span>ABC est un triangle tel que AB = 5 cm, BC = 4 cm et AC = 3,2 cm. A'B'C' est le symétrique de ABC par rapport à un point O. Quelles sont les longueurs A'B', B'C' et A'C' ?</p>
+    <details>
+      <summary>Correction</summary>
+      <p>La symétrie centrale conserve les longueurs, donc A'B' = AB = 5 cm, B'C' = BC = 4 cm, A'C' = AC = 3,2 cm.</p>
+    </details>
+    <p><span class="exo-num">2</span>Un triangle ABC a une aire de 12 cm² et un angle en A de 40°. Que peut-on dire de l'aire et de l'angle en A' du triangle image A'B'C' ?</p>
+    <details>
+      <summary>Correction</summary>
+      <p>La symétrie centrale conserve les aires et les angles : l'aire de A'B'C' est aussi 12 cm², et l'angle en A' mesure aussi 40°.</p>
+    </details>
+    <p><span class="exo-num">3</span>M, N, P sont trois points alignés. Que peut-on dire de leurs images M', N', P' par une symétrie de centre O ?</p>
+    <details>
+      <summary>Correction</summary>
+      <p>La symétrie centrale conserve l'alignement : M', N' et P' sont donc alignés eux aussi (dans le même ordre).</p>
+    </details>
+    <p><span class="exo-num">4</span>Un cercle (C) a pour centre I et pour rayon 5 cm. On construit le symétrique (C') de (C) par rapport à un point O extérieur à (C). Quel est le rayon de (C') ? Comment trouver son centre ?</p>
+    <details>
+      <summary>Correction</summary>
+      <p>Le rayon de (C') est le même que celui de (C), soit <strong>5 cm</strong> (la symétrie centrale conserve les longueurs, donc les rayons). Le centre de (C') est le symétrique I' du centre I par rapport à O : on le construit comme le symétrique d'un point ordinaire (O milieu de [II']).</p>
+    </details>
+    <p><span class="exo-num">5</span>Deux droites (d1) et (d2) sont parallèles. On construit leurs images (d1') et (d2') par une symétrie centrale de centre O. Que peut-on dire de (d1') et (d2') ?</p>
+    <details>
+      <summary>Correction</summary>
+      <p>La symétrie centrale conserve le parallélisme : (d1') et (d2') sont donc aussi parallèles entre elles.</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>Pourquoi ces propriétés sont-elles utiles ?</h3>
+    <p>Ces propriétés de conservation permettent de <strong>démontrer</strong> des résultats de géométrie sans avoir à tout mesurer. Par exemple, si l'on sait qu'une figure est l'image d'une autre par une symétrie centrale, on peut immédiatement affirmer l'égalité des longueurs et des angles correspondants, sans nouvelle mesure. C'est un outil puissant utilisé dans de nombreuses démonstrations du collège et du lycée.</p>
+  </div>
+
+  <div class="card">
+    <h3>Exemple détaillé : calcul d'aire</h3>
+    <p>Un quadrilatère ABCD a pour aire 18 cm². Son image A'B'C'D' par la symétrie de centre O a-t-elle la même aire ? Justifie.</p>
+    <p style="background:var(--surface2); padding:10px 14px; border-radius:8px;">
+      <strong>Réponse rédigée :</strong> « La symétrie centrale conserve les aires. Donc l'aire du quadrilatère A'B'C'D', image de ABCD par la symétrie de centre O, est égale à l'aire de ABCD, c'est-à-dire <strong>18 cm²</strong>. »
+    </p>
+    <p>Ce type de justification, courte mais complète (propriété citée + conclusion numérique), est exactement ce qui est attendu lors d'un contrôle ou au brevet des collèges.</p>
+  </div>
+
+  <div class="card">
+    <h3>Tableau récapitulatif des propriétés</h3>
+    <table>
+      <tr><th>Objet de départ</th><th>Objet image</th><th>Grandeur conservée</th></tr>
+      <tr><td>Point M</td><td>Point M'</td><td>Aucune (transformation ponctuelle)</td></tr>
+      <tr><td>Segment [AB]</td><td>Segment [A'B']</td><td>Longueur : A'B' = AB</td></tr>
+      <tr><td>Angle en un sommet</td><td>Angle en son image</td><td>Mesure de l'angle</td></tr>
+      <tr><td>Droite (d)</td><td>Droite (d') parallèle à (d)</td><td>Direction (parallélisme)</td></tr>
+      <tr><td>Cercle de rayon r</td><td>Cercle de rayon r</td><td>Rayon</td></tr>
+      <tr><td>Figure d'aire A</td><td>Figure d'aire A</td><td>Aire</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== TAB 3 : FIGURES SYMETRIQUES ===================== -->
+<section class="panel" id="panel-3">
+  <div class="card">
+    <h2>Figures ayant un centre de symétrie</h2>
+    <div class="def-box">
+      Une figure possède un <strong>centre de symétrie</strong> O lorsque son symétrique par rapport à O est <strong>elle-même</strong>.
+    </div>
+    <p>C'est l'équivalent, pour la symétrie centrale, de l'axe de symétrie pour la symétrie axiale.</p>
+  </div>
+
+  <div class="card">
+    <h3>Le parallélogramme</h3>
+    <p>Un <strong>parallélogramme</strong> a un centre de symétrie : le <strong>point d'intersection de ses diagonales</strong>. C'est même une propriété caractéristique !</p>
+    <div class="def-box">
+      <strong>Propriété.</strong> Si ABCD est un parallélogramme, alors les diagonales [AC] et [BD] se coupent en leur milieu O, qui est le centre de symétrie du parallélogramme.
+      <br><strong>Réciproque.</strong> Si les diagonales d'un quadrilatère se coupent en leur milieu, alors ce quadrilatère est un parallélogramme.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Autres figures à centre de symétrie</h3>
+    <table>
+      <tr><th>Figure</th><th>Centre de symétrie</th></tr>
+      <tr><td>Rectangle</td><td>Point d'intersection des diagonales</td></tr>
+      <tr><td>Losange</td><td>Point d'intersection des diagonales</td></tr>
+      <tr><td>Carré</td><td>Point d'intersection des diagonales</td></tr>
+      <tr><td>Cercle</td><td>Son centre</td></tr>
+      <tr><td>Segment</td><td>Son milieu</td></tr>
+    </table>
+    <div class="tip-box">💡 Le rectangle, le losange et le carré sont des parallélogrammes particuliers : ils héritent donc tous de cette propriété !</div>
+  </div>
+
+  <div class="card">
+    <h3>Visualisation : figures et leur centre</h3>
+    <div class="controls">
+      <button class="action secondary" onclick="setFigureShape('rect')">Rectangle</button>
+      <button class="action secondary" onclick="setFigureShape('losange')">Losange</button>
+      <button class="action secondary" onclick="setFigureShape('carre')">Carré</button>
+      <button class="action secondary" onclick="setFigureShape('cercle')">Cercle</button>
+    </div>
+    <canvas id="canvasFigures" width="560" height="380"></canvas>
+    <p class="legend">Le point rouge indique le centre de symétrie de la figure.</p>
+  </div>
+
+  <div class="card">
+    <h3>Attention : figures SANS centre de symétrie</h3>
+    <p>Un triangle (en général) n'a pas de centre de symétrie. Un trapèze quelconque non plus. Il faut vérifier que la figure entière coïncide avec elle-même après une rotation de 180°.</p>
+    <p><span class="exo-num">4</span>ABCD est un parallélogramme de centre O. Où se trouve le symétrique du point A par rapport à O ?</p>
+    <details>
+      <summary>Correction</summary>
+      <p>Le symétrique de A par rapport au centre O du parallélogramme est le point C (sommet opposé), car les diagonales [AC] et [BD] se coupent en leur milieu O.</p>
+    </details>
+    <p><span class="exo-num">5</span>Un rectangle RSTU a pour centre de symétrie O. Cite les couples de sommets qui sont symétriques l'un de l'autre par rapport à O.</p>
+    <details>
+      <summary>Correction</summary>
+      <p>Dans un rectangle RSTU, les sommets opposés sont symétriques par rapport au centre O : R et T sont symétriques, S et U sont symétriques.</p>
+    </details>
+    <p><span class="exo-num">6</span>Une figure possède exactement deux axes de symétrie perpendiculaires. A-t-elle nécessairement un centre de symétrie ?</p>
+    <details>
+      <summary>Correction</summary>
+      <p>Oui. Lorsqu'une figure a deux axes de symétrie perpendiculaires, leur point d'intersection est automatiquement un centre de symétrie de la figure (c'est le cas du rectangle, du losange, du carré et du cercle).</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>Comment vérifier qu'un point est un centre de symétrie ?</h3>
+    <p>Méthode pratique : on choisit plusieurs points caractéristiques de la figure (sommets, points remarquables) et on vérifie que le symétrique de chacun par rapport au point O suspecté est <strong>aussi un point de la figure</strong>. Si c'est vrai pour tous les points, alors O est bien un centre de symétrie.</p>
+    <div class="tip-box">💡 Pour un polygone, il suffit souvent de vérifier les sommets : si chaque sommet a son symétrique qui est un autre sommet de la figure, le centre convient.</div>
+  </div>
+
+  <div class="card">
+    <h3>Exemple détaillé : l'hexagone régulier</h3>
+    <p>Un hexagone régulier (6 côtés égaux, 6 angles égaux) possède-t-il un centre de symétrie ? Si oui, où se situe-t-il ?</p>
+    <p style="background:var(--surface2); padding:10px 14px; border-radius:8px;">
+      <strong>Réponse :</strong> Oui, un hexagone régulier possède un centre de symétrie : c'est son centre géométrique (le point équidistant de tous les sommets). En effet, chaque sommet a pour symétrique, par rapport à ce centre, le sommet qui lui est diamétralement opposé (le sommet situé « trois sommets plus loin » en tournant autour de l'hexagone).
+    </p>
+    <p>Plus généralement, tout polygone régulier ayant un <strong>nombre pair</strong> de côtés possède un centre de symétrie (son centre), alors qu'un polygone régulier ayant un nombre <strong>impair</strong> de côtés (comme le pentagone ou le triangle équilatéral) n'en possède pas.</p>
+  </div>
+
+  <div class="card">
+    <h3>Bilan des figures usuelles</h3>
+    <table>
+      <tr><th>Figure</th><th>Axe(s) de symétrie</th><th>Centre de symétrie</th></tr>
+      <tr><td>Triangle équilatéral</td><td>3 axes</td><td>Non</td></tr>
+      <tr><td>Carré</td><td>4 axes</td><td>Oui</td></tr>
+      <tr><td>Rectangle (non carré)</td><td>2 axes</td><td>Oui</td></tr>
+      <tr><td>Losange (non carré)</td><td>2 axes</td><td>Oui</td></tr>
+      <tr><td>Cercle</td><td>Une infinité (tous les diamètres)</td><td>Oui (son centre)</td></tr>
+      <tr><td>Hexagone régulier</td><td>6 axes</td><td>Oui</td></tr>
+      <tr><td>Pentagone régulier</td><td>5 axes</td><td>Non</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== TAB 4 : COMPARAISON ===================== -->
+<section class="panel" id="panel-4">
+  <div class="card">
+    <h2>Symétrie centrale vs symétrie axiale</h2>
+    <p>Ne confonds pas les deux transformations apprises en 6ème et en 5ème !</p>
+    <table>
+      <tr><th></th><th>Symétrie axiale</th><th>Symétrie centrale</th></tr>
+      <tr><td>Élément de référence</td><td>Un axe (droite)</td><td>Un centre (point)</td></tr>
+      <tr><td>Image de M</td><td>M' tel que l'axe soit la médiatrice de [MM']</td><td>M' tel que O soit le milieu de [MM']</td></tr>
+      <tr><td>Effet visuel</td><td>« Pliage » le long d'un axe</td><td>« Demi-tour » (rotation de 180°) autour d'un point</td></tr>
+      <tr><td>Orientation de la figure</td><td>Retournée (comme un miroir)</td><td>Conservée (mais retournée à 180°)</td></tr>
+      <tr><td>Points fixes</td><td>Tous les points de l'axe</td><td>Seulement le centre O</td></tr>
+      <tr><td>Conserve longueurs, angles, aires</td><td>Oui</td><td>Oui</td></tr>
+      <tr><td>Figure à centre / axe de symétrie</td><td>Axe de symétrie</td><td>Centre de symétrie</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Visualisation comparée</h3>
+    <p>Observe la même figure (bleue) transformée par une symétrie axiale (orange, par rapport à l'axe vertical) puis par une symétrie centrale (verte, par rapport au point O).</p>
+    <canvas id="canvasCompare" width="560" height="420"></canvas>
+    <p class="legend">Remarque : les deux images ne sont pas superposées, sauf cas particuliers !</p>
+  </div>
+
+  <div class="card">
+    <h3>Comment reconnaître la bonne symétrie ?</h3>
+    <ul>
+      <li>Si on te donne une <strong>droite</strong> comme référence → c'est une symétrie <strong>axiale</strong> (penser à la médiatrice).</li>
+      <li>Si on te donne un <strong>point</strong> comme référence → c'est une symétrie <strong>centrale</strong> (penser au milieu).</li>
+    </ul>
+    <p>Un moyen mnémotechnique simple : le mot « <strong>axiale</strong> » contient le mot « axe » (une droite), tandis que « <strong>centrale</strong> » contient le mot « centre » (un point). En cas de doute pendant un contrôle, repense à ces deux mots pour ne plus te tromper.</p>
+  </div>
+
+  <div class="card">
+    <h3>Points communs et différences en un coup d'œil</h3>
+    <p><strong>Points communs</strong> aux deux symétries :</p>
+    <ul>
+      <li>Ce sont toutes les deux des <strong>transformations géométriques</strong> qui associent à chaque point du plan un unique point image.</li>
+      <li>Elles conservent toutes les deux les longueurs, les angles, les aires et le parallélisme.</li>
+      <li>Elles sont toutes les deux <strong>réciproques</strong> : si M' est l'image de M, alors M est l'image de M'.</li>
+    </ul>
+    <p><strong>Différences</strong> majeures :</p>
+    <ul>
+      <li>La symétrie axiale <strong>inverse l'orientation</strong> de la figure (comme dans un miroir) ; la symétrie centrale <strong>conserve le sens de rotation</strong> de la figure (elle n'est pas « retournée » comme dans un miroir, seulement pivotée).</li>
+      <li>La symétrie axiale a une <strong>infinité</strong> de points invariants (toute la droite-axe) ; la symétrie centrale n'en a <strong>qu'un seul</strong> (le centre).</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Exercices de distinction</h3>
+    <p><span class="exo-num">5</span>Pour chaque phrase, indique s'il s'agit d'une symétrie axiale ou centrale :</p>
+    <ol type="a">
+      <li>« M' est tel que O est le milieu de [MM'] »</li>
+      <li>« (d) est la médiatrice de [MM'] »</li>
+      <li>« On fait tourner la figure d'un demi-tour autour de I »</li>
+      <li>« On plie la feuille le long de la droite (AB) »</li>
+    </ol>
+    <details>
+      <summary>Correction</summary>
+      <p>a) Symétrie <strong>centrale</strong> (de centre O). b) Symétrie <strong>axiale</strong> (d'axe (d)). c) Symétrie <strong>centrale</strong> (de centre I). d) Symétrie <strong>axiale</strong> (d'axe (AB)).</p>
+    </details>
+    <p><span class="exo-num">5bis</span>Un triangle ABC est transformé en triangle A'B'C' par une symétrie axiale d'axe (d), puis ce nouveau triangle A'B'C' est transformé en triangle A''B''C'' par une symétrie centrale de centre O. Le triangle final A''B''C'' a-t-il la même aire que le triangle de départ ABC ?</p>
+    <details>
+      <summary>Correction</summary>
+      <p>Oui. Chacune des deux transformations conserve les aires (c'est une propriété commune aux deux symétries). En enchaînant deux transformations qui conservent l'aire, l'aire finale est donc égale à l'aire de départ : aire(A''B''C'') = aire(A'B'C') = aire(ABC).</p>
+    </details>
+    <p><span class="exo-num">6</span>La lettre « S » a-t-elle un centre de symétrie ? La lettre « A » a-t-elle un axe de symétrie ? Et la lettre « H » ?</p>
+    <details>
+      <summary>Correction</summary>
+      <p>La lettre <strong>« S »</strong> possède un centre de symétrie (en son milieu), mais pas d'axe de symétrie. La lettre <strong>« A »</strong> a un axe de symétrie vertical, mais pas de centre de symétrie. La lettre <strong>« H »</strong> a la particularité d'avoir à la fois deux axes de symétrie (vertical et horizontal) <strong>et</strong> un centre de symétrie (leur intersection).</p>
+    </details>
+    <p><span class="exo-num">7</span>Complète : une figure qui possède deux axes de symétrie perpendiculaires possède toujours un _______ de symétrie, situé à leur _______.</p>
+    <details>
+      <summary>Correction</summary>
+      <p>Une figure qui possède deux axes de symétrie perpendiculaires possède toujours un <strong>centre</strong> de symétrie, situé à leur <strong>intersection</strong>.</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>Synthèse visuelle</h3>
+    <p>Pense à la symétrie axiale comme à un <strong>miroir</strong> (la figure et son image se font face, inversées), et à la symétrie centrale comme à une <strong>toupie</strong> qui tourne d'un demi-tour (la figure et son image sont « tête-bêche » par rapport au centre, mais pas inversées comme dans un miroir).</p>
+  </div>
+</section>
+
+<!-- ===================== TAB 5 : EXERCICES ===================== -->
+<section class="panel" id="panel-5">
+  <div class="card">
+    <h2>8 exercices progressifs</h2>
+    <p>Du plus simple (Appliquer) au plus difficile (Approfondir). Clique sur « Correction » pour vérifier ta réponse.</p>
+  </div>
+
+  <div class="card">
+    <h3>Niveau 1 — Appliquer <span class="diff-tag diff-1">facile</span></h3>
+    <p><span class="exo-num">1</span>Sur une feuille, place un point O. Place un point M. Construis à la règle et au compas le point M', symétrique de M par rapport à O.</p>
+    <details><summary>Correction</summary><p>Tracer la droite (MO), pointer le compas en O avec un écartement OM, reporter cette longueur de l'autre côté de O sur la droite (MO) : on obtient M'. Vérifier que O est bien le milieu de [MM'].</p></details>
+
+    <p><span class="exo-num">2</span>O est un point et A un point tel que OA = 6 cm. B est le symétrique de A par rapport à O. Que vaut OB ? Que vaut AB ?</p>
+    <details><summary>Correction</summary><p>Comme O est le milieu de [AB], OB = OA = 6 cm. De plus AB = OA + OB = 6 + 6 = 12 cm.</p></details>
+
+    <p><span class="exo-num">3</span>Vrai ou faux : « Si O est le milieu de [MN], alors M et N sont symétriques par rapport à O. »</p>
+    <details><summary>Correction</summary><p><strong>Vrai</strong>, c'est exactement la définition de la symétrie centrale.</p></details>
+  </div>
+
+  <div class="card">
+    <h3>Niveau 2 — Comprendre <span class="diff-tag diff-2">moyen</span></h3>
+    <p><span class="exo-num">4</span>ABC est un triangle. A', B', C' sont les images respectives de A, B, C par la symétrie de centre O. Sachant que l'angle ABC mesure 65°, quelle est la mesure de l'angle A'B'C' ?</p>
+    <details><summary>Correction</summary><p>La symétrie centrale conserve les angles, donc l'angle A'B'C' mesure aussi <strong>65°</strong>.</p></details>
+
+    <p><span class="exo-num">5</span>Construis un segment [AB] de 6 cm. Place un point O n'appartenant pas à la droite (AB). Construis le symétrique [A'B'] de [AB] par rapport à O. Que peux-tu dire des droites (AB) et (A'B') ?</p>
+    <details><summary>Correction</summary><p>Il suffit de construire A' (symétrique de A) et B' (symétrique de B), puis de tracer [A'B']. On a A'B' = 6 cm. Les droites (AB) et (A'B') sont <strong>parallèles</strong> (propriété de la symétrie centrale sur les droites).</p></details>
+
+    <p><span class="exo-num">6</span>EFGH est un parallélogramme de centre O. Démontre que O est le milieu de [EG].</p>
+    <details><summary>Correction</summary><p>Dans un parallélogramme, les diagonales se coupent en leur milieu. [EG] est une diagonale de EFGH, et O est le point d'intersection des diagonales : donc O est le milieu de [EG] (et aussi de [FH]).</p></details>
+  </div>
+
+  <div class="card">
+    <h3>Niveau 3 — Approfondir <span class="diff-tag diff-3">difficile</span></h3>
+    <p><span class="exo-num">7</span>ABC est un triangle. I est le milieu de [BC]. D est le symétrique de A par rapport à I. Démontre que ABDC est un parallélogramme.</p>
+    <details><summary>Correction</summary><p>Comme D est le symétrique de A par rapport à I, I est le milieu de [AD]. Or I est aussi le milieu de [BC] (donné). Le quadrilatère ABDC a donc ses diagonales [AD] et [BC] qui se coupent en leur milieu I : c'est donc un <strong>parallélogramme</strong> (réciproque de la propriété des diagonales).</p></details>
+
+    <p><span class="exo-num">8</span>O est un point fixe. M est un point qui se déplace sur un cercle (C) de centre I et de rayon 3 cm. M' est le symétrique de M par rapport à O. Quelle est la trajectoire décrite par M' quand M parcourt le cercle (C) ?</p>
+    <details><summary>Correction</summary><p>L'image d'un cercle par une symétrie centrale est un cercle de même rayon. Donc M' décrit un cercle (C') de rayon 3 cm, dont le centre I' est le symétrique de I par rapport à O.</p></details>
+
+    <p><span class="exo-num">9</span>ABCD est un parallélogramme de centre O. M est un point quelconque du segment [AB]. On appelle M' le symétrique de M par rapport à O. Sur quel segment se trouve le point M' ?</p>
+    <details><summary>Correction</summary>
+      <p>La symétrie centrale de centre O envoie A sur C et B sur D (sommets opposés du parallélogramme). Comme elle conserve l'alignement et les segments, l'image du segment [AB] tout entier est le segment [CD].</p>
+      <p>Le point M appartenant à [AB], son image M' appartient donc au segment <strong>[CD]</strong>.</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>Méthodologie : rédiger une démonstration avec la symétrie centrale</h3>
+    <p>Pour bien rédiger un exercice de démonstration utilisant la symétrie centrale, il faut suivre une structure précise, attendue par les professeurs et les correcteurs du brevet :</p>
+    <ol>
+      <li><strong>Identifier</strong> le centre de symétrie et les points concernés dans l'énoncé.</li>
+      <li><strong>Énoncer la définition</strong> utilisée avec une phrase du type : « Comme [...] est le symétrique de [...] par rapport à [...], on sait que [...] est le milieu de [...]. »</li>
+      <li><strong>Citer la propriété</strong> utilisée si besoin (conservation des longueurs, des angles, parallélisme, alignement).</li>
+      <li><strong>Conclure</strong> clairement, en une phrase, en répondant précisément à la question posée.</li>
+    </ol>
+    <div class="tip-box">💡 En rédaction de démonstration, il ne faut jamais écrire « ça se voit sur la figure » : chaque affirmation doit être justifiée par une définition ou une propriété du cours.</div>
+    <p>Voici les formulations types à réutiliser selon la situation :</p>
+    <table>
+      <tr><th>Ce que tu veux montrer</th><th>Formulation à utiliser</th></tr>
+      <tr><td>Deux points sont symétriques</td><td>« Le point ... est le milieu de [...], donc ... et ... sont symétriques par rapport à ... »</td></tr>
+      <tr><td>Un quadrilatère est un parallélogramme</td><td>« Les diagonales [...] et [...] se coupent en leur milieu ..., donc ... est un parallélogramme. »</td></tr>
+      <tr><td>Deux longueurs sont égales</td><td>« La symétrie centrale conserve les longueurs, donc ... = ... »</td></tr>
+      <tr><td>Deux droites sont parallèles</td><td>« L'image d'une droite par une symétrie centrale lui est parallèle, donc (...) est parallèle à (...) »</td></tr>
+    </table>
+    <p>Exemple de rédaction complète pour l'exercice 7 ci-dessus :</p>
+    <p style="font-style:italic; background:var(--surface2); padding:10px 14px; border-radius:8px;">« D est le symétrique de A par rapport à I, donc I est le milieu de [AD]. Par hypothèse, I est le milieu de [BC]. Les diagonales [AD] et [BC] du quadrilatère ABDC se coupent donc en leur milieu I. Or, un quadrilatère dont les diagonales se coupent en leur milieu est un parallélogramme. Donc ABDC est un parallélogramme. »</p>
+  </div>
+</section>
+
+<!-- ===================== TAB 6 : QCM ===================== -->
+<section class="panel" id="panel-6">
+  <div class="card">
+    <h2>QCM — 16 questions</h2>
+    <p>Clique sur la réponse de ton choix. Le score final s'affiche à la fin.</p>
+    <div id="qcmContainer"></div>
+    <div class="controls">
+      <button class="action" onclick="checkQcmComplete(true)">Voir mon score</button>
+      <button class="action secondary" onclick="resetQcm()">Recommencer le QCM</button>
+    </div>
+    <div id="qcm-score"></div>
+  </div>
+
+  <div class="card">
+    <h3>Bilan général du chapitre</h3>
+    <p>Avant de clore ce chapitre, voici les points essentiels à maîtriser pour la suite (et pour le brevet) :</p>
+    <ul>
+      <li><strong>Définition</strong> : M' est le symétrique de M par rapport à O si et seulement si O est le milieu de [MM'].</li>
+      <li><strong>Construction</strong> : à la règle graduée (report de longueur) ou au compas (report d'écartement), toujours sur la droite (MO).</li>
+      <li><strong>Propriétés conservées</strong> : longueurs, angles, aires, alignement, parallélisme.</li>
+      <li><strong>Figures à centre de symétrie</strong> : parallélogramme (et ses cas particuliers rectangle, losange, carré), cercle, tout polygone régulier à nombre pair de côtés.</li>
+      <li><strong>Différence avec la symétrie axiale</strong> : un point de référence (et non une droite), un seul point invariant (et non une infinité), pas d'effet miroir.</li>
+    </ul>
+    <div class="tip-box">💡 Ce chapitre prépare directement les rotations, qui seront étudiées plus tard : la symétrie centrale n'est en réalité rien d'autre qu'une <strong>rotation de centre O et d'angle 180°</strong> !</div>
+  </div>
+</section>
+
+</main>
+
+<div class="footer-note">
+  Chapitre Symétrie centrale — Mathématiques 5ème
+  <br>
+  Ce cours interactif couvre les sept notions essentielles du programme officiel :
+  définition, construction, propriétés de conservation, figures à centre de symétrie,
+  comparaison avec la symétrie axiale, exercices progressifs et évaluation finale par QCM.
+</div>
+
+<script>
+/* =================== THEME =================== */
+function toggleTheme(){
+  const root = document.documentElement;
+  const current = root.getAttribute('data-theme');
+  if(current === 'dark'){ root.setAttribute('data-theme','light'); }
+  else if(current === 'light'){ root.setAttribute('data-theme','dark'); }
+  else {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    root.setAttribute('data-theme', prefersDark ? 'light' : 'dark');
+  }
+  redrawAllCanvases();
+}
+
+/* =================== TABS =================== */
+const sectionInitialized = [false,false,false,false,false,false,false];
+function showTab(i){
+  document.querySelectorAll('.panel').forEach((p,idx)=>p.classList.toggle('active', idx===i));
+  document.querySelectorAll('.tab-btn').forEach((b,idx)=>b.classList.toggle('active', idx===i));
+  initSection(i);
+}
+function initSection(i){
+  if(sectionInitialized[i]) { redrawSection(i); return; }
+  sectionInitialized[i] = true;
+  switch(i){
+    case 0: initCanvasDef(); break;
+    case 1: initCanvasConstruct(); initCanvasGrid(); break;
+    case 2: initCanvasProp(); break;
+    case 3: initCanvasFigures(); break;
+    case 4: initCanvasCompare(); break;
+    case 5: break;
+    case 6: buildQcm(); break;
+  }
+}
+function redrawSection(i){
+  switch(i){
+    case 0: drawDef(); break;
+    case 1: drawConstruct(); drawGrid(); break;
+    case 2: drawProp(); break;
+    case 3: drawFigures(); break;
+    case 4: drawCompare(); break;
+  }
+}
+function redrawAllCanvases(){
+  for(let i=0;i<7;i++){ if(sectionInitialized[i]) redrawSection(i); }
+}
+
+/* =================== HELPERS =================== */
+function cssVar(name){
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+function drawGridBg(ctx,w,h,step){
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle = cssVar('--border');
+  ctx.lineWidth = 1;
+  for(let x=0;x<=w;x+=step){
+    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke();
+  }
+  for(let y=0;y<=h;y+=step){
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke();
+  }
+}
+function dot(ctx,x,y,r,color){
+  ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fillStyle = color; ctx.fill();
+  ctx.lineWidth=2; ctx.strokeStyle = cssVar('--surface'); ctx.stroke();
+}
+function labelPt(ctx,x,y,text,color,dx=8,dy=-8){
+  ctx.fillStyle = color;
+  ctx.font = '600 15px "Nunito Sans", sans-serif';
+  ctx.fillText(text, x+dx, y+dy);
+}
+function lineSeg(ctx,x1,y1,x2,y2,color,dash){
+  ctx.beginPath();
+  ctx.setLineDash(dash||[]);
+  ctx.moveTo(x1,y1); ctx.lineTo(x2,y2);
+  ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+/* =================== TAB 0 : DEFINITION =================== */
+let defCanvas, defCtx, Ox=280, Oy=210, Mx=180, My=120, dragging=false;
+function initCanvasDef(){
+  defCanvas = document.getElementById('canvasDef');
+  defCtx = defCanvas.getContext('2d');
+  defCanvas.addEventListener('mousedown', defStart);
+  defCanvas.addEventListener('mousemove', defMove);
+  window.addEventListener('mouseup', ()=>dragging=false);
+  defCanvas.addEventListener('touchstart', defStart, {passive:false});
+  defCanvas.addEventListener('touchmove', defMove, {passive:false});
+  window.addEventListener('touchend', ()=>dragging=false);
+  drawDef();
+}
+function getPos(evt, canvas){
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width/rect.width, scaleY = canvas.height/rect.height;
+  let clientX, clientY;
+  if(evt.touches && evt.touches.length){ clientX = evt.touches[0].clientX; clientY = evt.touches[0].clientY; }
+  else { clientX = evt.clientX; clientY = evt.clientY; }
+  return { x:(clientX-rect.left)*scaleX, y:(clientY-rect.top)*scaleY };
+}
+function defStart(evt){
+  const p = getPos(evt, defCanvas);
+  if(Math.hypot(p.x-Mx,p.y-My) < 22){ dragging = true; }
+  evt.preventDefault();
+}
+function defMove(evt){
+  if(!dragging) return;
+  evt.preventDefault();
+  const p = getPos(evt, defCanvas);
+  Mx = Math.max(15, Math.min(defCanvas.width-15, p.x));
+  My = Math.max(15, Math.min(defCanvas.height-15, p.y));
+  drawDef();
+}
+function resetDef(){ Mx=180; My=120; drawDef(); }
+function drawDef(){
+  if(!defCtx) return;
+  const w=defCanvas.width, h=defCanvas.height;
+  drawGridBg(defCtx,w,h,28);
+  const Mpx = 2*Ox - Mx, Mpy = 2*Oy - My;
+  lineSeg(defCtx, Mx,My, Mpx,Mpy, cssVar('--muted'), [5,4]);
+  dot(defCtx, Ox,Oy, 7, '#c0392b');
+  labelPt(defCtx, Ox,Oy, 'O', '#c0392b');
+  dot(defCtx, Mx,My, 9, '#2e6ea6');
+  labelPt(defCtx, Mx,My, 'M', '#2e6ea6');
+  dot(defCtx, Mpx,Mpy, 9, '#2e8b57');
+  labelPt(defCtx, Mpx,Mpy, "M'", '#2e8b57');
+  const info = document.getElementById('defCoords');
+  if(info){
+    info.textContent = `OM = ${(Math.hypot(Mx-Ox,My-Oy)/28).toFixed(2)} carreaux, OM' = ${(Math.hypot(Mpx-Ox,Mpy-Oy)/28).toFixed(2)} carreaux — toujours égales !`;
+  }
+}
+
+/* =================== TAB 1 : CONSTRUCTION ANIMATION =================== */
+let constructCtx, constructCanvas, constructStep = 0;
+const CM = {x:200, y:130}, CO = {x:300, y:230};
+function initCanvasConstruct(){
+  constructCanvas = document.getElementById('canvasConstruct');
+  constructCtx = constructCanvas.getContext('2d');
+  drawConstruct();
+}
+function nextStepConstruct(){
+  constructStep = (constructStep+1) % 5;
+  drawConstruct();
+}
+function resetStepConstruct(){ constructStep = 0; drawConstruct(); }
+function drawConstruct(){
+  if(!constructCtx) return;
+  const w=constructCanvas.width, h=constructCanvas.height;
+  drawGridBg(constructCtx,w,h,28);
+  const ctx = constructCtx;
+  const legends = [
+    "Étape 0 : point M et centre O placés.",
+    "Étape 1 : on trace la droite (MO).",
+    "Étape 2 : on mesure OM au compas.",
+    "Étape 3 : on reporte OM de l'autre côté de O.",
+    "Étape 4 : M' est construit, O est le milieu de [MM']."
+  ];
+  document.getElementById('constructLegend').textContent = legends[constructStep];
+  dot(ctx, CM.x, CM.y, 8, '#2e6ea6'); labelPt(ctx, CM.x, CM.y, 'M', '#2e6ea6');
+  dot(ctx, CO.x, CO.y, 7, '#c0392b'); labelPt(ctx, CO.x, CO.y, 'O', '#c0392b');
+  const dirx = CO.x - CM.x, diry = CO.y - CM.y;
+  const len = Math.hypot(dirx,diry);
+  const ux = dirx/len, uy = diry/len;
+  const Mpx = CO.x + ux*len, Mpy = CO.y + uy*len;
+  if(constructStep >= 1){
+    const ext = 40;
+    lineSeg(ctx, CM.x-ux*ext, CM.y-uy*ext, CO.x+ux*ext, CO.y+uy*ext, cssVar('--muted'), [3,3]);
+  }
+  if(constructStep >= 2){
+    ctx.beginPath();
+    ctx.arc(CO.x, CO.y, len, 0, Math.PI*2);
+    ctx.strokeStyle = cssVar('--accent');
+    ctx.lineWidth = 1.4;
+    ctx.setLineDash([2,4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  if(constructStep >= 3){
+    dot(ctx, Mpx, Mpy, 9, '#2e8b57');
+  }
+  if(constructStep >= 4){
+    labelPt(ctx, Mpx, Mpy, "M'", '#2e8b57');
+    lineSeg(ctx, CM.x,CM.y, Mpx,Mpy, cssVar('--text'), []);
+  }
+}
+
+/* =================== TAB 1 : GRID EXAMPLE =================== */
+let gridCtx, gridCanvas;
+function initCanvasGrid(){
+  gridCanvas = document.getElementById('canvasGrid');
+  gridCtx = gridCanvas.getContext('2d');
+  drawGrid();
+}
+function drawGrid(){
+  if(!gridCtx) return;
+  const w=gridCanvas.width, h=gridCanvas.height, step=30;
+  drawGridBg(gridCtx,w,h,step);
+  const ctx = gridCtx;
+  const Ox2 = 280, Oy2 = 210;
+  const Mx2 = Ox2 + 3*step, My2 = Oy2 - 2*step;
+  const Mpx2 = Ox2 - 3*step, Mpy2 = Oy2 + 2*step;
+  dot(ctx, Ox2, Oy2, 7, '#c0392b'); labelPt(ctx, Ox2, Oy2, 'O', '#c0392b');
+  dot(ctx, Mx2, My2, 9, '#2e6ea6'); labelPt(ctx, Mx2, My2, 'M', '#2e6ea6');
+  dot(ctx, Mpx2, Mpy2, 9, '#2e8b57'); labelPt(ctx, Mpx2, Mpy2, "M'", '#2e8b57');
+  lineSeg(ctx, Mx2,My2, Mpx2,Mpy2, cssVar('--muted'), [5,4]);
+  ctx.fillStyle = cssVar('--text');
+  ctx.font = '600 13px "Nunito Sans", sans-serif';
+  ctx.fillText('3 carreaux →', Ox2+10, Oy2-2*step-10);
+  ctx.fillText('← 3 carreaux', Ox2-3*step-5, Oy2+2*step+22);
+}
+
+/* =================== TAB 2 : PROPERTIES =================== */
+let propCtx, propCanvas;
+function initCanvasProp(){
+  propCanvas = document.getElementById('canvasProp');
+  propCtx = propCanvas.getContext('2d');
+  drawProp();
+}
+function drawProp(){
+  if(!propCtx) return;
+  const w=propCanvas.width, h=propCanvas.height;
+  drawGridBg(propCtx,w,h,28);
+  const ctx = propCtx;
+  const O = {x:280, y:210};
+  const A = {x:150, y:100}, B = {x:230, y:130}, C = {x:170, y:180};
+  const refl = p => ({x: 2*O.x-p.x, y: 2*O.y-p.y});
+  const Ap = refl(A), Bp = refl(B), Cp = refl(C);
+  function tri(p1,p2,p3,color,fill){
+    ctx.beginPath();
+    ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.lineTo(p3.x,p3.y); ctx.closePath();
+    ctx.strokeStyle = color; ctx.lineWidth = 2.2; ctx.stroke();
+    if(fill){ ctx.fillStyle = color+'22'; ctx.fill(); }
+  }
+  tri(A,B,C,'#2e6ea6',true);
+  tri(Ap,Bp,Cp,'#2e8b57',true);
+  dot(ctx,O.x,O.y,7,'#c0392b'); labelPt(ctx,O.x,O.y,'O','#c0392b');
+  [['A',A,'#2e6ea6'],['B',B,'#2e6ea6'],['C',C,'#2e6ea6'],["A'",Ap,'#2e8b57'],["B'",Bp,'#2e8b57'],["C'",Cp,'#2e8b57']].forEach(([txt,p,col])=>{
+    dot(ctx,p.x,p.y,6,col); labelPt(ctx,p.x,p.y,txt,col);
+  });
+}
+
+/* =================== TAB 3 : FIGURES =================== */
+let figuresCtx, figuresCanvas, currentFigure = 'rect';
+function initCanvasFigures(){
+  figuresCanvas = document.getElementById('canvasFigures');
+  figuresCtx = figuresCanvas.getContext('2d');
+  drawFigures();
+}
+function setFigureShape(shape){ currentFigure = shape; drawFigures(); }
+function drawFigures(){
+  if(!figuresCtx) return;
+  const w=figuresCanvas.width, h=figuresCanvas.height;
+  figuresCtx.clearRect(0,0,w,h);
+  const ctx = figuresCtx;
+  const cx = w/2, cy = h/2;
+  ctx.lineWidth = 2.4;
+  ctx.strokeStyle = cssVar('--accent');
+  ctx.fillStyle = cssVar('--accent') + '18';
+  if(currentFigure === 'rect'){
+    ctx.beginPath(); ctx.rect(cx-140, cy-80, 280, 160); ctx.stroke(); ctx.fill();
+    lineSeg(ctx, cx-140,cy-80, cx+140,cy+80, cssVar('--muted'), [4,3]);
+    lineSeg(ctx, cx+140,cy-80, cx-140,cy+80, cssVar('--muted'), [4,3]);
+  } else if(currentFigure === 'losange'){
+    ctx.beginPath();
+    ctx.moveTo(cx, cy-110); ctx.lineTo(cx+150, cy); ctx.lineTo(cx, cy+110); ctx.lineTo(cx-150, cy); ctx.closePath();
+    ctx.stroke(); ctx.fill();
+    lineSeg(ctx, cx,cy-110, cx,cy+110, cssVar('--muted'), [4,3]);
+    lineSeg(ctx, cx-150,cy, cx+150,cy, cssVar('--muted'), [4,3]);
+  } else if(currentFigure === 'carre'){
+    ctx.beginPath(); ctx.rect(cx-110, cy-110, 220, 220); ctx.stroke(); ctx.fill();
+    lineSeg(ctx, cx-110,cy-110, cx+110,cy+110, cssVar('--muted'), [4,3]);
+    lineSeg(ctx, cx+110,cy-110, cx-110,cy+110, cssVar('--muted'), [4,3]);
+  } else if(currentFigure === 'cercle'){
+    ctx.beginPath(); ctx.arc(cx,cy,130,0,Math.PI*2); ctx.stroke(); ctx.fill();
+  }
+  dot(ctx, cx, cy, 8, '#c0392b'); labelPt(ctx, cx, cy, 'O', '#c0392b', 12, 6);
+}
+
+/* =================== TAB 4 : COMPARISON =================== */
+let compareCtx, compareCanvas;
+function initCanvasCompare(){
+  compareCanvas = document.getElementById('canvasCompare');
+  compareCtx = compareCanvas.getContext('2d');
+  drawCompare();
+}
+function drawCompare(){
+  if(!compareCtx) return;
+  const w=compareCanvas.width, h=compareCanvas.height;
+  drawGridBg(compareCtx,w,h,28);
+  const ctx = compareCtx;
+  const axisX = w/2;
+  lineSeg(ctx, axisX, 10, axisX, h-10, cssVar('--accent'), []);
+  ctx.fillStyle = cssVar('--accent');
+  ctx.font = '600 13px "Nunito Sans", sans-serif';
+  ctx.fillText('axe (d)', axisX+6, 22);
+  const O = {x:120, y:h-70};
+  const A = {x:70, y:h-260}, B = {x:150, y:h-230}, C = {x:100, y:h-180};
+  function tri(ctxr,p1,p2,p3,color){
+    ctxr.beginPath();
+    ctxr.moveTo(p1.x,p1.y); ctxr.lineTo(p2.x,p2.y); ctxr.lineTo(p3.x,p3.y); ctxr.closePath();
+    ctxr.strokeStyle = color; ctxr.lineWidth = 2.2; ctxr.stroke();
+    ctxr.fillStyle = color+'22'; ctxr.fill();
+  }
+  tri(ctx,A,B,C,'#2e6ea6');
+  const axRefl = p => ({x: 2*axisX-p.x, y:p.y});
+  const Aax = axRefl(A), Bax = axRefl(B), Cax = axRefl(C);
+  tri(ctx,Aax,Bax,Cax,'#c98a1e');
+  const centralRefl = p => ({x: 2*O.x-p.x, y: 2*O.y-p.y});
+  const Ac = centralRefl(A), Bc = centralRefl(B), Cc = centralRefl(C);
+  tri(ctx,Ac,Bc,Cc,'#2e8b57');
+  dot(ctx,O.x,O.y,7,'#c0392b'); labelPt(ctx,O.x,O.y,'O','#c0392b');
+  labelPt(ctx, A.x,A.y, 'Figure de départ', '#2e6ea6', -10, -14);
+}
+
+/* =================== TAB 6 : QCM =================== */
+const qcmData = [
+  { q:"M' est le symétrique de M par rapport à O. Que peut-on dire de O ?", opts:["O est le milieu de [MM']","O appartient à [MM'] sans être le milieu","O est équidistant de M et M' seulement"], correct:0 },
+  { q:"Quel est le symétrique du point O par rapport à lui-même ?", opts:["Il n'existe pas","O lui-même","Un point à l'infini"], correct:1 },
+  { q:"La symétrie centrale conserve...", opts:["Uniquement les longueurs","Les longueurs, les angles et les aires","Rien, tout est déformé"], correct:1 },
+  { q:"Le symétrique d'une droite (d) par rapport à O est...", opts:["Une droite perpendiculaire à (d)","Une droite parallèle à (d)","Un cercle"], correct:1 },
+  { q:"Le symétrique d'un cercle de rayon 5 cm est un cercle de rayon...", opts:["10 cm","2,5 cm","5 cm"], correct:2 },
+  { q:"Quel est le centre de symétrie d'un parallélogramme ?", opts:["Le milieu d'un côté","Le point d'intersection des diagonales","Un sommet quelconque"], correct:1 },
+  { q:"Un cercle a pour centre de symétrie...", opts:["Son centre","N'importe quel point du cercle","Il n'en a pas"], correct:0 },
+  { q:"Dans une symétrie axiale, la référence est...", opts:["Un point","Une droite","Un cercle"], correct:1 },
+  { q:"Dans une symétrie centrale, la référence est...", opts:["Un point","Une droite","Un segment"], correct:0 },
+  { q:"Si OA = 4 cm et B est le symétrique de A par rapport à O, alors AB =", opts:["4 cm","8 cm","2 cm"], correct:1 },
+  { q:"ABCD parallélogramme de centre O. Le symétrique de B par rapport à O est...", opts:["A","D","C"], correct:1 },
+  { q:"Un triangle quelconque possède...", opts:["Toujours un centre de symétrie","Jamais de centre de symétrie (en général)","Toujours deux centres de symétrie"], correct:1 },
+  { q:"M, O, M' sont trois points liés par une symétrie centrale de centre O. Ils sont...", opts:["Alignés","Formant un triangle équilatéral","Toujours perpendiculaires"], correct:0 },
+  { q:"Pour construire M' symétrique de M par rapport à O au compas, on...", opts:["Trace la médiatrice de [MO]","Reporte la longueur OM de l'autre côté de O sur la droite (MO)","Trace un cercle de centre M"], correct:1 },
+  { q:"Le carré est un parallélogramme particulier, donc il a...", opts:["Un centre de symétrie","Aucun centre de symétrie","Deux centres de symétrie"], correct:0 },
+  { q:"Une figure a un centre de symétrie O si...", opts:["Elle a un axe passant par O","Son image par la symétrie de centre O est elle-même","O est un sommet de la figure"], correct:1 }
+];
+let qcmAnswers = new Array(qcmData.length).fill(null);
+function buildQcm(){
+  const container = document.getElementById('qcmContainer');
+  container.innerHTML = '';
+  qcmData.forEach((item, qi) => {
+    const div = document.createElement('div');
+    div.className = 'qcm-q';
+    const p = document.createElement('p');
+    p.innerHTML = `<strong>Question ${qi+1}.</strong> ${item.q}`;
+    div.appendChild(p);
+    const optsDiv = document.createElement('div');
+    optsDiv.className = 'qcm-opts';
+    item.opts.forEach((opt, oi) => {
+      const btn = document.createElement('div');
+      btn.className = 'qcm-opt';
+      btn.textContent = opt;
+      btn.onclick = () => selectQcm(qi, oi, btn, optsDiv);
+      optsDiv.appendChild(btn);
+    });
+    div.appendChild(optsDiv);
+    container.appendChild(div);
+  });
+  document.getElementById('qcm-score').style.display = 'none';
+}
+function selectQcm(qi, oi, btn, optsDiv){
+  if(qcmAnswers[qi] !== null) return;
+  qcmAnswers[qi] = oi;
+  const correct = qcmData[qi].correct;
+  Array.from(optsDiv.children).forEach((child, idx) => {
+    child.classList.add('disabled');
+    if(idx === correct) child.classList.add('correct');
+    else if(idx === oi) child.classList.add('wrong');
+  });
+}
+function checkQcmComplete(showAnyway){
+  const answered = qcmAnswers.filter(a => a !== null).length;
+  let score = 0;
+  qcmAnswers.forEach((a, i) => { if(a === qcmData[i].correct) score++; });
+  const scoreDiv = document.getElementById('qcm-score');
+  scoreDiv.style.display = 'block';
+  if(answered < qcmData.length){
+    scoreDiv.textContent = `Score actuel : ${score} / ${answered} répondues (${qcmData.length - answered} question(s) restante(s)).`;
+  } else {
+    let msg = `Score final : ${score} / ${qcmData.length}`;
+    if(score === qcmData.length) msg += " — Excellent, maîtrise parfaite ! 🏆";
+    else if(score >= qcmData.length*0.7) msg += " — Très bien !";
+    else if(score >= qcmData.length*0.5) msg += " — Pas mal, revois quelques notions.";
+    else msg += " — Retourne relire le cours avant de continuer.";
+    scoreDiv.textContent = msg;
+  }
+}
+function resetQcm(){
+  qcmAnswers = new Array(qcmData.length).fill(null);
+  buildQcm();
+}
+
+/* =================== INIT =================== */
+window.addEventListener('DOMContentLoaded', () => { initSection(0); });
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', redrawAllCanvases);
+</script>
+</body>
+</html>

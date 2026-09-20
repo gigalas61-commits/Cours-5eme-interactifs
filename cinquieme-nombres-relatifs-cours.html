@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nombres relatifs — 5ème</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f5f2ed; --surface:#ffffff; --surface2:#ebe6de; --text:#2c2418;
+  --heading:#8b4513; --muted:#6b5a48; --border:#d4c8b8; --accent:#a0522d; --accent-light:#faf5ef;
+  --good:#3a7d44; --bad:#b3441e;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:#161210; --surface:#221c18; --surface2:#302820; --text:#ddd0c0;
+    --heading:#e0a868; --muted:#9a8878; --border:#403428; --accent:#d08840; --accent-light:#1e1610;
+    --good:#6fbf73; --bad:#e0785a;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:#161210; --surface:#221c18; --surface2:#302820; --text:#ddd0c0;
+  --heading:#e0a868; --muted:#9a8878; --border:#403428; --accent:#d08840; --accent-light:#1e1610;
+  --good:#6fbf73; --bad:#e0785a;
+}
+* { box-sizing: border-box; }
+body {
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:'Nunito Sans', sans-serif; line-height:1.6;
+  transition: background .2s, color .2s;
+}
+h1,h2,h3,h4 { font-family:'Cormorant Garamond', serif; color:var(--heading); font-weight:700; margin-top:0; }
+h2 { font-size:1.8rem; border-bottom:2px solid var(--border); padding-bottom:.4rem; }
+h3 { font-size:1.4rem; color:var(--accent); }
+header {
+  padding:1.2rem 16px; background:var(--surface); border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.6rem;
+  position:sticky; top:0; z-index:20;
+}
+.header-left { display:flex; align-items:center; gap:.8rem; }
+.badge {
+  background:var(--accent); color:var(--accent-light); font-weight:700; font-size:.8rem;
+  padding:.25rem .7rem; border-radius:999px; letter-spacing:.03em;
+}
+header h1 { font-size:1.5rem; margin:0; }
+#themeToggle {
+  background:var(--surface2); border:1px solid var(--border); color:var(--text);
+  border-radius:999px; padding:.4rem .9rem; cursor:pointer; font-family:inherit; font-weight:600;
+}
+nav.tabs {
+  display:flex; overflow-x:auto; gap:.3rem; background:var(--surface); padding:0 16px;
+  border-bottom:1px solid var(--border); position:sticky; top:64px; z-index:19;
+}
+nav.tabs button {
+  background:none; border:none; color:var(--muted); font-family:'Nunito Sans',sans-serif;
+  font-weight:700; padding:.8rem .9rem; cursor:pointer; white-space:nowrap; border-bottom:3px solid transparent;
+  font-size:.92rem;
+}
+nav.tabs button.active { color:var(--accent); border-bottom-color:var(--accent); }
+main { max-width:900px; margin:0 auto; padding:1.5rem 16px 4rem; }
+.section { display:none; }
+.section.active { display:block; animation: fade .25s ease; }
+@keyframes fade { from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+.card {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:1.2rem 1.3rem; margin:1rem 0;
+}
+.callout {
+  background:var(--accent-light); border-left:4px solid var(--accent); border-radius:6px;
+  padding:.9rem 1.1rem; margin:1rem 0;
+}
+.vocab { display:flex; flex-wrap:wrap; gap:.6rem; margin:.8rem 0; }
+.vocab span {
+  background:var(--surface2); border:1px solid var(--border); border-radius:8px;
+  padding:.4rem .8rem; font-weight:600; font-size:.9rem;
+}
+canvas { width:100%; max-width:100%; display:block; background:var(--surface2); border-radius:10px; touch-action:none; }
+.canvas-wrap { margin:1rem 0; }
+.ctrl-row { display:flex; align-items:center; gap:.8rem; flex-wrap:wrap; margin-top:.6rem; }
+input[type=range] { flex:1; min-width:140px; accent-color:var(--accent); }
+button.btn {
+  background:var(--accent); color:var(--accent-light); border:none; border-radius:8px;
+  padding:.55rem 1.1rem; font-weight:700; cursor:pointer; font-family:inherit; font-size:.9rem;
+}
+button.btn.secondary { background:var(--surface2); color:var(--text); border:1px solid var(--border); }
+.exo { border:1px solid var(--border); border-radius:10px; padding:1rem; margin:1.2rem 0; background:var(--surface); }
+.exo h4 { margin:0 0 .5rem; color:var(--heading); }
+.tag { display:inline-block; font-size:.72rem; font-weight:700; padding:.15rem .55rem; border-radius:999px; margin-bottom:.5rem; }
+.tag.appliquer { background:#3a7d4433; color:var(--good); }
+.tag.comprendre { background:#a0522d33; color:var(--accent); }
+.tag.approfondir { background:#b3441e33; color:var(--bad); }
+details { margin-top:.7rem; border-top:1px dashed var(--border); padding-top:.6rem; }
+summary { cursor:pointer; font-weight:700; color:var(--accent); }
+details[open] summary { margin-bottom:.5rem; }
+.answer-box { display:flex; gap:.5rem; flex-wrap:wrap; align-items:center; margin:.6rem 0; }
+input[type=text].ans {
+  background:var(--bg); border:1px solid var(--border); color:var(--text);
+  border-radius:6px; padding:.4rem .6rem; font-family:inherit; font-size:.95rem; width:110px;
+}
+.feedback { font-weight:700; margin-left:.4rem; }
+.feedback.ok { color:var(--good); }
+.feedback.no { color:var(--bad); }
+table { border-collapse:collapse; width:100%; margin:1rem 0; }
+th,td { border:1px solid var(--border); padding:.5rem .6rem; text-align:center; }
+th { background:var(--surface2); color:var(--heading); }
+.qcm-q { border:1px solid var(--border); border-radius:10px; padding:1rem; margin:1rem 0; background:var(--surface); }
+.qcm-q .opts { display:flex; flex-direction:column; gap:.4rem; margin-top:.6rem; }
+.qcm-q label { display:flex; gap:.5rem; align-items:center; cursor:pointer; padding:.4rem .6rem; border-radius:6px; border:1px solid transparent; }
+.qcm-q label:hover { background:var(--surface2); }
+.qcm-q label.correct { border-color:var(--good); background:#3a7d4422; }
+.qcm-q label.incorrect { border-color:var(--bad); background:#b3441e22; }
+#qcmScore { font-size:1.2rem; font-weight:700; margin-top:1rem; }
+.pillbar { display:flex; gap:.5rem; flex-wrap:wrap; margin:.8rem 0; }
+.chip { background:var(--surface2); border:1px solid var(--border); border-radius:999px; padding:.3rem .7rem; font-size:.85rem; }
+footer { text-align:center; color:var(--muted); font-size:.85rem; padding:2rem 16px; }
+@media (max-width:600px) {
+  header h1 { font-size:1.15rem; }
+  nav.tabs { top:58px; }
+  h2 { font-size:1.4rem; }
+  .card { padding:1rem; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <span class="badge">5ème</span>
+    <h1>Nombres relatifs</h1>
+  </div>
+  <button id="themeToggle" onclick="toggleTheme()">🌓 Thème</button>
+</header>
+
+<nav class="tabs" id="tabsNav">
+  <button onclick="showTab(0)">1. Découverte</button>
+  <button onclick="showTab(1)">2. Droite graduée</button>
+  <button onclick="showTab(2)">3. Comparer</button>
+  <button onclick="showTab(3)">4. Addition</button>
+  <button onclick="showTab(4)">5. Soustraction</button>
+  <button onclick="showTab(5)">6. Exercices</button>
+  <button onclick="showTab(6)">7. QCM</button>
+</nav>
+
+<main>
+
+<!-- SECTION 0 : Découverte -->
+<section class="section" id="sec0">
+  <h2>1. Découverte des nombres relatifs</h2>
+  <p>Jusqu'à présent, tu as toujours travaillé avec des nombres positifs (ou nuls). Mais dans la vie courante, on rencontre souvent des situations où il faut aller « en dessous de zéro ».</p>
+
+  <div class="callout">
+    <strong>Trois situations concrètes :</strong>
+    <ul>
+      <li>🌡️ Une température de <strong>−5°C</strong> (il fait 5 degrés en dessous de zéro).</li>
+      <li>⛰️ Une altitude de <strong>−120 m</strong> (120 mètres sous le niveau de la mer).</li>
+      <li>🏢 Le parking d'un immeuble, situé au <strong>2ᵉ étage sous-sol</strong>, noté <strong>−2</strong>.</li>
+    </ul>
+  </div>
+
+  <h3>Vocabulaire essentiel</h3>
+  <div class="vocab">
+    <span>Nombre positif</span><span>Nombre négatif</span><span>Signe</span>
+    <span>Partie numérique (ou distance à zéro)</span><span>Nombre relatif</span>
+  </div>
+  <div class="card">
+    <p><strong>Nombre relatif</strong> : un nombre relatif est composé d'un <strong>signe</strong> (+ ou −) et d'une <strong>partie numérique</strong> (un nombre positif ou nul).</p>
+    <table>
+      <tr><th>Écriture</th><th>Signe</th><th>Partie numérique</th><th>On lit</th></tr>
+      <tr><td>+7 ou 7</td><td>+</td><td>7</td><td>« plus sept »</td></tr>
+      <tr><td>−3</td><td>−</td><td>3</td><td>« moins trois »</td></tr>
+      <tr><td>0</td><td>ni + ni −</td><td>0</td><td>« zéro »</td></tr>
+    </table>
+    <p>Un nombre écrit <strong>sans signe</strong> est toujours <strong>positif</strong> : 7 signifie la même chose que +7.</p>
+  </div>
+
+  <h3>Thermomètre interactif</h3>
+  <p>Déplace le curseur pour choisir une température et observe le nombre relatif correspondant.</p>
+  <div class="canvas-wrap">
+    <canvas id="thermoCanvas" width="600" height="320"></canvas>
+    <div class="ctrl-row">
+      <label for="thermoRange">Température :</label>
+      <input type="range" id="thermoRange" min="-20" max="20" value="5" step="1">
+      <span class="chip" id="thermoValue">+5°C</span>
+    </div>
+  </div>
+
+  <div class="exo">
+    <h4>À toi de jouer</h4>
+    <p>Écris le nombre relatif correspondant à chaque situation.</p>
+    <div class="answer-box">
+      1) Une dette de 15 euros → <input type="text" class="ans" id="dec_a1"> <button class="btn" onclick="checkDeco(1)">Vérifier</button> <span id="dec_f1" class="feedback"></span>
+    </div>
+    <div class="answer-box">
+      2) Un gain de 8 points → <input type="text" class="ans" id="dec_a2"> <button class="btn" onclick="checkDeco(2)">Vérifier</button> <span id="dec_f2" class="feedback"></span>
+    </div>
+    <div class="answer-box">
+      3) 3 étages au-dessus du sol → <input type="text" class="ans" id="dec_a3"> <button class="btn" onclick="checkDeco(3)">Vérifier</button> <span id="dec_f3" class="feedback"></span>
+    </div>
+    <div class="answer-box">
+      4) 40 m sous le niveau de la mer → <input type="text" class="ans" id="dec_a4"> <button class="btn" onclick="checkDeco(4)">Vérifier</button> <span id="dec_f4" class="feedback"></span>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 1 : Droite graduée -->
+<section class="section" id="sec1">
+  <h2>2. La droite graduée</h2>
+  <div class="callout">
+    <p>On peut représenter les nombres relatifs sur une <strong>droite graduée</strong> : on choisit une origine (le point qui correspond à 0), une unité de longueur, et un sens (généralement vers la droite pour les nombres positifs).</p>
+  </div>
+  <div class="card">
+    <p><strong>Abscisse</strong> : le nombre associé à un point sur une droite graduée s'appelle l'<strong>abscisse</strong> de ce point.</p>
+    <p>Exemple : si le point A est associé au nombre −3, on note <strong>A(−3)</strong> et on dit que « l'abscisse de A est −3 ».</p>
+  </div>
+
+  <h3>Place les points sur la droite</h3>
+  <p>Clique (ou touche) sur la droite graduée pour placer un point à l'abscisse indiquée.</p>
+  <div class="canvas-wrap">
+    <canvas id="lineCanvas" width="600" height="220"></canvas>
+    <div class="ctrl-row">
+      <span>Place le point d'abscisse <strong id="targetAbs">−4</strong></span>
+      <button class="btn secondary" onclick="newLineTarget()">Nouvelle cible</button>
+      <span class="chip" id="lineFeedback">Clique sur la graduation correspondante</span>
+    </div>
+  </div>
+
+  <div class="exo">
+    <h4>Lecture d'abscisses</h4>
+    <p>Sur une droite graduée où chaque graduation vaut 1 unité, des points sont placés. Donne leur abscisse.</p>
+    <p>A est 3 graduations à droite de 0 → abscisse : <input type="text" class="ans" id="lec_a1"> <button class="btn" onclick="checkLec(1)">Vérifier</button> <span id="lec_f1" class="feedback"></span></p>
+    <p>B est 5 graduations à gauche de 0 → abscisse : <input type="text" class="ans" id="lec_a2"> <button class="btn" onclick="checkLec(2)">Vérifier</button> <span id="lec_f2" class="feedback"></span></p>
+    <p>C est 2 graduations à gauche de 0 → abscisse : <input type="text" class="ans" id="lec_a3"> <button class="btn" onclick="checkLec(3)">Vérifier</button> <span id="lec_f3" class="feedback"></span></p>
+  </div>
+
+  <div class="callout">
+    <strong>Nombres opposés :</strong> deux nombres relatifs sont <strong>opposés</strong> lorsqu'ils ont la même partie numérique mais des signes contraires. Exemple : +6 et −6 sont opposés. Sur une droite graduée, deux points d'abscisses opposées sont symétriques par rapport à 0.
+  </div>
+</section>
+
+<!-- SECTION 2 : Comparer -->
+<section class="section" id="sec2">
+  <h2>3. Comparer les nombres relatifs</h2>
+  <div class="card">
+    <h3>Les règles</h3>
+    <ul>
+      <li><strong>Un nombre positif est toujours plus grand qu'un nombre négatif.</strong><br>Exemple : +2 &gt; −5</li>
+      <li><strong>Entre deux nombres positifs</strong>, le plus grand est celui qui a la plus grande partie numérique.<br>Exemple : +7 &gt; +3</li>
+      <li><strong>Entre deux nombres négatifs</strong>, le plus grand est celui qui a la <em>plus petite</em> partie numérique (celui qui est le plus proche de 0).<br>Exemple : −2 &gt; −8 (car −2 est plus proche de 0 que −8)</li>
+    </ul>
+  </div>
+  <div class="callout">Sur la droite graduée : plus un nombre est <strong>à droite</strong>, plus il est <strong>grand</strong>.</div>
+
+  <h3>Comparer deux nombres</h3>
+  <div class="exo" id="compareExo">
+    <p>Complète avec le signe &lt; ou &gt; qui convient.</p>
+    <div id="compareList"></div>
+    <button class="btn secondary" onclick="newCompareSet()">Nouvelle série</button>
+  </div>
+
+  <h3>Ranger dans l'ordre</h3>
+  <div class="exo">
+    <p>Range ces nombres dans l'<strong>ordre croissant</strong> (du plus petit au plus grand) : <strong id="rangeList">−3 ; 5 ; −8 ; 0 ; 2</strong></p>
+    <div class="answer-box">
+      Réponse : <input type="text" class="ans" style="width:260px" id="range_ans" placeholder="ex: -8;-3;0;2;5">
+      <button class="btn" onclick="checkRange()">Vérifier</button>
+      <span id="range_f" class="feedback"></span>
+    </div>
+    <p style="font-size:.85rem;color:var(--muted)">Sépare les nombres par des points-virgules, sans espace.</p>
+  </div>
+</section>
+
+<!-- SECTION 3 : Addition -->
+<section class="section" id="sec3">
+  <h2>4. Addition de nombres relatifs</h2>
+  <div class="card">
+    <h3>Règle 1 — Même signe</h3>
+    <p>On <strong>additionne les parties numériques</strong> et on garde le <strong>signe commun</strong>.</p>
+    <p>Exemple : (+3) + (+5) = +8 &nbsp;&nbsp;|&nbsp;&nbsp; (−4) + (−2) = −6</p>
+    <h3>Règle 2 — Signes contraires</h3>
+    <p>On <strong>soustrait les parties numériques</strong> (la plus petite à la plus grande) et on garde le <strong>signe du nombre qui a la plus grande partie numérique</strong>.</p>
+    <p>Exemple : (+7) + (−2) = +5 &nbsp;&nbsp;|&nbsp;&nbsp; (+3) + (−9) = −6</p>
+  </div>
+
+  <h3>Visualiser sur la droite graduée</h3>
+  <p>Additionner, c'est se déplacer sur la droite graduée : <strong>+n</strong> = avancer de n vers la droite, <strong>−n</strong> = reculer de n vers la gauche.</p>
+  <div class="canvas-wrap">
+    <canvas id="addCanvas" width="600" height="220"></canvas>
+    <div class="ctrl-row">
+      <label>Point de départ :</label>
+      <input type="range" id="addStart" min="-10" max="10" value="-3">
+      <label>Déplacement :</label>
+      <input type="range" id="addMove" min="-10" max="10" value="6">
+      <span class="chip" id="addFormula">(−3) + (+6) = +3</span>
+    </div>
+  </div>
+
+  <h3>Entraîne-toi</h3>
+  <div class="exo" id="addExo">
+    <div id="addList"></div>
+    <button class="btn secondary" onclick="newAddSet()">Nouvelle série</button>
+  </div>
+</section>
+
+<!-- SECTION 4 : Soustraction -->
+<section class="section" id="sec4">
+  <h2>5. Soustraction de nombres relatifs</h2>
+  <div class="callout">
+    <strong>Règle d'or : soustraire un nombre revient à ajouter son opposé.</strong><br>
+    a − b = a + (−b)
+  </div>
+  <div class="card">
+    <p>Exemple : (+5) − (+8) = (+5) + (−8) = −3</p>
+    <p>Exemple : (−2) − (−6) = (−2) + (+6) = +4</p>
+    <p>Exemple : (−4) − (+3) = (−4) + (−3) = −7</p>
+  </div>
+
+  <h3>Transformation automatique</h3>
+  <p>Choisis deux nombres, observe la transformation étape par étape.</p>
+  <div class="ctrl-row">
+    <label>a =</label><input type="range" id="subA" min="-10" max="10" value="4">
+    <label>b =</label><input type="range" id="subB" min="-10" max="10" value="-7">
+  </div>
+  <div class="card" id="subSteps" style="font-size:1.05rem;"></div>
+
+  <h3>Distance entre deux points</h3>
+  <div class="callout">La distance entre deux points d'abscisses a et b sur une droite graduée est donnée par : <strong>d = |a − b|</strong> (la valeur absolue, c'est-à-dire la partie numérique du résultat, toujours positive).</div>
+  <div class="exo">
+    <p>Quelle est la distance entre le point A(−3) et le point B(5) ?</p>
+    <div class="answer-box">
+      Distance = <input type="text" class="ans" id="dist_a1"> <button class="btn" onclick="checkDist(1)">Vérifier</button> <span id="dist_f1" class="feedback"></span>
+    </div>
+    <p>Quelle est la distance entre le point C(−6) et le point D(−1) ?</p>
+    <div class="answer-box">
+      Distance = <input type="text" class="ans" id="dist_a2"> <button class="btn" onclick="checkDist(2)">Vérifier</button> <span id="dist_f2" class="feedback"></span>
+    </div>
+  </div>
+
+  <h3>Entraîne-toi</h3>
+  <div class="exo" id="subExo">
+    <div id="subList"></div>
+    <button class="btn secondary" onclick="newSubSet()">Nouvelle série</button>
+  </div>
+</section>
+
+<!-- SECTION 5 : Exercices -->
+<section class="section" id="sec5">
+  <h2>6. Exercices progressifs</h2>
+
+  <div class="exo">
+    <span class="tag appliquer">Appliquer</span>
+    <h4>Exercice 1 — Écrire un nombre relatif</h4>
+    <p>Traduis chaque phrase par un nombre relatif :<br>a) Il fait 4°C en dessous de zéro. &nbsp; b) Une plongée à 25 m sous la surface. &nbsp; c) Un bénéfice de 120 €.</p>
+    <details><summary>Voir la correction</summary>
+      <p>a) −4 &nbsp;&nbsp; b) −25 &nbsp;&nbsp; c) +120</p>
+    </details>
+  </div>
+
+  <div class="exo">
+    <span class="tag appliquer">Appliquer</span>
+    <h4>Exercice 2 — Placer des points</h4>
+    <p>Trace une droite graduée (1 cm = 1 unité) et place les points A(3), B(−5), C(−2), D(0), E(6).</p>
+    <details><summary>Voir la correction</summary>
+      <p>On trace une droite horizontale, on place l'origine O(0), puis on gradue régulièrement vers la droite (positifs) et vers la gauche (négatifs). A est 3 graduations à droite, B est 5 graduations à gauche, C est 2 graduations à gauche, D est sur l'origine, E est 6 graduations à droite.</p>
+    </details>
+  </div>
+
+  <div class="exo">
+    <span class="tag appliquer">Appliquer</span>
+    <h4>Exercice 3 — Comparer</h4>
+    <p>Compare en utilisant &lt; ou &gt; : a) −7 … 3 &nbsp; b) −2 … −9 &nbsp; c) 0 … −1 &nbsp; d) −15 … −4</p>
+    <details><summary>Voir la correction</summary>
+      <p>a) −7 &lt; 3 (négatif &lt; positif)<br>b) −2 &gt; −9 (−2 est plus proche de 0)<br>c) 0 &gt; −1<br>d) −15 &lt; −4 (−15 est plus loin de 0)</p>
+    </details>
+  </div>
+
+  <div class="exo">
+    <span class="tag comprendre">Comprendre</span>
+    <h4>Exercice 4 — Additions</h4>
+    <p>Calcule : a) (+8) + (+5) &nbsp; b) (−6) + (−9) &nbsp; c) (+7) + (−3) &nbsp; d) (−10) + (+4) &nbsp; e) (−2) + (+2)</p>
+    <details><summary>Voir la correction</summary>
+      <p>a) +13 (même signe : on additionne, on garde +)<br>b) −15 (même signe : on additionne, on garde −)<br>c) +4 (signes contraires : 7−3=4, on garde le signe du plus grand, +7)<br>d) −6 (signes contraires : 10−4=6, on garde le signe du plus grand en valeur, −10)<br>e) 0 (deux nombres opposés s'annulent)</p>
+    </details>
+  </div>
+
+  <div class="exo">
+    <span class="tag comprendre">Comprendre</span>
+    <h4>Exercice 5 — Soustractions</h4>
+    <p>Transforme en addition puis calcule : a) (+4) − (+9) &nbsp; b) (−3) − (−8) &nbsp; c) (−5) − (+2) &nbsp; d) (+6) − (−1)</p>
+    <details><summary>Voir la correction</summary>
+      <p>a) (+4) − (+9) = (+4) + (−9) = −5<br>b) (−3) − (−8) = (−3) + (+8) = +5<br>c) (−5) − (+2) = (−5) + (−2) = −7<br>d) (+6) − (−1) = (+6) + (+1) = +7</p>
+    </details>
+  </div>
+
+  <div class="exo">
+    <span class="tag comprendre">Comprendre</span>
+    <h4>Exercice 6 — Situation : le bilan d'un compte bancaire</h4>
+    <p>Le compte de Léa affiche +45 €. Elle dépense 60 € puis reçoit 25 €. Quel est le nouveau solde ? Écris le calcul avec des nombres relatifs.</p>
+    <details><summary>Voir la correction</summary>
+      <p>Solde = (+45) + (−60) + (+25)<br>= (−15) + (+25)<br>= +10<br>Le compte de Léa affiche +10 €.</p>
+    </details>
+  </div>
+
+  <div class="exo">
+    <span class="tag approfondir">Approfondir</span>
+    <h4>Exercice 7 — Températures et amplitude</h4>
+    <p>À 6h du matin, il faisait −8°C. À 14h, il faisait +5°C. Quelle est l'augmentation de température (l'écart) entre ces deux relevés ?</p>
+    <details><summary>Voir la correction</summary>
+      <p>Écart = (+5) − (−8) = (+5) + (+8) = +13<br>La température a augmenté de 13°C.</p>
+    </details>
+  </div>
+
+  <div class="exo">
+    <span class="tag approfondir">Approfondir</span>
+    <h4>Exercice 8 — Chaîne de calculs</h4>
+    <p>Calcule astucieusement en regroupant : A = (−12) + (+8) + (−3) + (+12) + (−8)</p>
+    <details><summary>Voir la correction</summary>
+      <p>On regroupe les nombres opposés : (−12)+(+12) = 0, puis (+8)+(−8) = 0.<br>Il reste A = 0 + 0 + (−3) = −3</p>
+    </details>
+  </div>
+</section>
+
+<!-- SECTION 6 : QCM -->
+<section class="section" id="sec6">
+  <h2>7. QCM — Teste-toi !</h2>
+  <p>Réponds aux 16 questions puis clique sur « Voir mon score ».</p>
+  <div id="qcmContainer"></div>
+  <button class="btn" onclick="gradeQcm()">Voir mon score</button>
+  <div id="qcmScore"></div>
+</section>
+
+</main>
+
+<footer>Cours de mathématiques — Nombres relatifs — Niveau 5ème</footer>
+
+<script>
+/* ---------- THEME ---------- */
+function toggleTheme(){
+  const root = document.documentElement;
+  const current = root.getAttribute('data-theme');
+  if(current === 'dark'){ root.setAttribute('data-theme','light'); }
+  else if(current === 'light'){ root.removeAttribute('data-theme'); }
+  else { root.setAttribute('data-theme','dark'); }
+  redrawAll();
+}
+
+/* ---------- TABS ---------- */
+const initialized = [false,false,false,false,false,false,false];
+function showTab(i){
+  document.querySelectorAll('.section').forEach((s,idx)=> s.classList.toggle('active', idx===i));
+  document.querySelectorAll('#tabsNav button').forEach((b,idx)=> b.classList.toggle('active', idx===i));
+  if(!initialized[i]){ initSection(i); initialized[i] = true; }
+}
+function initSection(i){
+  if(i===0) initDeco();
+  if(i===1) initLine();
+  if(i===2) initCompare();
+  if(i===3) initAdd();
+  if(i===4) initSub();
+  if(i===5) { /* static */ }
+  if(i===6) initQcm();
+}
+
+function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function redrawAll(){
+  if(initialized[0]) drawThermo();
+  if(initialized[1]) drawLine();
+  if(initialized[3]) drawAdd();
+}
+
+/* ================= SECTION 0 : DECOUVERTE ================= */
+function initDeco(){
+  const range = document.getElementById('thermoRange');
+  range.addEventListener('input', drawThermo);
+  drawThermo();
+}
+function drawThermo(){
+  const c = document.getElementById('thermoCanvas');
+  const ctx = c.getContext('2d');
+  const w = c.width, h = c.height;
+  ctx.clearRect(0,0,w,h);
+  const val = parseInt(document.getElementById('thermoRange').value,10);
+  document.getElementById('thermoValue').textContent = (val>0?'+':'') + val + '°C';
+
+  const text = cssVar('--text'), muted = cssVar('--muted'), border = cssVar('--border'),
+        accent = cssVar('--accent'), bad = cssVar('--bad'), good = cssVar('--good');
+
+  const tubeX = w/2 - 15, tubeY = 30, tubeW = 30, tubeH = 240;
+  ctx.strokeStyle = border; ctx.lineWidth = 2;
+  ctx.strokeRect(tubeX, tubeY, tubeW, tubeH);
+  ctx.beginPath(); ctx.arc(w/2, tubeY+tubeH+25, 28, 0, Math.PI*2); ctx.stroke();
+
+  // graduations -20..20
+  ctx.font = '11px sans-serif'; ctx.fillStyle = muted; ctx.textAlign='left';
+  for(let t=-20;t<=20;t+=5){
+    const y = tubeY + tubeH - ((t+20)/40)*tubeH;
+    ctx.beginPath(); ctx.moveTo(tubeX-6,y); ctx.lineTo(tubeX,y); ctx.strokeStyle=border; ctx.stroke();
+    ctx.fillText((t>0?'+':'')+t, tubeX-32, y+4);
+  }
+  // zero line
+  const zeroY = tubeY + tubeH - ((0+20)/40)*tubeH;
+  ctx.strokeStyle = text; ctx.beginPath(); ctx.moveTo(tubeX, zeroY); ctx.lineTo(tubeX+tubeW, zeroY); ctx.stroke();
+
+  // mercury fill
+  const fillColor = val>=0 ? accent : bad;
+  const valY = tubeY + tubeH - ((val+20)/40)*tubeH;
+  ctx.fillStyle = fillColor;
+  ctx.fillRect(tubeX+4, valY, tubeW-8, tubeY+tubeH-valY);
+  ctx.beginPath(); ctx.arc(w/2, tubeY+tubeH+25, 22, 0, Math.PI*2); ctx.fill();
+
+  ctx.fillStyle = text; ctx.font = 'bold 20px sans-serif'; ctx.textAlign='center';
+  ctx.fillText((val>0?'+':'') + val + '°C', w/2+90, valY+5);
+}
+function checkDeco(n){
+  const answers = {1:'-15',2:'+8',3:'+3',4:'-40'};
+  const acceptAlt = {1:['-15'],2:['+8','8'],3:['+3','3'],4:['-40']};
+  const input = document.getElementById('dec_a'+n).value.trim().replace(/\s/g,'');
+  const fb = document.getElementById('dec_f'+n);
+  const ok = acceptAlt[n].includes(input);
+  fb.textContent = ok ? '✓ Correct !' : '✗ Essaie encore (réponse : '+answers[n]+')';
+  fb.className = 'feedback ' + (ok?'ok':'no');
+}
+
+/* ================= SECTION 1 : DROITE GRADUEE ================= */
+let lineTarget = -4;
+let linePlaced = null;
+function initLine(){
+  newLineTarget();
+  const c = document.getElementById('lineCanvas');
+  c.addEventListener('click', onLineClick);
+  drawLine();
+}
+function lineGeom(c){
+  const w=c.width,h=c.height;
+  const marginX = 40;
+  const originX = w/2, y = h/2;
+  const unit = (w - 2*marginX)/24; // -12..12 range
+  return {w,h,originX,y,unit};
+}
+function newLineTarget(){
+  lineTarget = Math.floor(Math.random()*17) - 8; // -8..8
+  linePlaced = null;
+  document.getElementById('targetAbs').textContent = (lineTarget>0?'+':'') + lineTarget;
+  document.getElementById('lineFeedback').textContent = 'Clique sur la graduation correspondante';
+  drawLine();
+}
+function onLineClick(e){
+  const c = document.getElementById('lineCanvas');
+  const rect = c.getBoundingClientRect();
+  const scaleX = c.width/rect.width;
+  const x = (e.clientX - rect.left)*scaleX;
+  const g = lineGeom(c);
+  const n = Math.round((x - g.originX)/g.unit);
+  linePlaced = n;
+  const fb = document.getElementById('lineFeedback');
+  if(n === lineTarget){ fb.textContent = "✓ Bravo, c'est correct !"; fb.style.color = cssVar('--good'); }
+  else { fb.textContent = '✗ Tu as placé ' + (n>0?'+':'') + n + ', réessaie'; fb.style.color = cssVar('--bad'); }
+  drawLine();
+}
+function drawLine(){
+  const c = document.getElementById('lineCanvas');
+  const ctx = c.getContext('2d');
+  const g = lineGeom(c);
+  ctx.clearRect(0,0,g.w,g.h);
+  const text = cssVar('--text'), muted = cssVar('--muted'), border = cssVar('--border'), accent = cssVar('--accent'), good = cssVar('--good');
+
+  ctx.strokeStyle = text; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(20, g.y); ctx.lineTo(g.w-20, g.y);
+  ctx.lineTo(g.w-28, g.y-6); ctx.moveTo(g.w-20,g.y); ctx.lineTo(g.w-28,g.y+6);
+  ctx.stroke();
+
+  ctx.font='12px sans-serif'; ctx.textAlign='center';
+  for(let n=-11;n<=11;n++){
+    const x = g.originX + n*g.unit;
+    if(x<20||x>g.w-20) continue;
+    ctx.strokeStyle = border;
+    ctx.beginPath(); ctx.moveTo(x,g.y-6); ctx.lineTo(x,g.y+6); ctx.stroke();
+    if(n%2===0 || Math.abs(n)<=6){
+      ctx.fillStyle = n===0?text:muted;
+      ctx.fillText(n===0?'0':(n>0?'+'+n:n), x, g.y+22);
+    }
+  }
+  // target marker (ghost)
+  const tx = g.originX + lineTarget*g.unit;
+  ctx.strokeStyle = accent; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(tx,g.y-30); ctx.lineTo(tx,g.y+30); ctx.stroke();
+  ctx.setLineDash([]);
+
+  if(linePlaced !== null){
+    const px = g.originX + linePlaced*g.unit;
+    ctx.fillStyle = linePlaced===lineTarget ? good : cssVar('--bad');
+    ctx.beginPath(); ctx.arc(px, g.y, 7, 0, Math.PI*2); ctx.fill();
+  }
+}
+function checkLec(n){
+  const answers = {1:'3',2:'-5',3:'-2'};
+  const alt = {1:['3','+3'],2:['-5'],3:['-2']};
+  const input = document.getElementById('lec_a'+n).value.trim().replace(/\s/g,'');
+  const fb = document.getElementById('lec_f'+n);
+  const ok = alt[n].includes(input);
+  fb.textContent = ok ? '✓ Correct !' : '✗ Réponse : '+answers[n];
+  fb.className = 'feedback ' + (ok?'ok':'no');
+}
+
+/* ================= SECTION 2 : COMPARER ================= */
+let compareData = [];
+function initCompare(){ newCompareSet(); }
+function randInt(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function newCompareSet(){
+  compareData = [];
+  for(let i=0;i<4;i++){
+    let a = randInt(-12,12), b = randInt(-12,12);
+    while(a===b){ b = randInt(-12,12); }
+    compareData.push([a,b]);
+  }
+  const div = document.getElementById('compareList');
+  div.innerHTML = compareData.map((pair,idx)=>{
+    const [a,b] = pair;
+    return `<div class="answer-box">${a>0?'+':''}${a} <select id="cmp_sel${idx}">
+      <option value="">--</option><option value="<">&lt;</option><option value=">">&gt;</option>
+      </select> ${b>0?'+':''}${b}
+      <button class="btn" onclick="checkCompare(${idx})">Vérifier</button>
+      <span id="cmp_f${idx}" class="feedback"></span></div>`;
+  }).join('');
+}
+function checkCompare(idx){
+  const [a,b] = compareData[idx];
+  const correct = a<b ? '<' : '>';
+  const sel = document.getElementById('cmp_sel'+idx).value;
+  const fb = document.getElementById('cmp_f'+idx);
+  const ok = sel === correct;
+  fb.textContent = ok ? '✓ Correct !' : '✗ Réponse : ' + correct;
+  fb.className = 'feedback ' + (ok?'ok':'no');
+}
+function checkRange(){
+  const nums = [-3,5,-8,0,2].slice().sort((a,b)=>a-b);
+  const expected = nums.join(';');
+  const expectedPlus = nums.map(n=> n>0? '+'+n : ''+n).join(';');
+  const input = document.getElementById('range_ans').value.trim().replace(/\s/g,'');
+  const fb = document.getElementById('range_f');
+  const ok = input === expected || input === expectedPlus;
+  fb.textContent = ok ? '✓ Correct !' : '✗ Réponse attendue : ' + expectedPlus;
+  fb.className = 'feedback ' + (ok?'ok':'no');
+}
+
+/* ================= SECTION 3 : ADDITION ================= */
+function initAdd(){
+  document.getElementById('addStart').addEventListener('input', drawAdd);
+  document.getElementById('addMove').addEventListener('input', drawAdd);
+  drawAdd();
+  newAddSet();
+}
+function drawAdd(){
+  const c = document.getElementById('addCanvas');
+  const ctx = c.getContext('2d');
+  const w=c.width,h=c.height;
+  ctx.clearRect(0,0,w,h);
+  const start = parseInt(document.getElementById('addStart').value,10);
+  const move = parseInt(document.getElementById('addMove').value,10);
+  const end = start+move;
+  document.getElementById('addFormula').textContent =
+    `(${start>0?'+':''}${start}) + (${move>0?'+':''}${move}) = ${end>0?'+':''}${end}`;
+
+  const marginX=40, originX=w/2, y=h/2, unit=(w-2*marginX)/24;
+  const text = cssVar('--text'), muted = cssVar('--muted'), border = cssVar('--border'),
+        accent = cssVar('--accent'), good = cssVar('--good'), bad = cssVar('--bad');
+
+  ctx.strokeStyle = text; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(20,y); ctx.lineTo(w-20,y);
+  ctx.lineTo(w-28,y-6); ctx.moveTo(w-20,y); ctx.lineTo(w-28,y+6); ctx.stroke();
+
+  ctx.font='11px sans-serif'; ctx.textAlign='center';
+  for(let n=-11;n<=11;n++){
+    const x = originX+n*unit;
+    if(x<20||x>w-20) continue;
+    ctx.strokeStyle=border;
+    ctx.beginPath(); ctx.moveTo(x,y-5); ctx.lineTo(x,y+5); ctx.stroke();
+    if(Math.abs(n)<=8){ ctx.fillStyle= n===0?text:muted; ctx.fillText(n===0?'0':(n>0?'+'+n:n), x, y+20); }
+  }
+  // arrow from start to end
+  const sx = originX+start*unit, ex = originX+end*unit;
+  ctx.strokeStyle = move>=0 ? good : bad;
+  ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(sx, y-40); ctx.lineTo(ex, y-40); ctx.stroke();
+  const dir = move>=0?1:-1;
+  ctx.beginPath();
+  ctx.moveTo(ex, y-40); ctx.lineTo(ex-10*dir, y-45); ctx.moveTo(ex,y-40); ctx.lineTo(ex-10*dir,y-35);
+  ctx.stroke();
+
+  ctx.fillStyle = accent;
+  ctx.beginPath(); ctx.arc(sx, y, 6, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = move>=0?good:bad;
+  ctx.beginPath(); ctx.arc(ex, y, 6, 0, Math.PI*2); ctx.fill();
+}
+let addData = [];
+function newAddSet(){
+  addData = [];
+  const gens = [
+    ()=>[randInt(1,9), randInt(1,9)], // same positive
+    ()=>[-randInt(1,9), -randInt(1,9)], // same negative
+    ()=>[randInt(1,9), -randInt(1,9)], // mixed
+    ()=>[-randInt(1,9), randInt(1,9)] // mixed
+  ];
+  for(let i=0;i<5;i++){
+    const [a,b] = gens[i%gens.length]();
+    addData.push([a,b]);
+  }
+  document.getElementById('addList').innerHTML = addData.map((pair,idx)=>{
+    const [a,b]=pair;
+    return `<div class="answer-box">(${a>0?'+':''}${a}) + (${b>0?'+':''}${b}) =
+      <input type="text" class="ans" id="add_a${idx}">
+      <button class="btn" onclick="checkAdd(${idx})">Vérifier</button>
+      <span id="add_f${idx}" class="feedback"></span></div>`;
+  }).join('');
+}
+function checkAdd(idx){
+  const [a,b] = addData[idx];
+  const result = a+b;
+  const expected = [String(result)];
+  if(result>0) expected.push('+'+result);
+  const input = document.getElementById('add_a'+idx).value.trim().replace(/\s/g,'');
+  const fb = document.getElementById('add_f'+idx);
+  const ok = expected.includes(input);
+  fb.textContent = ok ? '✓ Correct !' : '✗ Réponse : '+(result>0?'+':'')+result;
+  fb.className = 'feedback ' + (ok?'ok':'no');
+}
+
+/* ================= SECTION 4 : SOUSTRACTION ================= */
+function initSub(){
+  document.getElementById('subA').addEventListener('input', drawSubSteps);
+  document.getElementById('subB').addEventListener('input', drawSubSteps);
+  drawSubSteps();
+  newSubSet();
+}
+function fmt(n){ return (n>0?'+':'') + n; }
+function drawSubSteps(){
+  const a = parseInt(document.getElementById('subA').value,10);
+  const b = parseInt(document.getElementById('subB').value,10);
+  const opp = -b;
+  const result = a + opp;
+  document.getElementById('subSteps').innerHTML = `
+    <p>Calcul de départ : <strong>(${fmt(a)}) − (${fmt(b)})</strong></p>
+    <p>Étape 1 — on change en addition de l'opposé : <strong>(${fmt(a)}) + (${fmt(opp)})</strong></p>
+    <p>Étape 2 — on applique la règle de l'addition : <strong>${fmt(a)} ${opp>=0?'+':'−'} ${Math.abs(opp)} = ${fmt(result)}</strong></p>
+    <p style="color:var(--accent);font-weight:700;">Résultat : (${fmt(a)}) − (${fmt(b)}) = ${fmt(result)}</p>
+  `;
+}
+function checkDist(n){
+  const answers = {1:'8',2:'5'};
+  const input = document.getElementById('dist_a'+n).value.trim().replace(/\s/g,'').replace('+','');
+  const fb = document.getElementById('dist_f'+n);
+  const ok = input === answers[n];
+  fb.textContent = ok ? '✓ Correct !' : '✗ Réponse : '+answers[n];
+  fb.className = 'feedback ' + (ok?'ok':'no');
+}
+let subData = [];
+function newSubSet(){
+  subData = [];
+  for(let i=0;i<5;i++){
+    subData.push([randInt(-9,9), randInt(-9,9)]);
+  }
+  document.getElementById('subList').innerHTML = subData.map((pair,idx)=>{
+    const [a,b]=pair;
+    return `<div class="answer-box">(${fmt(a)}) − (${fmt(b)}) =
+      <input type="text" class="ans" id="sub_a${idx}">
+      <button class="btn" onclick="checkSub(${idx})">Vérifier</button>
+      <span id="sub_f${idx}" class="feedback"></span></div>`;
+  }).join('');
+}
+function checkSub(idx){
+  const [a,b] = subData[idx];
+  const result = a-b;
+  const expected = [String(result)];
+  if(result>0) expected.push('+'+result);
+  const input = document.getElementById('sub_a'+idx).value.trim().replace(/\s/g,'');
+  const fb = document.getElementById('sub_f'+idx);
+  const ok = expected.includes(input);
+  fb.textContent = ok ? '✓ Correct !' : '✗ Réponse : '+fmt(result);
+  fb.className = 'feedback ' + (ok?'ok':'no');
+}
+
+/* ================= SECTION 6 : QCM ================= */
+const qcmQuestions = [
+  {q:"Quel est le signe du nombre −7 ?", opts:["+","−","Aucun"], correct:1},
+  {q:"7 (écrit sans signe) est équivalent à :", opts:["−7","+7","0"], correct:1},
+  {q:"Une température de 3°C en dessous de zéro s'écrit :", opts:["+3","−3","3"], correct:1},
+  {q:"L'opposé de +9 est :", opts:["−9","+9","0"], correct:0},
+  {q:"Sur une droite graduée, les nombres négatifs sont placés :", opts:["à droite de 0","à gauche de 0","au-dessus de 0"], correct:1},
+  {q:"Si A(−4), quelle est l'abscisse de A ?", opts:["4","−4","0"], correct:1},
+  {q:"Comparer : −5 et 2", opts:["−5 > 2","−5 < 2","−5 = 2"], correct:1},
+  {q:"Comparer : −3 et −8", opts:["−3 > −8","−3 < −8","−3 = −8"], correct:0},
+  {q:"Le plus grand des deux nombres −12 et −2 est :", opts:["−12","−2","Impossible à dire"], correct:1},
+  {q:"(+4) + (+6) =", opts:["+10","−10","+2"], correct:0},
+  {q:"(−5) + (−3) =", opts:["+8","−8","−2"], correct:1},
+  {q:"(+9) + (−4) =", opts:["+5","−5","+13"], correct:0},
+  {q:"(−7) + (+2) =", opts:["−5","+5","−9"], correct:0},
+  {q:"(+6) − (+9) est équivalent à :", opts:["(+6) + (+9)","(+6) + (−9)","(−6) + (−9)"], correct:1},
+  {q:"(−2) − (−5) =", opts:["−7","+3","−3"], correct:1},
+  {q:"La distance entre A(−4) et B(3) est :", opts:["1","7","−1"], correct:1},
+];
+function initQcm(){
+  const container = document.getElementById('qcmContainer');
+  container.innerHTML = qcmQuestions.map((item,idx)=>{
+    return `<div class="qcm-q" id="qcm_q${idx}">
+      <p><strong>${idx+1}.</strong> ${item.q}</p>
+      <div class="opts">
+        ${item.opts.map((o,oi)=>`<label id="qcm_${idx}_${oi}"><input type="radio" name="qcm${idx}" value="${oi}"> ${o}</label>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+function gradeQcm(){
+  let score = 0;
+  qcmQuestions.forEach((item, idx)=>{
+    const selected = document.querySelector('input[name="qcm'+idx+'"]:checked');
+    const selVal = selected ? parseInt(selected.value,10) : -1;
+    for(let oi=0; oi<item.opts.length; oi++){
+      const label = document.getElementById('qcm_'+idx+'_'+oi);
+      label.classList.remove('correct','incorrect');
+      if(oi === item.correct) label.classList.add('correct');
+      else if(oi === selVal) label.classList.add('incorrect');
+    }
+    if(selVal === item.correct) score++;
+  });
+  const pct = Math.round(score/qcmQuestions.length*100);
+  let msg;
+  if(pct>=90) msg = "Excellent ! Tu maîtrises parfaitement les nombres relatifs. 🌟";
+  else if(pct>=70) msg = "Très bien ! Quelques révisions et ce sera parfait. 👍";
+  else if(pct>=50) msg = "Pas mal, mais revois bien les règles d'addition et de comparaison.";
+  else msg = "Il faut revoir le chapitre attentivement, courage !";
+  document.getElementById('qcmScore').innerHTML = `Score : ${score} / ${qcmQuestions.length} (${pct}%)<br><span style="font-weight:400">${msg}</span>`;
+}
+
+/* ---------- INIT ---------- */
+showTab(0);
+window.addEventListener('resize', ()=>{ redrawAll(); });
+</script>
+</body>
+</html>

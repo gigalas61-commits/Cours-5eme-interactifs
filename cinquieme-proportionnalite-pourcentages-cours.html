@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proportionnalité et pourcentages</title>
+<meta name="description" content="Cours interactif de 5ème : proportionnalité, coefficient, produit en croix, pourcentages et échelles.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f5f2ed; --surface:#ffffff; --surface2:#ebe6de; --text:#2c2418;
+  --heading:#8b4513; --muted:#6b5a48; --border:#d4c8b8; --accent:#a0522d; --accent-light:#faf5ef;
+  --good:#2e7d32; --bad:#c62828;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:#161210; --surface:#221c18; --surface2:#302820; --text:#ddd0c0;
+    --heading:#e0a868; --muted:#9a8878; --border:#403428; --accent:#d08840; --accent-light:#1e1610;
+    --good:#66bb6a; --bad:#ef5350;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:#161210; --surface:#221c18; --surface2:#302820; --text:#ddd0c0;
+  --heading:#e0a868; --muted:#9a8878; --border:#403428; --accent:#d08840; --accent-light:#1e1610;
+  --good:#66bb6a; --bad:#ef5350;
+}
+* { box-sizing: border-box; }
+body {
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:'Nunito Sans', sans-serif; line-height:1.6;
+  transition: background .2s, color .2s;
+}
+h1,h2,h3,h4 { font-family:'Cormorant Garamond', serif; color:var(--heading); font-weight:700; margin-top:0; }
+h2 { font-size:1.8rem; border-bottom:2px solid var(--border); padding-bottom:.4rem; }
+h3 { font-size:1.35rem; color:var(--accent); }
+header {
+  background:var(--surface); border-bottom:1px solid var(--border);
+  padding:16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  position:sticky; top:0; z-index:20;
+}
+.badge {
+  background:var(--accent); color:#fff; font-weight:700; font-size:.85rem;
+  padding:4px 12px; border-radius:20px; font-family:'Nunito Sans',sans-serif;
+}
+header h1 { font-size:1.5rem; margin:0; flex:1; min-width:180px; }
+#themeBtn {
+  background:var(--surface2); border:1px solid var(--border); color:var(--text);
+  border-radius:8px; padding:8px 14px; cursor:pointer; font-size:1rem;
+}
+nav.tabs {
+  display:flex; overflow-x:auto; gap:4px; background:var(--surface);
+  border-bottom:1px solid var(--border); padding:0 8px; position:sticky; top:64px; z-index:19;
+}
+nav.tabs button {
+  background:none; border:none; color:var(--muted); padding:12px 14px;
+  font-family:'Nunito Sans',sans-serif; font-weight:600; cursor:pointer;
+  white-space:nowrap; border-bottom:3px solid transparent; font-size:.92rem;
+}
+nav.tabs button.active { color:var(--accent); border-bottom-color:var(--accent); }
+main { max-width:900px; margin:0 auto; padding:16px; }
+.panel { display:none; }
+.panel.active { display:block; animation:fade .25s ease; }
+@keyframes fade { from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:translateY(0);} }
+.card {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:18px; margin-bottom:16px;
+}
+.def {
+  background:var(--accent-light); border-left:4px solid var(--accent);
+  border-radius:6px; padding:12px 16px; margin:12px 0;
+}
+table { width:100%; border-collapse:collapse; margin:12px 0; }
+th, td { border:1px solid var(--border); padding:8px 10px; text-align:center; }
+th { background:var(--surface2); color:var(--heading); }
+.exo { border:1px solid var(--border); border-radius:10px; padding:14px; margin:14px 0; background:var(--surface2); }
+details { margin-top:10px; }
+summary {
+  cursor:pointer; color:var(--accent); font-weight:700; padding:8px;
+  background:var(--accent-light); border-radius:6px;
+}
+.corr { padding:10px 4px; }
+input[type=text], input[type=number] {
+  background:var(--bg); border:1px solid var(--border); color:var(--text);
+  border-radius:6px; padding:7px 10px; font-size:1rem; width:110px; font-family:inherit;
+}
+button.check {
+  background:var(--accent); color:#fff; border:none; border-radius:6px;
+  padding:8px 16px; cursor:pointer; font-weight:700; margin-left:8px;
+}
+button.check:hover { opacity:.88; }
+.feedback { margin-top:8px; font-weight:700; }
+.feedback.ok { color:var(--good); }
+.feedback.ko { color:var(--bad); }
+canvas { width:100%; background:var(--surface2); border-radius:10px; border:1px solid var(--border); }
+.qcm-q { border:1px solid var(--border); border-radius:10px; padding:14px; margin:12px 0; background:var(--surface2); }
+.qcm-opt { display:block; padding:8px 10px; margin:6px 0; border:1px solid var(--border); border-radius:6px; cursor:pointer; background:var(--surface); }
+.qcm-opt:hover { border-color:var(--accent); }
+.qcm-opt.sel { border-color:var(--accent); background:var(--accent-light); }
+#qcmScore { font-size:1.2rem; font-weight:700; text-align:center; padding:16px; }
+.tag { display:inline-block; background:var(--accent); color:#fff; border-radius:6px; padding:2px 8px; font-size:.75rem; font-weight:700; margin-right:6px;}
+footer { text-align:center; padding:24px; color:var(--muted); font-size:.85rem; }
+@media (max-width:600px) {
+  header h1 { font-size:1.2rem; }
+  nav.tabs { top:58px; }
+  h2 { font-size:1.4rem; }
+  main { padding:12px 16px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <span class="badge">5ème</span>
+  <h1>Proportionnalité et pourcentages</h1>
+  <button id="themeBtn" onclick="toggleTheme()">🌓</button>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button onclick="showTab(0)" class="active">1. Reconnaître</button>
+  <button onclick="showTab(1)">2. Coefficient</button>
+  <button onclick="showTab(2)">3. Produit en croix</button>
+  <button onclick="showTab(3)">4. Pourcentages</button>
+  <button onclick="showTab(4)">5. Échelles</button>
+  <button onclick="showTab(5)">6. Exercices</button>
+  <button onclick="showTab(6)">7. QCM</button>
+</nav>
+
+<main>
+
+<!-- TAB 0 : RECONNAÎTRE -->
+<section class="panel active" id="panel0">
+  <div class="card">
+    <h2>Reconnaître une situation de proportionnalité</h2>
+    <p>Deux grandeurs sont <strong>proportionnelles</strong> lorsque les valeurs de l'une s'obtiennent en multipliant les valeurs de l'autre toujours par le <strong>même nombre</strong>, appelé <em>coefficient de proportionnalité</em>.</p>
+    <div class="def">
+      <strong>Tableau de proportionnalité</strong><br>
+      Un tableau à deux lignes est un tableau de proportionnalité si on passe de la première ligne à la seconde en multipliant chaque nombre par un même nombre non nul.
+    </div>
+    <h3>Exemple</h3>
+    <table>
+      <tr><th>Nombre de kg de pommes</th><td>2</td><td>3</td><td>5</td></tr>
+      <tr><th>Prix en €</th><td>3</td><td>4,5</td><td>7,5</td></tr>
+    </table>
+    <p>On vérifie : 3 ÷ 2 = 1,5 ; 4,5 ÷ 3 = 1,5 ; 7,5 ÷ 5 = 1,5. Le coefficient est constant : <strong>1,5</strong>. C'est un tableau de proportionnalité.</p>
+
+    <h3>Contre-exemple</h3>
+    <table>
+      <tr><th>Côté d'un carré (cm)</th><td>2</td><td>3</td><td>4</td></tr>
+      <tr><th>Aire du carré (cm²)</th><td>4</td><td>9</td><td>16</td></tr>
+    </table>
+    <p>4 ÷ 2 = 2 mais 9 ÷ 3 = 3 : les quotients ne sont pas égaux. Ce n'est <strong>pas</strong> un tableau de proportionnalité (l'aire n'est pas proportionnelle au côté).</p>
+
+    <div class="def">
+      <strong>Méthode pour vérifier</strong>
+      <ol>
+        <li>Calculer le quotient (2ᵉ ligne ÷ 1ᵉ ligne) pour chaque colonne.</li>
+        <li>Si tous les quotients sont égaux → proportionnalité.</li>
+        <li>Si un seul quotient diffère → pas de proportionnalité.</li>
+      </ol>
+    </div>
+
+    <h3>Représentation graphique</h3>
+    <p>Une situation de proportionnalité se représente par des points <strong>alignés avec l'origine</strong> du repère (une droite qui passe par (0;0)). Si la courbe n'est pas une droite passant par l'origine, il n'y a pas proportionnalité.</p>
+    <canvas id="cvReco" height="320"></canvas>
+    <p style="text-align:center;color:var(--muted);font-size:.9rem;">En orange : droite de proportionnalité (passe par l'origine). En bleu : courbe qui n'est pas une situation de proportionnalité.</p>
+  </div>
+</section>
+
+<!-- TAB 1 : COEFFICIENT -->
+<section class="panel" id="panel1"></section>
+
+<!-- TAB 2 : PRODUIT EN CROIX -->
+<section class="panel" id="panel2"></section>
+
+<!-- TAB 3 : POURCENTAGES -->
+<section class="panel" id="panel3"></section>
+
+<!-- TAB 4 : ECHELLES -->
+<section class="panel" id="panel4"></section>
+
+<!-- TAB 5 : EXERCICES -->
+<section class="panel" id="panel5"></section>
+
+<!-- TAB 6 : QCM -->
+<section class="panel" id="panel6"></section>
+
+</main>
+
+<footer>Cours de mathématiques — Classe de 5ème — Proportionnalité et pourcentages</footer>
+
+<script>
+/* ===================== THEME ===================== */
+function toggleTheme() {
+  const root = document.documentElement;
+  const current = root.getAttribute('data-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  let next;
+  if (!current) next = prefersDark ? 'light' : 'dark';
+  else if (current === 'dark') next = 'light';
+  else next = 'dark';
+  root.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch(e) {}
+  redrawAllCanvas();
+}
+try {
+  const saved = localStorage.getItem('theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+} catch(e) {}
+
+/* ===================== TABS ===================== */
+const initialized = [false,false,false,false,false,false,false];
+function showTab(i) {
+  document.querySelectorAll('.panel').forEach((p,idx)=>p.classList.toggle('active', idx===i));
+  document.querySelectorAll('#tabs button').forEach((b,idx)=>b.classList.toggle('active', idx===i));
+  if (!initialized[i]) { initSection(i); initialized[i] = true; }
+  setTimeout(redrawAllCanvas, 30);
+}
+
+function initSection(i) {
+  const builders = [null, buildCoefficient, buildProduitCroix, buildPourcentages, buildEchelles, buildExercices, buildQCM];
+  if (builders[i]) builders[i](document.getElementById('panel'+i));
+}
+
+function redrawAllCanvas() {
+  if (document.getElementById('cvReco')) drawReco();
+  if (document.getElementById('cvPct')) drawPct(currentPctValue || 40);
+  if (document.getElementById('cvEchelle')) drawEchelle();
+}
+
+/* ===================== CANVAS: RECONNAITRE ===================== */
+function drawReco() {
+  const cv = document.getElementById('cvReco');
+  const ctx = cv.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const w = cv.clientWidth, h = 320;
+  cv.width = w*dpr; cv.height = h*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const css = getComputedStyle(document.documentElement);
+  const border = css.getPropertyValue('--border').trim();
+  const text = css.getPropertyValue('--text').trim();
+  const accent = css.getPropertyValue('--accent').trim();
+  const heading = css.getPropertyValue('--heading').trim();
+  ctx.clearRect(0,0,w,h);
+  const ox = 50, oy = h-40, ex = w-20, ey = 20;
+  ctx.strokeStyle = border; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(ox,oy); ctx.lineTo(ex,oy); ctx.moveTo(ox,oy); ctx.lineTo(ox,ey); ctx.stroke();
+  ctx.fillStyle = text; ctx.font = '13px Nunito Sans';
+  ctx.fillText('0', ox-14, oy+16);
+  ctx.fillText('quantité', ex-50, oy+30);
+  ctx.save(); ctx.translate(ox-32, ey+40); ctx.rotate(-Math.PI/2); ctx.fillText('prix', 0,0); ctx.restore();
+
+  // droite de proportionnalité (orange)
+  ctx.strokeStyle = accent; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(ox,oy);
+  ctx.lineTo(ex, oy-(ex-ox)*0.75);
+  ctx.stroke();
+
+  // courbe non proportionnelle (bleu / heading)
+  ctx.strokeStyle = '#3b6ea5'; ctx.lineWidth = 3;
+  ctx.beginPath();
+  for (let x=ox; x<=ex; x+=2) {
+    const t = (x-ox)/(ex-ox);
+    const y = oy - (h-70) * (t*t) - 10;
+    if (x===ox) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  ctx.fillStyle = accent; ctx.font = 'bold 13px Nunito Sans';
+  ctx.fillText('proportionnelle', ex-150, oy-(ex-ox)*0.75-10);
+  ctx.fillStyle = '#3b6ea5';
+  ctx.fillText('non proportionnelle', ex-160, ey+15);
+}
+
+/* ===================== TAB 1: COEFFICIENT ===================== */
+function buildCoefficient(el) {
+  el.innerHTML = `
+  <div class="card">
+    <h2>Calculer et utiliser le coefficient de proportionnalité</h2>
+    <div class="def">
+      Le <strong>coefficient de proportionnalité</strong> est le nombre par lequel on multiplie chaque valeur de la première ligne pour obtenir la valeur correspondante de la seconde ligne.<br>
+      <strong>coefficient = valeur ligne 2 ÷ valeur ligne 1 (à la même colonne)</strong>
+    </div>
+    <h3>Exemple : recettes de cuisine</h3>
+    <table>
+      <tr><th>Nombre de personnes</th><td>4</td><td>6</td><td>10</td></tr>
+      <tr><th>Quantité de farine (g)</th><td>200</td><td>300</td><td>500</td></tr>
+    </table>
+    <p>Coefficient : 200 ÷ 4 = 50 (g de farine par personne). Pour 6 personnes : 6 × 50 = 300 g. ✓</p>
+    <p>On peut aussi utiliser le <strong>coefficient inverse</strong> (ligne 1 ÷ ligne 2) pour passer de la seconde ligne à la première : ici 1 ÷ 50 = 0,02.</p>
+
+    <h3>Exercice interactif 1</h3>
+    <div class="exo">
+      <p>Un tableau de proportionnalité : 5 → 12,5 et 8 → ?. Quel est le coefficient de proportionnalité ?</p>
+      <input type="text" id="c1a" placeholder="coefficient">
+      <button class="check" onclick="checkCoef1()">Vérifier</button>
+      <div class="feedback" id="c1af"></div>
+      <p style="margin-top:10px;">En déduire la valeur manquante pour 8 :</p>
+      <input type="text" id="c1b" placeholder="valeur">
+      <button class="check" onclick="checkCoef1b()">Vérifier</button>
+      <div class="feedback" id="c1bf"></div>
+      <details><summary>Voir la correction</summary>
+        <div class="corr">
+          Coefficient = 12,5 ÷ 5 = <strong>2,5</strong>.<br>
+          Valeur pour 8 : 8 × 2,5 = <strong>20</strong>.
+        </div>
+      </details>
+    </div>
+
+    <h3>Exercice interactif 2</h3>
+    <div class="exo">
+      <p>Une voiture consomme 6 L d'essence pour 100 km. Quel est le coefficient de proportionnalité (litres par km) ? Combien consomme-t-elle pour 250 km ?</p>
+      <input type="text" id="c2" placeholder="consommation pour 250 km (L)">
+      <button class="check" onclick="checkCoef2()">Vérifier</button>
+      <div class="feedback" id="c2f"></div>
+      <details><summary>Voir la correction</summary>
+        <div class="corr">
+          Coefficient : 6 ÷ 100 = 0,06 L/km.<br>
+          Pour 250 km : 250 × 0,06 = <strong>15 L</strong>.
+        </div>
+      </details>
+    </div>
+
+    <h3>Exercice interactif 3 : compléter le tableau</h3>
+    <div class="exo">
+      <p>Tableau de proportionnalité de coefficient 3,5. Complète la valeur manquante quand la première ligne vaut 7 :</p>
+      <input type="text" id="c3" placeholder="valeur">
+      <button class="check" onclick="checkCoef3()">Vérifier</button>
+      <div class="feedback" id="c3f"></div>
+      <details><summary>Voir la correction</summary>
+        <div class="corr">7 × 3,5 = <strong>24,5</strong></div>
+      </details>
+    </div>
+  </div>`;
+}
+function checkCoef1() {
+  const v = parseFloat(document.getElementById('c1a').value.replace(',','.'));
+  const f = document.getElementById('c1af');
+  if (Math.abs(v-2.5) < 0.01) { f.textContent='Correct ! Coefficient = 2,5'; f.className='feedback ok'; }
+  else { f.textContent='Essaie encore (indice : 12,5 ÷ 5)'; f.className='feedback ko'; }
+}
+function checkCoef1b() {
+  const v = parseFloat(document.getElementById('c1b').value.replace(',','.'));
+  const f = document.getElementById('c1bf');
+  if (Math.abs(v-20) < 0.01) { f.textContent='Correct ! 8 × 2,5 = 20'; f.className='feedback ok'; }
+  else { f.textContent='Pas tout à fait, réessaie.'; f.className='feedback ko'; }
+}
+function checkCoef2() {
+  const v = parseFloat(document.getElementById('c2').value.replace(',','.'));
+  const f = document.getElementById('c2f');
+  if (Math.abs(v-15) < 0.01) { f.textContent='Bravo ! 15 L'; f.className='feedback ok'; }
+  else { f.textContent='Recalcule : 250 × 0,06'; f.className='feedback ko'; }
+}
+function checkCoef3() {
+  const v = parseFloat(document.getElementById('c3').value.replace(',','.'));
+  const f = document.getElementById('c3f');
+  if (Math.abs(v-24.5) < 0.01) { f.textContent='Exact ! 24,5'; f.className='feedback ok'; }
+  else { f.textContent='Réessaie : 7 × 3,5'; f.className='feedback ko'; }
+}
+
+/* ===================== TAB 2: PRODUIT EN CROIX ===================== */
+function buildProduitCroix(el) {
+  el.innerHTML = `
+  <div class="card">
+    <h2>La quatrième proportionnelle : produit en croix</h2>
+    <p>Quand on ne connaît pas facilement le coefficient (nombre non entier compliqué), on utilise le <strong>produit en croix</strong> pour trouver la <em>quatrième proportionnelle</em>.</p>
+    <div class="def">
+      <strong>Règle du produit en croix</strong><br>
+      Dans un tableau de proportionnalité :
+      <table><tr><th>a</th><td>b</td></tr><tr><th>c</th><td>x</td></tr></table>
+      alors <strong>a × x = b × c</strong>, donc <strong>x = (b × c) ÷ a</strong>
+    </div>
+    <h3>Méthode pas à pas</h3>
+    <ol>
+      <li>Placer les nombres connus dans un tableau à 2 lignes, 2 colonnes.</li>
+      <li>Repérer la valeur inconnue x.</li>
+      <li>Faire le produit des deux nombres en diagonale (produit en croix) qui ne contient pas x.</li>
+      <li>Diviser ce produit par le quatrième nombre.</li>
+    </ol>
+    <h3>Exemple résolu</h3>
+    <p>7 kg de pommes coûtent 10,50 €. Combien coûtent 12 kg ?</p>
+    <table><tr><th>Masse (kg)</th><td>7</td><td>12</td></tr><tr><th>Prix (€)</th><td>10,50</td><td>x</td></tr></table>
+    <p>x = (10,50 × 12) ÷ 7 = 126 ÷ 7 = <strong>18 €</strong></p>
+
+    <h3>Exercice interactif 1</h3>
+    <div class="exo">
+      <p>8 stylos coûtent 9,60 €. Combien coûtent 15 stylos ? (arrondir si besoin au centime)</p>
+      <input type="text" id="p1" placeholder="prix en €">
+      <button class="check" onclick="checkPC1()">Vérifier</button>
+      <div class="feedback" id="p1f"></div>
+      <details><summary>Voir la correction</summary>
+        <div class="corr">
+          Tableau : 8 → 9,60 ; 15 → x.<br>
+          x = (9,60 × 15) ÷ 8 = 144 ÷ 8 = <strong>18 €</strong>
+        </div>
+      </details>
+    </div>
+
+    <h3>Exercice interactif 2</h3>
+    <div class="exo">
+      <p>Une recette pour 6 personnes utilise 450 g de riz. Quelle quantité pour 10 personnes ?</p>
+      <input type="text" id="p2" placeholder="quantité en g">
+      <button class="check" onclick="checkPC2()">Vérifier</button>
+      <div class="feedback" id="p2f"></div>
+      <details><summary>Voir la correction</summary>
+        <div class="corr">x = (450 × 10) ÷ 6 = 4500 ÷ 6 = <strong>750 g</strong></div>
+      </details>
+    </div>
+
+    <h3>Exercice interactif 3</h3>
+    <div class="exo">
+      <p>13 litres d'essence coûtent 19,50 €. Quel est le prix de 20 litres ?</p>
+      <input type="text" id="p3" placeholder="prix en €">
+      <button class="check" onclick="checkPC3()">Vérifier</button>
+      <div class="feedback" id="p3f"></div>
+      <details><summary>Voir la correction</summary>
+        <div class="corr">x = (19,50 × 20) ÷ 13 = 390 ÷ 13 = <strong>30 €</strong></div>
+      </details>
+    </div>
+
+    <h3>Exercice interactif 4 : retrouver un antécédent</h3>
+    <div class="exo">
+      <p>Un ouvrier pose 24 m² de carrelage en 3 heures. Combien d'heures faut-il pour poser 56 m² ?</p>
+      <input type="text" id="p4" placeholder="durée en h">
+      <button class="check" onclick="checkPC4()">Vérifier</button>
+      <div class="feedback" id="p4f"></div>
+      <details><summary>Voir la correction</summary>
+        <div class="corr">x = (3 × 56) ÷ 24 = 168 ÷ 24 = <strong>7 h</strong></div>
+      </details>
+    </div>
+  </div>`;
+}
+function checkPC1(){const v=parseFloat(document.getElementById('p1').value.replace(',','.'));const f=document.getElementById('p1f');
+  if(Math.abs(v-18)<0.02){f.textContent='Correct ! 18 €';f.className='feedback ok';}else{f.textContent='Essaie : (9,60×15)÷8';f.className='feedback ko';}}
+function checkPC2(){const v=parseFloat(document.getElementById('p2').value.replace(',','.'));const f=document.getElementById('p2f');
+  if(Math.abs(v-750)<1){f.textContent='Bravo ! 750 g';f.className='feedback ok';}else{f.textContent='Recalcule : (450×10)÷6';f.className='feedback ko';}}
+function checkPC3(){const v=parseFloat(document.getElementById('p3').value.replace(',','.'));const f=document.getElementById('p3f');
+  if(Math.abs(v-30)<0.02){f.textContent='Exact ! 30 €';f.className='feedback ok';}else{f.textContent='Réessaie : (19,50×20)÷13';f.className='feedback ko';}}
+function checkPC4(){const v=parseFloat(document.getElementById('p4').value.replace(',','.'));const f=document.getElementById('p4f');
+  if(Math.abs(v-7)<0.05){f.textContent='Parfait ! 7 h';f.className='feedback ok';}else{f.textContent='Recalcule : (3×56)÷24';f.className='feedback ko';}}
+
+/* ===================== TAB 3: POURCENTAGES ===================== */
+let currentPctValue = 40;
+function buildPourcentages(el) {
+  el.innerHTML = `
+  <div class="card">
+    <h2>Pourcentages</h2>
+    <div class="def">
+      <strong>Calculer t % d'une quantité A</strong><br>
+      t % de A = A × t ÷ 100
+    </div>
+    <h3>Exemple : appliquer un pourcentage</h3>
+    <p>Un article à 80 € est soldé à -25 %. Réduction : 80 × 25 ÷ 100 = 20 €. Nouveau prix : 80 − 20 = <strong>60 €</strong>.</p>
+    <p>Astuce : payer après une réduction de 25 % revient à payer 75 % du prix initial, soit 80 × 0,75 = 60 €.</p>
+
+    <h3>Barre de pourcentage interactive</h3>
+    <p>Déplace le curseur pour voir t % de 200 € représenté :</p>
+    <input type="range" id="pctSlider" min="0" max="100" value="40" style="width:100%;" oninput="updatePct(this.value)">
+    <p style="text-align:center;font-weight:700;">t = <span id="pctVal">40</span> % → <span id="pctResult">80</span> € sur 200 €</p>
+    <canvas id="cvPct" height="90"></canvas>
+
+    <h3>Calculer un pourcentage (proportion)</h3>
+    <div class="def">
+      Pour trouver quel pourcentage représente une partie P d'un total A :<br>
+      <strong>t = P × 100 ÷ A</strong> (en %)
+    </div>
+    <p>Exemple : dans une classe de 25 élèves, 15 sont des filles. Pourcentage de filles : 15 × 100 ÷ 25 = <strong>60 %</strong>.</p>
+
+    <h3>Exercice interactif 1 : appliquer</h3>
+    <div class="exo">
+      <p>Une salle de cinéma de 320 places est remplie à 85 %. Combien de spectateurs sont présents ?</p>
+      <input type="text" id="pc1" placeholder="nombre de spectateurs">
+      <button class="check" onclick="checkPct1()">Vérifier</button>
+      <div class="feedback" id="pc1f"></div>
+      <details><summary>Voir la correction</summary>
+        <div class="corr">320 × 85 ÷ 100 = <strong>272 spectateurs</strong></div>
+      </details>
+    </div>
+
+    <h3>Exercice interactif 2 : soldes</h3>
+    <div class="exo">
+      <p>Un pull coûte 45 €. Il est soldé à -30 %. Quel est son nouveau prix ?</p>
+      <input type="text" id="pc2" placeholder="prix en €">
+      <button class="check" onclick="checkPct2()">Vérifier</button>
+      <div class="feedback" id="pc2f"></div>
+      <details><summary>Voir la correction</summary>
+        <div class="corr">Réduction : 45 × 30 ÷ 100 = 13,50 €. Nouveau prix : 45 − 13,50 = <strong>31,50 €</strong></div>
+      </details>
+    </div>
+
+    <h3>Exercice interactif 3 : composition</h3>
+    <div class="exo">
+      <p>Dans un collège de 480 élèves, 216 pratiquent un sport en club. Quel pourcentage cela représente-t-il ?</p>
+      <input type="text" id="pc3" placeholder="pourcentage %">
+      <button class="check" onclick="checkPct3()">Vérifier</button>
+      <div class="feedback" id="pc3f"></div>
+      <details><summary>Voir la correction</summary>
+        <div class="corr">216 × 100 ÷ 480 = <strong>45 %</strong></div>
+      </details>
+    </div>
+
+    <h3>Exercice interactif 4 : augmentation</h3>
+    <div class="exo">
+      <p>Un produit coûtait 60 €, son prix augmente de 8 %. Quel est le nouveau prix ?</p>
+      <input type="text" id="pc4" placeholder="prix en €">
+      <button class="check" onclick="checkPct4()">Vérifier</button>
+      <div class="feedback" id="pc4f"></div>
+      <details><summary>Voir la correction</summary>
+        <div class="corr">Augmentation : 60 × 8 ÷ 100 = 4,80 €. Nouveau prix : 60 + 4,80 = <strong>64,80 €</strong></div>
+      </details>
+    </div>
+  </div>`;
+  updatePct(40);
+}
+function updatePct(v) {
+  currentPctValue = parseFloat(v);
+  document.getElementById('pctVal').textContent = v;
+  document.getElementById('pctResult').textContent = (200 * v / 100).toFixed(0);
+  drawPct(currentPctValue);
+}
+function drawPct(t) {
+  const cv = document.getElementById('cvPct');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const w = cv.clientWidth, h = 90;
+  cv.width = w*dpr; cv.height = h*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const css = getComputedStyle(document.documentElement);
+  const border = css.getPropertyValue('--border').trim();
+  const accent = css.getPropertyValue('--accent').trim();
+  const text = css.getPropertyValue('--text').trim();
+  ctx.clearRect(0,0,w,h);
+  const bx=20, by=30, bw=w-40, bh=30;
+  ctx.strokeStyle = border; ctx.lineWidth=2;
+  ctx.strokeRect(bx,by,bw,bh);
+  ctx.fillStyle = accent;
+  ctx.fillRect(bx,by, bw*t/100, bh);
+  ctx.fillStyle = text; ctx.font='bold 14px Nunito Sans'; ctx.textAlign='center';
+  ctx.fillText(t+' %', bx+bw/2, by+bh+20);
+  ctx.textAlign='left';
+}
+function checkPct1(){const v=parseFloat(document.getElementById('pc1').value.replace(',','.'));const f=document.getElementById('pc1f');
+  if(Math.abs(v-272)<0.5){f.textContent='Correct ! 272 spectateurs';f.className='feedback ok';}else{f.textContent='Recalcule : 320×85÷100';f.className='feedback ko';}}
+function checkPct2(){const v=parseFloat(document.getElementById('pc2').value.replace(',','.'));const f=document.getElementById('pc2f');
+  if(Math.abs(v-31.5)<0.05){f.textContent='Bravo ! 31,50 €';f.className='feedback ok';}else{f.textContent='Réessaie.';f.className='feedback ko';}}
+function checkPct3(){const v=parseFloat(document.getElementById('pc3').value.replace(',','.'));const f=document.getElementById('pc3f');
+  if(Math.abs(v-45)<0.5){f.textContent='Exact ! 45 %';f.className='feedback ok';}else{f.textContent='Recalcule : 216×100÷480';f.className='feedback ko';}}
+function checkPct4(){const v=parseFloat(document.getElementById('pc4').value.replace(',','.'));const f=document.getElementById('pc4f');
+  if(Math.abs(v-64.8)<0.05){f.textContent='Parfait ! 64,80 €';f.className='feedback ok';}else{f.textContent='Réessaie.';f.className='feedback ko';}}
+
+/* ===================== TAB 4: ECHELLES ===================== */
+function buildEchelles(el) {
+  el.innerHTML = `
+  <div class="card">
+    <h2>Échelles : plans et cartes</h2>
+    <div class="def">
+      Une <strong>échelle</strong> est le coefficient de proportionnalité entre une longueur sur un plan (ou une carte) et la longueur réelle correspondante, <strong>exprimées dans la même unité</strong>.<br>
+      <strong>échelle = longueur sur le plan ÷ longueur réelle</strong>
+    </div>
+    <p>Une échelle 1/25 000 signifie que 1 cm sur la carte représente 25 000 cm dans la réalité, soit 250 m.</p>
+
+    <h3>Méthode</h3>
+    <ol>
+      <li>Convertir les longueurs dans la <strong>même unité</strong> (souvent cm).</li>
+      <li>Utiliser le tableau de proportionnalité ou le produit en croix.</li>
+      <li>Convertir le résultat dans l'unité demandée (souvent m ou km).</li>
+    </ol>
+
+    <h3>Exemple résolu</h3>
+    <p>Sur un plan à l'échelle 1/500, un jardin mesure 8 cm de long. Quelle est sa longueur réelle ?</p>
+    <table><tr><th>Plan (cm)</th><td>1</td><td>8</td></tr><tr><th>Réel (cm)</th><td>500</td><td>x</td></tr></table>
+    <p>x = 500 × 8 = 4000 cm = <strong>40 m</strong></p>
+
+    <h3>Carte interactive</h3>
+    <p>Échelle 1 / <span id="echVal">10000</span> — Distance sur la carte : <span id="echDistPlan">5</span> cm</p>
+    <input type="range" id="echSlider" min="1" max="15" value="5" style="width:100%;" oninput="updateEchelle(this.value)">
+    <canvas id="cvEchelle" height="140"></canvas>
+    <p style="text-align:center;font-weight:700;">Distance réelle : <span id="echResult">500</span> m</p>
+
+    <h3>Exercice interactif 1</h3>
+    <div class="exo">
+      <p>Une carte est à l'échelle 1/50 000. Deux villes sont distantes de 6 cm sur la carte. Quelle est la distance réelle en km ?</p>
+      <input type="text" id="e1" placeholder="distance en km">
+      <button class="check" onclick="checkEch1()">Vérifier</button>
+      <div class="feedback" id="e1f"></div>
+      <details><summary>Voir la correction</summary>
+        <div class="corr">6 × 50 000 = 300 000 cm = 3000 m = <strong>3 km</strong></div>
+      </details>
+    </div>
+
+    <h3>Exercice interactif 2</h3>
+    <div class="exo">
+      <p>Un bâtiment mesure réellement 24 m de long. Sur un plan à l'échelle 1/200, quelle sera sa longueur en cm ?</p>
+      <input type="text" id="e2" placeholder="longueur en cm">
+      <button class="check" onclick="checkEch2()">Vérifier</button>
+      <div class="feedback" id="e2f"></div>
+      <details><summary>Voir la correction</summary>
+        <div class="corr">24 m = 2400 cm. 2400 ÷ 200 = <strong>12 cm</strong></div>
+      </details>
+    </div>
+
+    <h3>Exercice interactif 3 : trouver l'échelle</h3>
+    <div class="exo">
+      <p>Sur un plan, un couloir de 15 m de long réel est représenté par un segment de 3 cm. Quelle est l'échelle du plan (sous la forme 1/n) ?</p>
+      <input type="text" id="e3" placeholder="n">
+      <button class="check" onclick="checkEch3()">Vérifier</button>
+      <div class="feedback" id="e3f"></div>
+      <details><summary>Voir la correction</summary>
+        <div class="corr">15 m = 1500 cm. Échelle = 3 ÷ 1500 = 1/500. n = <strong>500</strong></div>
+      </details>
+    </div>
+  </div>`;
+  updateEchelle(5);
+}
+function updateEchelle(v) {
+  document.getElementById('echDistPlan').textContent = v;
+  const result = v * 10000 / 100;
+  document.getElementById('echResult').textContent = result;
+  drawEchelle(v);
+}
+function drawEchelle(planCm) {
+  const cv = document.getElementById('cvEchelle');
+  if (!cv) return;
+  planCm = planCm || document.getElementById('echSlider').value;
+  const ctx = cv.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const w = cv.clientWidth, h = 140;
+  cv.width = w*dpr; cv.height = h*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const css = getComputedStyle(document.documentElement);
+  const border = css.getPropertyValue('--border').trim();
+  const accent = css.getPropertyValue('--accent').trim();
+  const text = css.getPropertyValue('--text').trim();
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle = border; ctx.lineWidth=1;
+  for (let i=0;i<5;i++){ ctx.beginPath(); ctx.moveTo(10,20+i*22); ctx.lineTo(w-10,20+i*22); ctx.stroke(); }
+  const maxLen = w-60;
+  const len = Math.max(20, (planCm/15)*maxLen);
+  ctx.strokeStyle = accent; ctx.lineWidth = 6; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(30,70); ctx.lineTo(30+len,70); ctx.stroke();
+  ctx.fillStyle = text; ctx.font='bold 13px Nunito Sans';
+  ctx.fillText(planCm+' cm sur le plan', 30, 100);
+}
+function checkEch1(){const v=parseFloat(document.getElementById('e1').value.replace(',','.'));const f=document.getElementById('e1f');
+  if(Math.abs(v-3)<0.05){f.textContent='Correct ! 3 km';f.className='feedback ok';}else{f.textContent='Recalcule : 6×50000 cm puis convertis en km';f.className='feedback ko';}}
+function checkEch2(){const v=parseFloat(document.getElementById('e2').value.replace(',','.'));const f=document.getElementById('e2f');
+  if(Math.abs(v-12)<0.1){f.textContent='Bravo ! 12 cm';f.className='feedback ok';}else{f.textContent='Réessaie : 2400÷200';f.className='feedback ko';}}
+function checkEch3(){const v=parseFloat(document.getElementById('e3').value.replace(',','.'));const f=document.getElementById('e3f');
+  if(Math.abs(v-500)<1){f.textContent='Exact ! échelle 1/500';f.className='feedback ok';}else{f.textContent='Recalcule : 1500÷3';f.className='feedback ko';}}
+
+/* ===================== TAB 5: EXERCICES ===================== */
+function buildExercices(el) {
+  const data = [
+    {q:"Exercice 1 — Reconnaître", txt:"Le tableau suivant est-il un tableau de proportionnalité ? Ligne 1 : 3, 6, 9. Ligne 2 : 7, 14, 20.",
+     corr:"7÷3 ≈ 2,33 ; 14÷6 ≈ 2,33 ; 20÷9 ≈ 2,22. Les quotients ne sont pas tous égaux : <strong>ce n'est pas</strong> un tableau de proportionnalité."},
+    {q:"Exercice 2 — Coefficient", txt:"Un robinet remplit une piscine de façon proportionnelle au temps : en 3 h, 450 L. Quel est le coefficient (L/h) ? Quel volume en 7 h ?",
+     corr:"Coefficient = 450 ÷ 3 = 150 L/h. En 7 h : 7 × 150 = <strong>1050 L</strong>."},
+    {q:"Exercice 3 — Produit en croix", txt:"9 cahiers coûtent 13,50 €. Quel est le prix de 14 cahiers ?",
+     corr:"x = (13,50 × 14) ÷ 9 = 189 ÷ 9 = <strong>21 €</strong>."},
+    {q:"Exercice 4 — Pourcentage (appliquer)", txt:"Dans un magasin, une TV à 540 € bénéficie d'une remise de 15 %. Quel est le prix final ?",
+     corr:"Remise : 540 × 15 ÷ 100 = 81 €. Prix final : 540 − 81 = <strong>459 €</strong>."},
+    {q:"Exercice 5 — Pourcentage (calculer)", txt:"Sur 40 questions d'un contrôle, un élève en réussit 34. Quel est son pourcentage de réussite ?",
+     corr:"34 × 100 ÷ 40 = <strong>85 %</strong>."},
+    {q:"Exercice 6 — Échelle", txt:"Une carte est à l'échelle 1/100 000. Un trajet réel de 42 km, quelle longueur sur la carte (en cm) ?",
+     corr:"42 km = 4 200 000 cm. 4 200 000 ÷ 100 000 = <strong>42 cm</strong>."},
+    {q:"Exercice 7 — Problème mêlé", txt:"Un jus de fruits contient 12 % de sucre pour 1,5 L. Quelle masse de sucre (en g) dans 1,5 L (1 L de jus ≈ 1000 g) ?",
+     corr:"1,5 L ≈ 1500 g. Sucre = 1500 × 12 ÷ 100 = <strong>180 g</strong>."},
+    {q:"Exercice 8 — Synthèse", txt:"Un plan à l'échelle 1/250 représente une pièce rectangulaire de 8 cm sur 5 cm. Quelle est l'aire réelle de la pièce en m² ?",
+     corr:"Longueur réelle : 8×250=2000 cm=20 m. Largeur réelle : 5×250=1250 cm=12,5 m. Aire = 20×12,5 = <strong>250 m²</strong>."}
+  ];
+  let html = '<div class="card"><h2>Exercices d\'entraînement</h2>';
+  data.forEach((d,i) => {
+    html += `<div class="exo"><h3>${d.q}</h3><p>${d.txt}</p>
+      <details><summary>Voir la correction</summary><div class="corr">${d.corr}</div></details></div>`;
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+/* ===================== TAB 6: QCM ===================== */
+const qcmData = [
+  {q:"Dans un tableau de proportionnalité, on passe de la 1ère à la 2ème ligne en :", opts:["Ajoutant toujours le même nombre","Multipliant toujours par le même nombre","Elevant au carré","Divisant par des nombres différents"], a:1},
+  {q:"Le coefficient de proportionnalité entre 5 et 20 (5→20) est :", opts:["2","4","15","25"], a:1},
+  {q:"12 → 30 et 20 → x dans un tableau de proportionnalité. x vaut :", opts:["40","48","50","44"], a:2},
+  {q:"Une situation de proportionnalité se représente graphiquement par :", opts:["Une droite quelconque","Une courbe","Une droite passant par l'origine","Un nuage de points"], a:2},
+  {q:"10 % de 250 vaut :", opts:["2,5","25","250","0,25"], a:1},
+  {q:"Un article à 40 € avec une remise de 20 % coûte finalement :", opts:["20 €","8 €","32 €","36 €"], a:2},
+  {q:"18 élèves sur 30 sont des filles. Le pourcentage de filles est :", opts:["18 %","30 %","60 %","65 %"], a:2},
+  {q:"Le produit en croix pour trouver x dans a→b et c→x s'écrit :", opts:["x = a×b÷c","x = b×c÷a","x = a×c÷b","x = a+b−c"], a:1},
+  {q:"Sur un plan à l'échelle 1/100, 3 cm représentent en réalité :", opts:["3 m","30 m","300 cm = 3 m","3 km"], a:2},
+  {q:"Une échelle 1/25 000 signifie que 1 cm sur la carte représente :", opts:["25 m","250 m","2500 m","25 km"], a:1},
+  {q:"Augmenter un prix de 8 % revient à le multiplier par :", opts:["0,92","1,08","1,8","0,08"], a:1},
+  {q:"7 kg → 10,50 € et 3 kg → x €. x vaut :", opts:["3,5","4,5","4","5"], a:1},
+  {q:"Si tous les quotients (ligne2÷ligne1) sont égaux, le tableau est :", opts:["Non proportionnel","Proportionnel","Indéterminé","Aléatoire"], a:1},
+  {q:"84 est quel pourcentage de 200 ?", opts:["40 %","42 %","84 %","48 %"], a:1},
+  {q:"Un plan représente 15 m par 6 cm. L'échelle est :", opts:["1/25","1/250","1/2500","1/25000"], a:2},
+  {q:"Diminuer un prix de 35 % revient à le multiplier par :", opts:["0,35","0,65","1,35","0,75"], a:1}
+];
+let qcmAnswers = new Array(qcmData.length).fill(null);
+function buildQCM(el) {
+  let html = '<div class="card"><h2>QCM — 16 questions</h2><p>Sélectionne une réponse pour chaque question, puis clique sur "Voir mon score".</p>';
+  qcmData.forEach((item, i) => {
+    html += `<div class="qcm-q"><p><strong>${i+1}. ${item.q}</strong></p>`;
+    item.opts.forEach((o, j) => {
+      html += `<div class="qcm-opt" id="q${i}o${j}" onclick="selectQcm(${i},${j})">${o}</div>`;
+    });
+    html += `</div>`;
+  });
+  html += `<button class="check" onclick="scoreQcm()" style="margin-top:10px;">Voir mon score</button>
+    <div id="qcmScore"></div></div>`;
+  el.innerHTML = html;
+}
+function selectQcm(i,j) {
+  qcmAnswers[i] = j;
+  for (let k=0;k<qcmData[i].opts.length;k++) {
+    document.getElementById('q'+i+'o'+k).classList.toggle('sel', k===j);
+  }
+}
+function scoreQcm() {
+  let score = 0;
+  qcmData.forEach((item,i) => {
+    for (let k=0;k<item.opts.length;k++) {
+      const el2 = document.getElementById('q'+i+'o'+k);
+      el2.style.borderColor = 'var(--border)';
+      el2.style.background = 'var(--surface)';
+      if (k===item.a) { el2.style.borderColor='var(--good)'; el2.style.background='var(--accent-light)'; }
+    }
+    if (qcmAnswers[i] === item.a) score++;
+    else if (qcmAnswers[i] !== null) {
+      const wrong = document.getElementById('q'+i+'o'+qcmAnswers[i]);
+      wrong.style.borderColor = 'var(--bad)';
+    }
+  });
+  const div = document.getElementById('qcmScore');
+  div.textContent = 'Score : ' + score + ' / ' + qcmData.length +
+    (score===qcmData.length ? '  Excellent !' : score >= qcmData.length*0.7 ? '  Bien joué !' : "  Continue à t'entraîner.");
+}
+
+/* Init */
+showTab(0);
+window.addEventListener('resize', redrawAllCanvas);
+</script>
+</body>
+</html>

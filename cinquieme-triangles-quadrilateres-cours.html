@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triangles et quadrilatères — 5ème</title>
+<meta name="description" content="Cours interactif de 5ème : triangles, constructions, parallélogrammes, cas particuliers, exercices et QCM.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f2ed; --surface:#ffffff; --surface2:#ebe6de; --text:#2c2418; --heading:#8b4513;
+  --muted:#6b5a48; --border:#d4c8b8; --accent:#a0522d; --accent-light:#faf5ef;
+  --good:#3a7d44; --bad:#b8433a;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161210; --surface:#221c18; --surface2:#302820; --text:#ddd0c0; --heading:#e0a868;
+    --muted:#9a8878; --border:#403428; --accent:#d08840; --accent-light:#1e1610;
+    --good:#5bb86a; --bad:#e06a5f;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161210; --surface:#221c18; --surface2:#302820; --text:#ddd0c0; --heading:#e0a868;
+  --muted:#9a8878; --border:#403428; --accent:#d08840; --accent-light:#1e1610;
+  --good:#5bb86a; --bad:#e06a5f;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:'Nunito Sans', sans-serif;
+  line-height:1.6;
+  padding-bottom:60px;
+}
+h1,h2,h3,h4{
+  font-family:'Cormorant Garamond', serif;
+  color:var(--heading);
+  font-weight:700;
+  margin-top:0;
+}
+h1{font-size:2.1rem;}
+h2{font-size:1.6rem; border-bottom:2px solid var(--border); padding-bottom:8px;}
+h3{font-size:1.25rem; color:var(--accent);}
+a{color:var(--accent);}
+header{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:16px;
+  position:sticky; top:0; z-index:50;
+}
+.header-inner{
+  max-width:1000px; margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+}
+.title-row{display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+.title-row h1{margin:0;}
+.badge{
+  background:var(--accent); color:#fff;
+  font-family:'Nunito Sans', sans-serif; font-weight:700;
+  font-size:0.8rem; padding:4px 12px; border-radius:20px;
+  letter-spacing:0.03em;
+}
+.theme-toggle{
+  background:var(--surface2); border:1px solid var(--border); color:var(--text);
+  border-radius:20px; padding:8px 14px; cursor:pointer; font-family:inherit; font-weight:600;
+  font-size:0.85rem;
+}
+.theme-toggle:hover{border-color:var(--accent);}
+nav.tabs{
+  max-width:1000px; margin:12px auto 0; padding:0 16px;
+  display:flex; gap:6px; overflow-x:auto; scrollbar-width:thin;
+}
+nav.tabs button{
+  background:var(--surface2); border:1px solid var(--border); color:var(--text);
+  padding:10px 14px; border-radius:10px 10px 0 0; cursor:pointer; font-family:inherit;
+  font-weight:600; font-size:0.85rem; white-space:nowrap; flex-shrink:0;
+}
+nav.tabs button.active{
+  background:var(--accent); color:#fff; border-color:var(--accent);
+}
+main{max-width:1000px; margin:0 auto; padding:20px 16px;}
+.section{display:none;}
+.section.active{display:block; animation:fadein .25s ease;}
+@keyframes fadein{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+.card{
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+  padding:18px 20px; margin-bottom:18px;
+}
+.def-box{
+  background:var(--accent-light); border-left:4px solid var(--accent);
+  border-radius:8px; padding:14px 16px; margin:14px 0;
+}
+.def-box strong{color:var(--heading);}
+.prop-list{padding-left:20px;}
+.prop-list li{margin-bottom:6px;}
+table{width:100%; border-collapse:collapse; margin:14px 0; font-size:0.92rem;}
+th,td{border:1px solid var(--border); padding:8px 10px; text-align:left;}
+th{background:var(--surface2); color:var(--heading); font-family:'Cormorant Garamond',serif; font-size:1.05rem;}
+tr:nth-child(even) td{background:var(--surface2);}
+.canvas-wrap{
+  background:var(--surface2); border:1px solid var(--border); border-radius:10px;
+  padding:12px; text-align:center; margin:14px 0;
+}
+canvas{max-width:100%; touch-action:none; cursor:grab;}
+.controls{display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:10px;}
+.controls button{
+  background:var(--accent); color:#fff; border:none; border-radius:8px;
+  padding:8px 14px; cursor:pointer; font-family:inherit; font-weight:600; font-size:0.85rem;
+}
+.controls button:hover{opacity:0.9;}
+.controls button.secondary{background:var(--surface); color:var(--text); border:1px solid var(--border);}
+.hint{font-size:0.85rem; color:var(--muted); margin-top:6px;}
+.exo{
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:16px 18px; margin-bottom:16px;
+}
+.exo h4{margin-bottom:6px;}
+.exo-num{
+  display:inline-block; background:var(--accent); color:#fff; border-radius:50%;
+  width:28px; height:28px; text-align:center; line-height:28px; font-weight:700;
+  margin-right:8px; font-family:'Cormorant Garamond',serif;
+}
+details{
+  margin-top:10px; background:var(--accent-light); border-radius:8px; padding:8px 12px;
+  border:1px solid var(--border);
+}
+summary{cursor:pointer; font-weight:700; color:var(--accent); font-family:'Nunito Sans',sans-serif;}
+details[open] summary{margin-bottom:8px;}
+.qcm-q{
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:14px 16px; margin-bottom:14px;
+}
+.qcm-q p.question{font-weight:700; margin:0 0 10px;}
+.qcm-opts{display:flex; flex-direction:column; gap:6px;}
+.qcm-opt{
+  background:var(--surface2); border:1px solid var(--border); border-radius:8px;
+  padding:8px 12px; cursor:pointer; font-size:0.95rem;
+}
+.qcm-opt:hover{border-color:var(--accent);}
+.qcm-opt.correct{background:color-mix(in srgb, var(--good) 25%, var(--surface)); border-color:var(--good);}
+.qcm-opt.incorrect{background:color-mix(in srgb, var(--bad) 25%, var(--surface)); border-color:var(--bad);}
+.qcm-opt.disabled{pointer-events:none;}
+#qcmScoreBox{
+  background:var(--accent-light); border:1px solid var(--accent); border-radius:12px;
+  padding:16px; text-align:center; margin-top:16px; font-size:1.1rem; font-weight:700; display:none;
+}
+.formula{
+  font-family:'Cormorant Garamond', serif; font-size:1.3rem; color:var(--heading);
+  text-align:center; padding:10px; background:var(--accent-light); border-radius:8px; margin:12px 0;
+}
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+@media (max-width:600px){
+  .two-col{grid-template-columns:1fr;}
+  h1{font-size:1.5rem;}
+  h2{font-size:1.3rem;}
+  main{padding:14px 12px;}
+  nav.tabs button{padding:8px 10px; font-size:0.78rem;}
+}
+.footer-note{text-align:center; color:var(--muted); font-size:0.8rem; margin-top:30px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="title-row">
+      <h1>Triangles et quadrilatères</h1>
+      <span class="badge">5ème</span>
+    </div>
+    <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌗 Thème</button>
+  </div>
+  <nav class="tabs" id="tabNav">
+    <button class="active" onclick="showTab(0)">1. Triangles</button>
+    <button onclick="showTab(1)">2. Construire un triangle</button>
+    <button onclick="showTab(2)">3. Parallélogramme</button>
+    <button onclick="showTab(3)">4. Cas particuliers</button>
+    <button onclick="showTab(4)">5. Construire</button>
+    <button onclick="showTab(5)">6. Exercices</button>
+    <button onclick="showTab(6)">7. QCM</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ===================== SECTION 0 : TRIANGLES ===================== -->
+<section class="section active" id="section0">
+  <div class="card">
+    <h2>Classification des triangles</h2>
+    <p>Un triangle est une figure formée de trois points non alignés (les <strong>sommets</strong>) reliés par trois segments (les <strong>côtés</strong>). On classe les triangles selon leurs côtés ou leurs angles.</p>
+    <div class="two-col">
+      <div class="def-box">
+        <strong>Triangle isocèle</strong><br>
+        Il a deux côtés de même longueur. Les deux angles à la base (opposés aux côtés égaux) sont égaux.
+      </div>
+      <div class="def-box">
+        <strong>Triangle équilatéral</strong><br>
+        Il a ses trois côtés de même longueur. Ses trois angles mesurent chacun 60°.
+      </div>
+      <div class="def-box">
+        <strong>Triangle rectangle</strong><br>
+        Il a un angle droit (90°). Le côté opposé à l'angle droit s'appelle l'<strong>hypoténuse</strong>, c'est le plus long côté.
+      </div>
+      <div class="def-box">
+        <strong>Triangle quelconque</strong><br>
+        Il n'a aucune propriété particulière : ses trois côtés et ses trois angles sont différents.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Somme des angles d'un triangle</h2>
+    <p>Propriété fondamentale, valable pour <strong>tout</strong> triangle :</p>
+    <div class="formula">Â + B̂ + Ĉ = 180°</div>
+    <p>Cette propriété permet de calculer un angle manquant lorsqu'on connaît les deux autres. Par exemple, si Â = 50° et B̂ = 70°, alors Ĉ = 180° − 50° − 70° = 60°.</p>
+    <div class="def-box">
+      <strong>Conséquence :</strong> dans un triangle rectangle, les deux angles aigus (autres que l'angle droit) sont complémentaires : leur somme fait 90°.
+    </div>
+    <h3>Exemple rédigé</h3>
+    <p>Dans un triangle isocèle DEF de sommet principal D, l'angle au sommet D̂ mesure 36°. On cherche la mesure des angles à la base Ê et F̂.</p>
+    <p><em>Rédaction :</em> Le triangle DEF est isocèle en D, donc Ê = F̂ (angles à la base égaux). Or D̂ + Ê + F̂ = 180°, donc Ê + F̂ = 180° − 36° = 144°. Comme Ê = F̂, on a Ê = F̂ = 144° ÷ 2 = <strong>72°</strong>.</p>
+  </div>
+
+  <div class="card">
+    <h2>Angle extérieur d'un triangle</h2>
+    <p>Un angle extérieur d'un triangle est l'angle formé par un côté et le prolongement d'un côté adjacent.</p>
+    <div class="def-box">
+      <strong>Propriété :</strong> un angle extérieur est égal à la somme des deux angles intérieurs qui ne lui sont pas adjacents. Il est aussi le supplément de l'angle intérieur correspondant (leur somme fait 180°).
+    </div>
+    <p>Cette propriété n'est pas exigible en 5ème mais permet de mieux comprendre pourquoi la somme des angles vaut 180° : en faisant le tour du triangle en suivant les côtés, on effectue un tour complet de 360°, réparti en trois angles extérieurs.</p>
+  </div>
+
+  <div class="card">
+    <h2>Triangle déformable</h2>
+    <p>Déplace les sommets (souris ou doigt) pour observer comment les longueurs et les angles évoluent — la somme des angles reste toujours 180°.</p>
+    <div class="canvas-wrap">
+      <canvas id="cvTriangle1" width="500" height="380"></canvas>
+      <div class="controls">
+        <button onclick="resetTriangle1()">Réinitialiser</button>
+        <button class="secondary" onclick="setTriangleType('equilateral')">Équilatéral</button>
+        <button class="secondary" onclick="setTriangleType('isocele')">Isocèle</button>
+        <button class="secondary" onclick="setTriangleType('rectangle')">Rectangle</button>
+      </div>
+      <p class="hint">Glisse un sommet (A, B ou C) pour déformer le triangle.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>À retenir</h2>
+    <ul class="prop-list">
+      <li>Un triangle possède toujours <strong>3 sommets</strong>, <strong>3 côtés</strong> et <strong>3 angles</strong>.</li>
+      <li>La somme des trois angles vaut toujours <strong>180°</strong>, quelle que soit la forme du triangle.</li>
+      <li>Un triangle isocèle « particulier » qui a ses trois côtés égaux est un triangle <strong>équilatéral</strong> : c'est un cas particulier du triangle isocèle.</li>
+      <li>Dans un triangle isocèle, les angles à la base sont égaux : c'est une conséquence directe de l'égalité des deux côtés.</li>
+      <li>Le vocabulaire à connaître : sommet, côté, angle, hypoténuse, angle à la base, angle au sommet.</li>
+    </ul>
+    <div class="def-box">
+      <strong>Point de vigilance :</strong> un triangle « rectangle isocèle » existe : il a un angle droit et ses deux angles aigus valent chacun 45°. Il combine deux propriétés à la fois.
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 1 : CONSTRUIRE UN TRIANGLE ===================== -->
+<section class="section" id="section1">
+  <div class="card">
+    <h2>Inégalité triangulaire</h2>
+    <p>Pour que trois longueurs puissent former un triangle, chaque côté doit être <strong>strictement inférieur</strong> à la somme des deux autres.</p>
+    <div class="formula">Si a, b, c sont les côtés : a &lt; b + c&nbsp;&nbsp; et&nbsp;&nbsp; b &lt; a + c&nbsp;&nbsp; et&nbsp;&nbsp; c &lt; a + b</div>
+    <div class="def-box">
+      <strong>Astuce :</strong> il suffit de vérifier que le côté le plus long est inférieur à la somme des deux autres. Si l'égalité est atteinte (a = b + c), les trois points sont alignés : ce n'est pas un triangle.
+    </div>
+    <p><em>Exemple :</em> 3 cm, 4 cm, 8 cm → 8 n'est pas inférieur à 3 + 4 = 7, donc <strong>ce n'est pas un triangle</strong>.<br>
+    <em>Exemple :</em> 3 cm, 4 cm, 5 cm → 5 &lt; 3 + 4 = 7 ✓, donc le triangle existe.</p>
+    <h3>Cas d'égalité</h3>
+    <p>Si le côté le plus long est <strong>exactement égal</strong> à la somme des deux autres (par exemple 3 cm, 4 cm et 7 cm), les trois points A, B, C sont <strong>alignés</strong> : la figure obtenue est un segment et non un triangle. C'est un cas limite à bien connaître car il piège souvent les élèves.</p>
+  </div>
+
+  <div class="card">
+    <h2>Trois méthodes de construction</h2>
+    <div class="two-col">
+      <div class="def-box">
+        <strong>1. Connaissant les 3 côtés</strong><br>
+        On trace un côté au crayon, puis on utilise le compas pour reporter les deux autres longueurs depuis chaque extrémité : leur intersection donne le troisième sommet.
+      </div>
+      <div class="def-box">
+        <strong>2. Connaissant 2 côtés et l'angle compris</strong><br>
+        On trace un côté, on reporte l'angle donné avec un rapporteur à l'une des extrémités, puis on reporte la longueur du deuxième côté sur ce nouveau rayon.
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>Données connues</th><th>Instruments utilisés</th><th>Nombre de solutions</th></tr></thead>
+      <tbody>
+        <tr><td>3 côtés</td><td>Règle + compas</td><td>1 triangle (si inégalité triangulaire respectée)</td></tr>
+        <tr><td>2 côtés + angle compris</td><td>Règle + rapporteur</td><td>1 triangle unique</td></tr>
+        <tr><td>1 côté + 2 angles</td><td>Règle + rapporteur</td><td>1 triangle unique</td></tr>
+      </tbody>
+    </table>
+    <div class="def-box" style="margin-top:14px;">
+      <strong>3. Connaissant 1 côté et 2 angles</strong><br>
+      On trace le côté connu, puis on reporte à chaque extrémité l'angle correspondant avec le rapporteur. Le troisième sommet est le point d'intersection des deux demi-droites tracées.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Construction animée pas à pas</h2>
+    <p>Exemple : construire un triangle ABC avec AB = 6 cm, AC = 4 cm, BC = 5 cm.</p>
+    <div class="canvas-wrap">
+      <canvas id="cvConstruct" width="500" height="360"></canvas>
+      <div class="controls">
+        <button onclick="constructStep()">Étape suivante ▶</button>
+        <button class="secondary" onclick="constructReset()">Recommencer</button>
+      </div>
+      <p class="hint" id="constructHint">Étape 0 / 4 — clique sur « Étape suivante » pour commencer.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Matériel et conseils de construction</h2>
+    <ul class="prop-list">
+      <li><strong>Règle graduée</strong> : pour tracer les segments et mesurer les longueurs.</li>
+      <li><strong>Compas</strong> : pour reporter une longueur sans la mesurer directement (tracer un arc de cercle).</li>
+      <li><strong>Rapporteur</strong> : pour tracer ou mesurer un angle.</li>
+      <li>On trace toujours au <strong>crayon à papier</strong>, léger, afin de pouvoir corriger si nécessaire.</li>
+      <li>On vérifie l'inégalité triangulaire <strong>avant</strong> de commencer la construction, pour ne pas perdre de temps.</li>
+    </ul>
+    <div class="def-box">
+      <strong>Cas particulier :</strong> si les trois angles sont connus mais aucun côté, il existe une infinité de triangles possibles (ils sont tous semblables, mais de tailles différentes) : la construction n'est possible que si on connaît au moins un côté.
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 2 : PARALLÉLOGRAMME ===================== -->
+<section class="section" id="section2">
+  <div class="card">
+    <h2>Définition</h2>
+    <div class="def-box">
+      <strong>Parallélogramme :</strong> quadrilatère dont les côtés opposés sont parallèles deux à deux.
+    </div>
+    <p>On peut aussi le définir par ses diagonales : un quadrilatère dont les diagonales se coupent en leur milieu est un parallélogramme.</p>
+  </div>
+
+  <div class="card">
+    <h2>Propriétés du parallélogramme</h2>
+    <ul class="prop-list">
+      <li>Les côtés opposés sont <strong>parallèles</strong> et de <strong>même longueur</strong>.</li>
+      <li>Les diagonales se coupent en leur <strong>milieu commun</strong> (le centre du parallélogramme).</li>
+      <li>Les angles opposés sont <strong>égaux</strong>.</li>
+      <li>Deux angles consécutifs sont <strong>supplémentaires</strong> (leur somme fait 180°).</li>
+      <li>Le parallélogramme a un <strong>centre de symétrie</strong> : le point d'intersection des diagonales.</li>
+    </ul>
+    <h3>Exemple rédigé</h3>
+    <p>ABCD est un parallélogramme de centre O. On sait que AC = 10 cm. Que peut-on dire de AO et OC ?</p>
+    <p><em>Rédaction :</em> Dans un parallélogramme, les diagonales se coupent en leur milieu. O est donc le milieu de [AC], donc AO = OC = AC ÷ 2 = 10 ÷ 2 = <strong>5 cm</strong>.</p>
+  </div>
+
+  <div class="card">
+    <h2>Parallélogramme interactif</h2>
+    <p>Déplace un sommet pour déformer le parallélogramme : les mesures se mettent à jour automatiquement et les propriétés restent vraies.</p>
+    <div class="canvas-wrap">
+      <canvas id="cvParallelo" width="500" height="380"></canvas>
+      <div class="controls">
+        <button onclick="resetParallelo()">Réinitialiser</button>
+        <button class="secondary" onclick="toggleParalleloDiag()">Afficher / masquer les diagonales</button>
+      </div>
+      <p class="hint">Glisse le sommet A, B ou D. Le sommet C se recalcule pour garder un vrai parallélogramme.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Comment reconnaître un parallélogramme ?</h2>
+    <p>Il existe plusieurs façons équivalentes de prouver qu'un quadrilatère est un parallélogramme. Il suffit de démontrer <strong>l'une</strong> de ces propriétés :</p>
+    <ul class="prop-list">
+      <li>Les côtés opposés sont parallèles deux à deux (définition).</li>
+      <li>Les côtés opposés sont égaux deux à deux.</li>
+      <li>Les diagonales se coupent en leur milieu commun.</li>
+      <li>Deux côtés opposés sont à la fois parallèles <strong>et</strong> de même longueur.</li>
+      <li>Les angles opposés sont égaux deux à deux.</li>
+    </ul>
+    <h3>Contre-exemples à connaître</h3>
+    <p>Attention : avoir des côtés opposés de même longueur ne suffit pas toujours à conclure. Il faut soit que <strong>les deux paires</strong> de côtés opposés soient égales, soit qu'<strong>une seule paire</strong> soit à la fois parallèle et de même longueur. Un quadrilatère avec seulement deux côtés opposés égaux (mais non parallèles) peut être un trapèze isocèle, qui n'est pas un parallélogramme.</p>
+    <div class="def-box">
+      <strong>Méthode rédactionnelle :</strong> pour démontrer qu'un quadrilatère ABCD est un parallélogramme à partir des diagonales, on montre que les segments [AC] et [BD] ont le <strong>même milieu</strong>, puis on conclut : « Comme les diagonales du quadrilatère ABCD ont le même milieu, ABCD est un parallélogramme. »
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 3 : CAS PARTICULIERS ===================== -->
+<section class="section" id="section3">
+  <div class="card">
+    <h2>Rectangle, losange, carré</h2>
+    <div class="two-col">
+      <div class="def-box">
+        <strong>Rectangle</strong><br>
+        Parallélogramme ayant un angle droit (donc les 4 angles sont droits). Ses diagonales sont de <strong>même longueur</strong>.
+      </div>
+      <div class="def-box">
+        <strong>Losange</strong><br>
+        Parallélogramme ayant deux côtés consécutifs de même longueur (donc les 4 côtés sont égaux). Ses diagonales sont <strong>perpendiculaires</strong>.
+      </div>
+    </div>
+    <div class="def-box" style="margin-top:14px;">
+      <strong>Carré</strong><br>
+      Parallélogramme à la fois rectangle et losange : 4 côtés égaux, 4 angles droits, diagonales de même longueur, perpendiculaires et se coupant en leur milieu.
+    </div>
+    <h3>Exemple rédigé</h3>
+    <p>ABCD est un losange de côté 6 cm. Sa diagonale [AC] mesure 9,6 cm. Calcule la longueur de la diagonale [BD] sachant que le triangle ABO (O étant le centre) est rectangle en O.</p>
+    <p><em>Rédaction :</em> O est le milieu de [AC] donc AO = 9,6 ÷ 2 = 4,8 cm. Le triangle ABO est rectangle en O avec AB = 6 cm (hypoténuse). On pourra utiliser le théorème de Pythagore (vu en 4ème) pour calculer BO, puis BD = 2 × BO.</p>
+  </div>
+
+  <div class="card">
+    <h2>Tableau comparatif des diagonales</h2>
+    <table>
+      <thead>
+        <tr><th>Figure</th><th>Côtés</th><th>Angles</th><th>Diagonales</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Parallélogramme</td><td>Opposés égaux</td><td>Opposés égaux</td><td>Se coupent en leur milieu</td></tr>
+        <tr><td>Rectangle</td><td>Opposés égaux</td><td>4 angles droits</td><td>Se coupent en leur milieu, <strong>même longueur</strong></td></tr>
+        <tr><td>Losange</td><td>4 côtés égaux</td><td>Opposés égaux</td><td>Se coupent en leur milieu, <strong>perpendiculaires</strong></td></tr>
+        <tr><td>Carré</td><td>4 côtés égaux</td><td>4 angles droits</td><td>Milieu commun, mêmes longueurs, perpendiculaires</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Basculer entre les figures</h2>
+    <div class="canvas-wrap">
+      <canvas id="cvSpecial" width="500" height="360"></canvas>
+      <div class="controls">
+        <button onclick="setSpecialShape('parallelo')">Parallélogramme</button>
+        <button onclick="setSpecialShape('rectangle')">Rectangle</button>
+        <button onclick="setSpecialShape('losange')">Losange</button>
+        <button onclick="setSpecialShape('carre')">Carré</button>
+      </div>
+      <p class="hint" id="specialHint">Clique sur un bouton pour observer les diagonales de chaque figure.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Schéma d'implication</h2>
+    <p>Ces figures s'emboîtent les unes dans les autres : chaque figure particulière hérite de toutes les propriétés de la figure plus générale.</p>
+    <div class="formula">Parallélogramme ⊃ Rectangle&nbsp;&nbsp;·&nbsp;&nbsp;Parallélogramme ⊃ Losange&nbsp;&nbsp;·&nbsp;&nbsp;Rectangle ∩ Losange = Carré</div>
+    <ul class="prop-list">
+      <li>Tout <strong>rectangle</strong> est un parallélogramme (mais l'inverse est faux).</li>
+      <li>Tout <strong>losange</strong> est un parallélogramme (mais l'inverse est faux).</li>
+      <li>Tout <strong>carré</strong> est à la fois un rectangle et un losange : il cumule toutes les propriétés.</li>
+    </ul>
+    <div class="def-box">
+      <strong>Piège classique :</strong> un losange n'est pas forcément un carré (ses angles ne sont pas forcément droits), et un rectangle n'est pas forcément un carré (ses côtés ne sont pas forcément tous égaux).
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 4 : CONSTRUIRE (parallélogrammes) ===================== -->
+<section class="section" id="section4">
+  <div class="card">
+    <h2>Construire un parallélogramme au compas</h2>
+    <p>Méthode à partir de trois sommets A, B, D et du fait que les côtés opposés sont égaux et parallèles :</p>
+    <ul class="prop-list">
+      <li>On place les points A, B et D (non alignés).</li>
+      <li>Avec le compas, on reporte la longueur AB depuis D (arc de cercle).</li>
+      <li>Avec le compas, on reporte la longueur AD depuis B (arc de cercle).</li>
+      <li>Le sommet C est à l'intersection des deux arcs : ABCD est un parallélogramme.</li>
+    </ul>
+    <div class="def-box">
+      <strong>Autre méthode (diagonales) :</strong> on trace deux segments qui se coupent en leur milieu commun O ; les quatre extrémités forment un parallélogramme.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Méthode par le centre de symétrie</h2>
+    <p>Si on connaît trois sommets A, B, D et le centre O du parallélogramme (milieu des diagonales), on obtient C comme le symétrique de A par rapport à O.</p>
+    <div class="def-box">
+      <strong>Rappel :</strong> C est tel que O soit le milieu de [AC]. On peut donc placer C au compas en reportant la distance AO depuis O, dans le prolongement de (AO).
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Récapitulatif des méthodes</h2>
+    <table>
+      <thead><tr><th>Données de départ</th><th>Méthode à utiliser</th></tr></thead>
+      <tbody>
+        <tr><td>3 sommets A, B, D</td><td>Double report de longueurs au compas (côtés opposés égaux)</td></tr>
+        <tr><td>A, B, D et le centre O</td><td>Symétrie centrale : C est le symétrique de A par rapport à O</td></tr>
+        <tr><td>Un côté et deux angles adjacents</td><td>Construction du triangle ABD, puis report symétrique pour obtenir C</td></tr>
+      </tbody>
+    </table>
+    <p>Dans tous les cas, on vérifie à la fin la construction en contrôlant que les côtés opposés ont bien la même longueur avec le compas ou la règle graduée.</p>
+  </div>
+
+  <div class="card">
+    <h2>Exercices guidés</h2>
+    <div class="exo">
+      <h4><span class="exo-num">1</span>Construction guidée n°1</h4>
+      <p>Construis un parallélogramme ABCD tel que AB = 6 cm, AD = 4 cm et l'angle BÂD = 60°.</p>
+      <details>
+        <summary>Voir la méthode</summary>
+        <p>1. Trace [AB] = 6 cm.<br>
+        2. En A, trace une demi-droite formant un angle de 60° avec [AB).<br>
+        3. Reporte AD = 4 cm sur cette demi-droite : tu obtiens D.<br>
+        4. Depuis B, reporte au compas AD = 4 cm ; depuis D, reporte AB = 6 cm. Le point d'intersection des deux arcs est C.</p>
+      </details>
+    </div>
+    <div class="exo">
+      <h4><span class="exo-num">2</span>Construction guidée n°2</h4>
+      <p>Construis un losange ABCD de côté 5 cm tel que la diagonale [AC] mesure 8 cm.</p>
+      <details>
+        <summary>Voir la méthode</summary>
+        <p>1. Trace [AC] = 8 cm.<br>
+        2. Trace le cercle de centre A et de rayon 5 cm, puis le cercle de centre C et de rayon 5 cm.<br>
+        3. Les deux points d'intersection des cercles sont B et D (de part et d'autre de [AC]).<br>
+        4. Relie A-B-C-D : ABCD est un losange (diagonales perpendiculaires, se coupant en leur milieu).</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 5 : EXERCICES ===================== -->
+<section class="section" id="section5">
+  <div class="card">
+    <h2>Méthodologie avant de commencer</h2>
+    <ul class="prop-list">
+      <li>Lis l'énoncé en entier avant de rédiger, repère les données numériques et la figure à construire.</li>
+      <li>Fais un <strong>schéma à main levée</strong> pour visualiser la situation, même si l'énoncé n'en donne pas.</li>
+      <li>Identifie la propriété du cours à utiliser (somme des angles, inégalité triangulaire, propriété du parallélogramme...).</li>
+      <li>Rédige une phrase de conclusion claire, avec l'unité (cm, °, etc.).</li>
+      <li>Vérifie ton résultat : un angle de triangle ne peut pas dépasser 180°, une longueur ne peut pas être négative.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>8 exercices progressifs</h2>
+
+    <div class="exo">
+      <h4><span class="exo-num">1</span>Vérifier une inégalité triangulaire</h4>
+      <p>Peut-on construire un triangle de côtés 5 cm, 7 cm et 13 cm ? Justifie.</p>
+      <details><summary>Corrigé</summary>
+      <p>Le côté le plus long est 13 cm. Or 5 + 7 = 12, et 13 n'est pas inférieur à 12. L'inégalité triangulaire n'est pas vérifiée : <strong>ce triangle n'existe pas</strong>.</p>
+      </details>
+    </div>
+
+    <div class="exo">
+      <h4><span class="exo-num">2</span>Calculer un angle manquant</h4>
+      <p>Dans un triangle RST, R̂ = 42° et Ŝ = 88°. Calcule T̂.</p>
+      <details><summary>Corrigé</summary>
+      <p>R̂ + Ŝ + T̂ = 180°, donc T̂ = 180° − 42° − 88° = <strong>50°</strong>.</p>
+      </details>
+    </div>
+
+    <div class="exo">
+      <h4><span class="exo-num">3</span>Reconnaître un triangle particulier</h4>
+      <p>Un triangle a deux angles de 45° et 90°. Quelle est la nature de ce triangle ?</p>
+      <details><summary>Corrigé</summary>
+      <p>Le troisième angle vaut 180° − 45° − 90° = 45°. Le triangle a donc un angle droit et deux angles de 45° égaux : c'est un <strong>triangle rectangle isocèle</strong>.</p>
+      </details>
+    </div>
+
+    <div class="exo">
+      <h4><span class="exo-num">4</span>Construire un triangle</h4>
+      <p>Construis le triangle MNP tel que MN = 5 cm, M̂ = 50° et N̂ = 70°.</p>
+      <details><summary>Corrigé</summary>
+      <p>1. Trace [MN] = 5 cm.<br>2. En M, trace une demi-droite formant 50° avec [MN).<br>3. En N, trace une demi-droite formant 70° avec [NM).<br>4. L'intersection des deux demi-droites est P.</p>
+      </details>
+    </div>
+
+    <div class="exo">
+      <h4><span class="exo-num">5</span>Propriétés du parallélogramme</h4>
+      <p>ABCD est un parallélogramme. AB = 7 cm et l'angle BÂD = 110°. Donne CD et l'angle en C.</p>
+      <details><summary>Corrigé</summary>
+      <p>Côtés opposés égaux : CD = AB = <strong>7 cm</strong>. Angles opposés égaux : angle en C = angle en A = <strong>110°</strong>.</p>
+      </details>
+    </div>
+
+    <div class="exo">
+      <h4><span class="exo-num">6</span>Angles consécutifs</h4>
+      <p>Dans un parallélogramme EFGH, l'angle en E mesure 65°. Calcule l'angle en F.</p>
+      <details><summary>Corrigé</summary>
+      <p>Deux angles consécutifs sont supplémentaires : angle F = 180° − 65° = <strong>115°</strong>.</p>
+      </details>
+    </div>
+
+    <div class="exo">
+      <h4><span class="exo-num">7</span>Identifier une figure</h4>
+      <p>Un quadrilatère a ses diagonales de même longueur, perpendiculaires, et se coupant en leur milieu. Quelle est sa nature ?</p>
+      <details><summary>Corrigé</summary>
+      <p>Diagonales égales → propriété du rectangle. Diagonales perpendiculaires → propriété du losange. Un quadrilatère qui est à la fois rectangle et losange est un <strong>carré</strong>.</p>
+      </details>
+    </div>
+
+    <div class="exo">
+      <h4><span class="exo-num">8</span>Problème de synthèse</h4>
+      <p>ABC est un triangle isocèle en A avec Â = 40°. On construit le parallélogramme ABDC. Calcule tous les angles du parallélogramme ABDC.</p>
+      <details><summary>Corrigé</summary>
+      <p>Triangle isocèle en A : B̂ = Ĉ = (180° − 40°) / 2 = 70°.<br>
+      Dans le parallélogramme ABDC, l'angle en A du parallélogramme correspond à l'angle Â du triangle = <strong>40°</strong> ; l'angle opposé en D est aussi <strong>40°</strong>.<br>
+      Les angles en B et C du parallélogramme sont supplémentaires à 40°, donc <strong>140°</strong> chacun (à vérifier selon la figure : ici on utilise que la somme des 4 angles fait 360° et les angles opposés sont égaux).</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION 6 : QCM ===================== -->
+<section class="section" id="section6">
+  <div class="card">
+    <h2>QCM — 16 questions</h2>
+    <p>Choisis une réponse pour chaque question. Le score s'affiche à la fin.</p>
+    <div id="qcmContainer"></div>
+    <div class="controls">
+      <button onclick="checkQcm()">Valider mes réponses</button>
+      <button class="secondary" onclick="resetQcm()">Recommencer</button>
+    </div>
+    <div id="qcmScoreBox"></div>
+  </div>
+
+  <div class="card">
+    <h2>Vocabulaire à maîtriser pour l'examen</h2>
+    <table>
+      <thead><tr><th>Terme</th><th>Définition rapide</th></tr></thead>
+      <tbody>
+        <tr><td>Sommet</td><td>Point d'intersection de deux côtés d'une figure</td></tr>
+        <tr><td>Côtés opposés</td><td>Dans un quadrilatère, deux côtés qui ne se touchent pas</td></tr>
+        <tr><td>Angles consécutifs</td><td>Deux angles d'un polygone qui partagent un côté commun</td></tr>
+        <tr><td>Diagonale</td><td>Segment reliant deux sommets non consécutifs d'un polygone</td></tr>
+        <tr><td>Hypoténuse</td><td>Côté opposé à l'angle droit dans un triangle rectangle</td></tr>
+        <tr><td>Inégalité triangulaire</td><td>Condition sur les 3 côtés pour qu'un triangle existe</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</main>
+
+<p class="footer-note">Cours interactif — Triangles et quadrilatères — Niveau 5ème</p>
+
+<script>
+/* ============ THEME ============ */
+function toggleTheme(){
+  const root = document.documentElement;
+  const current = root.getAttribute('data-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  let next;
+  if(!current){ next = prefersDark ? 'light' : 'dark'; }
+  else if(current === 'dark'){ next = 'light'; }
+  else { next = 'dark'; }
+  root.setAttribute('data-theme', next);
+  try{ localStorage.setItem('mathTheme', next); }catch(e){}
+}
+(function initTheme(){
+  try{
+    const saved = localStorage.getItem('mathTheme');
+    if(saved){ document.documentElement.setAttribute('data-theme', saved); }
+  }catch(e){}
+})();
+
+/* ============ TABS ============ */
+const initialized = [false,false,false,false,false,false,false];
+function showTab(i){
+  const sections = document.querySelectorAll('.section');
+  const buttons = document.querySelectorAll('#tabNav button');
+  sections.forEach((s,idx)=>{ s.classList.toggle('active', idx===i); });
+  buttons.forEach((b,idx)=>{ b.classList.toggle('active', idx===i); });
+  initSection(i);
+}
+function initSection(i){
+  if(initialized[i]) return;
+  initialized[i] = true;
+  if(i===0){ drawTriangle1(); }
+  if(i===1){ drawConstruct(); }
+  if(i===2){ drawParallelo(); }
+  if(i===3){ drawSpecial(); }
+  if(i===5){ /* exercises static */ }
+  if(i===6){ buildQcm(); }
+}
+// init first tab
+initSection(0);
+
+/* ============ HELPERS ============ */
+function css(varName){
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+}
+function dist(p1,p2){ return Math.hypot(p2.x-p1.x, p2.y-p1.y); }
+function angleAt(p, p1, p2){
+  const v1 = {x:p1.x-p.x, y:p1.y-p.y};
+  const v2 = {x:p2.x-p.x, y:p2.y-p.y};
+  const dot = v1.x*v2.x + v1.y*v2.y;
+  const mag = Math.hypot(v1.x,v1.y)*Math.hypot(v2.x,v2.y);
+  let a = Math.acos(Math.max(-1,Math.min(1,dot/mag)));
+  return a * 180/Math.PI;
+}
+
+/* ============ SECTION 0 : TRIANGLE DEFORMABLE ============ */
+let cvT1, ctxT1;
+let triPoints = { A:{x:250,y:80}, B:{x:110,y:300}, C:{x:390,y:300} };
+let dragTarget = null;
+const SCALE_T1 = 0.03; // px to "cm" for display
+
+function drawTriangle1(){
+  cvT1 = document.getElementById('cvTriangle1');
+  ctxT1 = cvT1.getContext('2d');
+  render1();
+  cvT1.addEventListener('mousedown', t1Start);
+  cvT1.addEventListener('mousemove', t1Move);
+  window.addEventListener('mouseup', t1End);
+  cvT1.addEventListener('touchstart', t1Start, {passive:false});
+  cvT1.addEventListener('touchmove', t1Move, {passive:false});
+  window.addEventListener('touchend', t1End);
+}
+function getPos(evt, canvas){
+  const rect = canvas.getBoundingClientRect();
+  let clientX, clientY;
+  if(evt.touches && evt.touches.length){ clientX = evt.touches[0].clientX; clientY = evt.touches[0].clientY; }
+  else { clientX = evt.clientX; clientY = evt.clientY; }
+  return {
+    x: (clientX - rect.left) * (canvas.width/rect.width),
+    y: (clientY - rect.top) * (canvas.height/rect.height)
+  };
+}
+function t1Start(evt){
+  evt.preventDefault();
+  const pos = getPos(evt, cvT1);
+  for(const key of ['A','B','C']){
+    if(dist(pos, triPoints[key]) < 18){ dragTarget = key; return; }
+  }
+}
+function t1Move(evt){
+  if(!dragTarget) return;
+  evt.preventDefault();
+  const pos = getPos(evt, cvT1);
+  pos.x = Math.max(20, Math.min(480, pos.x));
+  pos.y = Math.max(20, Math.min(360, pos.y));
+  triPoints[dragTarget] = pos;
+  render1();
+}
+function t1End(){ dragTarget = null; }
+
+function resetTriangle1(){
+  triPoints = { A:{x:250,y:80}, B:{x:110,y:300}, C:{x:390,y:300} };
+  render1();
+}
+function setTriangleType(type){
+  if(type==='equilateral'){
+    triPoints = { A:{x:250,y:70}, B:{x:110,y:310}, C:{x:390,y:310} };
+  } else if(type==='isocele'){
+    triPoints = { A:{x:250,y:60}, B:{x:150,y:320}, C:{x:350,y:320} };
+    // adjust to be closer to isoceles visually
+    triPoints = { A:{x:250,y:60}, B:{x:130,y:320}, C:{x:370,y:320} };
+  } else if(type==='rectangle'){
+    triPoints = { A:{x:130,y:80}, B:{x:130,y:320}, C:{x:400,y:320} };
+  }
+  render1();
+}
+function render1(){
+  const ctx = ctxT1, cv = cvT1;
+  const {A,B,C} = triPoints;
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.fillStyle = css('--surface');
+  ctx.fillRect(0,0,cv.width,cv.height);
+
+  ctx.beginPath();
+  ctx.moveTo(A.x,A.y); ctx.lineTo(B.x,B.y); ctx.lineTo(C.x,C.y); ctx.closePath();
+  ctx.fillStyle = css('--accent-light');
+  ctx.fill();
+  ctx.strokeStyle = css('--accent');
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // side lengths
+  const ab = (dist(A,B)*SCALE_T1).toFixed(1);
+  const bc = (dist(B,C)*SCALE_T1).toFixed(1);
+  const ac = (dist(A,C)*SCALE_T1).toFixed(1);
+  ctx.fillStyle = css('--text');
+  ctx.font = '13px Nunito Sans, sans-serif';
+  ctx.textAlign='center';
+  ctx.fillText(ab+' cm', (A.x+B.x)/2 - 14, (A.y+B.y)/2);
+  ctx.fillText(bc+' cm', (B.x+C.x)/2, (B.y+C.y)/2 + 18);
+  ctx.fillText(ac+' cm', (A.x+C.x)/2 + 14, (A.y+C.y)/2);
+
+  // angles
+  const angA = angleAt(A,B,C).toFixed(0);
+  const angB = angleAt(B,A,C).toFixed(0);
+  const angC = angleAt(C,A,B).toFixed(0);
+  ctx.fillStyle = css('--heading');
+  ctx.font = 'bold 12px Nunito Sans, sans-serif';
+  ctx.fillText(angA+'°', A.x, A.y - 12*Math.sign(1) - 6 < A.y ? A.y+ (A.y<60?24:-16) : A.y-16);
+  ctx.fillText(angA+'°', A.x, A.y + (A.y<60?26:-16));
+  ctx.fillText(angB+'°', B.x - (B.x<40?-26:26), B.y - 6);
+  ctx.fillText(angC+'°', C.x + (C.x>460?-26:26), C.y - 6);
+
+  // sum
+  ctx.fillStyle = css('--muted');
+  ctx.font = '13px Nunito Sans, sans-serif';
+  ctx.fillText('Somme des angles = '+(Number(angA)+Number(angB)+Number(angC))+'°', cv.width/2, 355);
+
+  // vertices
+  drawVertex(ctx, A, 'A');
+  drawVertex(ctx, B, 'B');
+  drawVertex(ctx, C, 'C');
+}
+function drawVertex(ctx, p, label){
+  ctx.beginPath();
+  ctx.arc(p.x,p.y,6,0,Math.PI*2);
+  ctx.fillStyle = css('--accent');
+  ctx.fill();
+  ctx.fillStyle = css('--heading');
+  ctx.font = 'bold 15px Cormorant Garamond, serif';
+  ctx.textAlign='center';
+  ctx.fillText(label, p.x, p.y - 12);
+}
+
+/* ============ SECTION 1 : CONSTRUCTION ANIMEE ============ */
+let cvC, ctxC, constructStepNum = 0;
+const cA = {x:80,y:280}, cB = {x:380,y:280};
+function drawConstruct(){
+  cvC = document.getElementById('cvConstruct');
+  ctxC = cvC.getContext('2d');
+  constructRender();
+}
+function constructReset(){
+  constructStepNum = 0;
+  constructRender();
+  document.getElementById('constructHint').textContent = 'Étape 0 / 4 — clique sur « Étape suivante » pour commencer.';
+}
+function constructStep(){
+  if(constructStepNum < 4){ constructStepNum++; }
+  constructRender();
+  const hints = [
+    'Étape 0 / 4 — clique sur « Étape suivante » pour commencer.',
+    'Étape 1 / 4 — on trace le côté [AB] = 6 cm.',
+    'Étape 2 / 4 — on trace le cercle de centre A et de rayon AC = 4 cm.',
+    'Étape 3 / 4 — on trace le cercle de centre B et de rayon BC = 5 cm.',
+    "Étape 4 / 4 — le point C est à l'intersection des deux cercles : le triangle ABC est construit !"
+  ];
+  document.getElementById('constructHint').textContent = hints[constructStepNum];
+}
+function constructRender(){
+  const ctx = ctxC, cv = cvC;
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.fillStyle = css('--surface');
+  ctx.fillRect(0,0,cv.width,cv.height);
+
+  const rAC = 130, rBC = 160; // px radii approx representing 4cm/5cm scaled from AB=6cm=300px
+  // Step >=1 : draw AB
+  if(constructStepNum>=1){
+    ctx.beginPath(); ctx.moveTo(cA.x,cA.y); ctx.lineTo(cB.x,cB.y);
+    ctx.strokeStyle = css('--accent'); ctx.lineWidth=2.5; ctx.stroke();
+    drawVertex(ctx,cA,'A'); drawVertex(ctx,cB,'B');
+    ctx.fillStyle = css('--text'); ctx.font='13px Nunito Sans, sans-serif'; ctx.textAlign='center';
+    ctx.fillText('6 cm', (cA.x+cB.x)/2, cA.y+20);
+  }
+  // Step >=2: circle center A radius AC(4cm)
+  if(constructStepNum>=2){
+    ctx.beginPath(); ctx.arc(cA.x,cA.y,rAC,0,Math.PI*2);
+    ctx.strokeStyle = css('--muted'); ctx.setLineDash([5,4]); ctx.lineWidth=1.5; ctx.stroke(); ctx.setLineDash([]);
+  }
+  // Step >=3: circle center B radius BC(5cm)
+  if(constructStepNum>=3){
+    ctx.beginPath(); ctx.arc(cB.x,cB.y,rBC,0,Math.PI*2);
+    ctx.strokeStyle = css('--muted'); ctx.setLineDash([5,4]); ctx.lineWidth=1.5; ctx.stroke(); ctx.setLineDash([]);
+  }
+  // Step 4: find intersection & draw triangle
+  if(constructStepNum>=4){
+    // circle intersection math
+    const d = dist(cA,cB);
+    const a = (rAC*rAC - rBC*rBC + d*d) / (2*d);
+    const h = Math.sqrt(Math.max(0,rAC*rAC - a*a));
+    const xm = cA.x + a*(cB.x-cA.x)/d;
+    const ym = cA.y + a*(cB.y-cA.y)/d;
+    const Cx = xm - h*(cB.y-cA.y)/d;
+    const Cy = ym + h*(cB.x-cA.x)/d;
+    const C = {x:Cx,y:Cy};
+    ctx.beginPath(); ctx.moveTo(cA.x,cA.y); ctx.lineTo(C.x,C.y); ctx.lineTo(cB.x,cB.y);
+    ctx.strokeStyle = css('--accent'); ctx.lineWidth=2.5; ctx.stroke();
+    ctx.fillStyle = css('--accent-light');
+    ctx.beginPath(); ctx.moveTo(cA.x,cA.y); ctx.lineTo(C.x,C.y); ctx.lineTo(cB.x,cB.y); ctx.closePath();
+    ctx.globalAlpha=0.5; ctx.fill(); ctx.globalAlpha=1;
+    drawVertex(ctx,C,'C');
+    ctx.fillStyle = css('--text'); ctx.font='13px Nunito Sans, sans-serif';
+    ctx.fillText('4 cm', (cA.x+C.x)/2 - 16, (cA.y+C.y)/2);
+    ctx.fillText('5 cm', (cB.x+C.x)/2 + 16, (cB.y+C.y)/2);
+  }
+}
+
+/* ============ SECTION 2 : PARALLELOGRAMME ============ */
+let cvP, ctxP;
+let paraPoints = { A:{x:150,y:300}, B:{x:350,y:300}, D:{x:210,y:120} };
+let paraDrag = null;
+let showParaDiag = false;
+function getC(){
+  return { x: paraPoints.B.x + paraPoints.D.x - paraPoints.A.x, y: paraPoints.B.y + paraPoints.D.y - paraPoints.A.y };
+}
+function drawParallelo(){
+  cvP = document.getElementById('cvParallelo');
+  ctxP = cvP.getContext('2d');
+  renderP();
+  cvP.addEventListener('mousedown', pStart);
+  cvP.addEventListener('mousemove', pMove);
+  window.addEventListener('mouseup', pEnd);
+  cvP.addEventListener('touchstart', pStart, {passive:false});
+  cvP.addEventListener('touchmove', pMove, {passive:false});
+  window.addEventListener('touchend', pEnd);
+}
+function pStart(evt){
+  evt.preventDefault();
+  const pos = getPos(evt, cvP);
+  for(const key of ['A','B','D']){
+    if(dist(pos, paraPoints[key]) < 18){ paraDrag = key; return; }
+  }
+}
+function pMove(evt){
+  if(!paraDrag) return;
+  evt.preventDefault();
+  const pos = getPos(evt, cvP);
+  pos.x = Math.max(20, Math.min(480, pos.x));
+  pos.y = Math.max(20, Math.min(360, pos.y));
+  paraPoints[paraDrag] = pos;
+  renderP();
+}
+function pEnd(){ paraDrag = null; }
+function resetParallelo(){
+  paraPoints = { A:{x:150,y:300}, B:{x:350,y:300}, D:{x:210,y:120} };
+  renderP();
+}
+function toggleParaDiagWrap(){ showParaDiag = !showParaDiag; renderP(); }
+function toggleParalleloDiag(){ toggleParaDiagWrap(); }
+function renderP(){
+  const ctx = ctxP, cv = cvP;
+  const A = paraPoints.A, B = paraPoints.B, D = paraPoints.D, C = getC();
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.fillStyle = css('--surface'); ctx.fillRect(0,0,cv.width,cv.height);
+
+  ctx.beginPath();
+  ctx.moveTo(A.x,A.y); ctx.lineTo(B.x,B.y); ctx.lineTo(C.x,C.y); ctx.lineTo(D.x,D.y); ctx.closePath();
+  ctx.fillStyle = css('--accent-light'); ctx.fill();
+  ctx.strokeStyle = css('--accent'); ctx.lineWidth=2.5; ctx.stroke();
+
+  if(showParaDiag){
+    ctx.beginPath(); ctx.moveTo(A.x,A.y); ctx.lineTo(C.x,C.y);
+    ctx.moveTo(B.x,B.y); ctx.lineTo(D.x,D.y);
+    ctx.strokeStyle = css('--muted'); ctx.setLineDash([4,4]); ctx.lineWidth=1.5; ctx.stroke(); ctx.setLineDash([]);
+    const O = {x:(A.x+C.x)/2, y:(A.y+C.y)/2};
+    ctx.beginPath(); ctx.arc(O.x,O.y,4,0,Math.PI*2); ctx.fillStyle=css('--bad'); ctx.fill();
+    ctx.fillStyle = css('--text'); ctx.font='12px Nunito Sans, sans-serif'; ctx.textAlign='left';
+    ctx.fillText('O', O.x+8, O.y-8);
+  }
+
+  ctx.fillStyle = css('--text'); ctx.font='13px Nunito Sans, sans-serif'; ctx.textAlign='center';
+  const ab = (dist(A,B)*0.03).toFixed(1);
+  const ad = (dist(A,D)*0.03).toFixed(1);
+  ctx.fillText(ab+' cm', (A.x+B.x)/2, (A.y+B.y)/2 + 18);
+  ctx.fillText(ad+' cm', (A.x+D.x)/2 - 18, (A.y+D.y)/2);
+
+  drawVertex(ctx, A, 'A'); drawVertex(ctx, B, 'B'); drawVertex(ctx, C, 'C'); drawVertex(ctx, D, 'D');
+}
+
+/* ============ SECTION 3 : CAS PARTICULIERS ============ */
+let cvS, ctxS, specialShape = 'parallelo';
+function drawSpecial(){
+  cvS = document.getElementById('cvSpecial');
+  ctxS = cvS.getContext('2d');
+  renderSpecial();
+}
+function setSpecialShape(shape){
+  specialShape = shape;
+  const hints = {
+    parallelo: 'Parallélogramme : diagonales se coupent en leur milieu, mais ni égales ni perpendiculaires en général.',
+    rectangle: 'Rectangle : diagonales de même longueur, se coupant en leur milieu.',
+    losange: 'Losange : diagonales perpendiculaires, se coupant en leur milieu.',
+    carre: 'Carré : diagonales de même longueur, perpendiculaires, se coupant en leur milieu.'
+  };
+  document.getElementById('specialHint').textContent = hints[shape];
+  renderSpecial();
+}
+function renderSpecial(){
+  const ctx = ctxS, cv = cvS;
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.fillStyle = css('--surface'); ctx.fillRect(0,0,cv.width,cv.height);
+  let pts;
+  const cx=250, cy=190;
+  if(specialShape==='parallelo'){
+    pts = { A:{x:cx-140,y:cy+100}, B:{x:cx+100,y:cy+100}, C:{x:cx+140,y:cy-100}, D:{x:cx-100,y:cy-100} };
+  } else if(specialShape==='rectangle'){
+    pts = { A:{x:cx-130,y:cy+90}, B:{x:cx+130,y:cy+90}, C:{x:cx+130,y:cy-90}, D:{x:cx-130,y:cy-90} };
+  } else if(specialShape==='losange'){
+    pts = { A:{x:cx,y:cy+130}, B:{x:cx+110,y:cy}, C:{x:cx,y:cy-130}, D:{x:cx-110,y:cy} };
+  } else { // carre
+    pts = { A:{x:cx-110,y:cy+110}, B:{x:cx+110,y:cy+110}, C:{x:cx+110,y:cy-110}, D:{x:cx-110,y:cy-110} };
+  }
+  const {A,B,C,D} = pts;
+  ctx.beginPath();
+  ctx.moveTo(A.x,A.y); ctx.lineTo(B.x,B.y); ctx.lineTo(C.x,C.y); ctx.lineTo(D.x,D.y); ctx.closePath();
+  ctx.fillStyle = css('--accent-light'); ctx.fill();
+  ctx.strokeStyle = css('--accent'); ctx.lineWidth=2.5; ctx.stroke();
+
+  ctx.beginPath(); ctx.moveTo(A.x,A.y); ctx.lineTo(C.x,C.y); ctx.moveTo(B.x,B.y); ctx.lineTo(D.x,D.y);
+  ctx.strokeStyle = css('--muted'); ctx.setLineDash([4,4]); ctx.lineWidth=1.5; ctx.stroke(); ctx.setLineDash([]);
+
+  drawVertex(ctx,A,'A'); drawVertex(ctx,B,'B'); drawVertex(ctx,C,'C'); drawVertex(ctx,D,'D');
+
+  ctx.fillStyle = css('--muted'); ctx.font='13px Nunito Sans, sans-serif'; ctx.textAlign='center';
+  const names = {parallelo:'Parallélogramme', rectangle:'Rectangle', losange:'Losange', carre:'Carré'};
+  ctx.fillText(names[specialShape], cx, 350);
+}
+
+/* ============ SECTION 6 : QCM ============ */
+const qcmData = [
+  {q:"Quelle est la somme des angles d'un triangle ?", opts:["90°","180°","360°","270°"], correct:1},
+  {q:"Un triangle isocèle a...", opts:["3 côtés égaux","2 côtés égaux","1 angle droit","aucun côté égal"], correct:1},
+  {q:"Un triangle équilatéral a des angles de...", opts:["90° chacun","45° chacun","60° chacun","30° chacun"], correct:2},
+  {q:"Dans un triangle rectangle, le côté le plus long s'appelle...", opts:["la base","la médiane","l'hypoténuse","la hauteur"], correct:2},
+  {q:"Peut-on construire un triangle de côtés 2 cm, 3 cm et 6 cm ?", opts:["Oui","Non, l'inégalité triangulaire n'est pas respectée","Oui si l'angle est droit","Cela dépend des angles"], correct:1},
+  {q:"Si â = 60° et b̂ = 60° dans un triangle, alors ĉ vaut...", opts:["60°","90°","120°","180°"], correct:0},
+  {q:"Un parallélogramme a ses côtés opposés...", opts:["perpendiculaires","parallèles et égaux","de longueurs différentes","non parallèles"], correct:1},
+  {q:"Dans un parallélogramme, les diagonales...", opts:["sont toujours perpendiculaires","sont toujours égales","se coupent en leur milieu","ne se coupent jamais"], correct:2},
+  {q:"Dans un parallélogramme, deux angles consécutifs sont...", opts:["égaux","complémentaires (somme 90°)","supplémentaires (somme 180°)","toujours droits"], correct:2},
+  {q:"Un rectangle est un parallélogramme qui a...", opts:["4 côtés égaux","un angle droit","des diagonales perpendiculaires","un centre de symétrie seulement"], correct:1},
+  {q:"Un losange est un parallélogramme qui a...", opts:["un angle droit","deux côtés consécutifs égaux","des diagonales égales","4 angles droits"], correct:1},
+  {q:"Un carré est à la fois...", opts:["un rectangle et un losange","un triangle et un rectangle","un losange et un triangle","aucune des réponses"], correct:0},
+  {q:"Dans un rectangle, les diagonales sont...", opts:["perpendiculaires","de même longueur","de longueurs différentes","parallèles entre elles"], correct:1},
+  {q:"Dans un losange, les diagonales sont...", opts:["de même longueur","parallèles","perpendiculaires","égales aux côtés"], correct:2},
+  {q:"Combien de sommets a un quadrilatère ?", opts:["3","4","5","6"], correct:1},
+  {q:"Pour construire un triangle connaissant 2 côtés et l'angle compris, on utilise...", opts:["seulement le compas","seulement la règle","le rapporteur et le compas/règle","aucun instrument"], correct:2}
+];
+let qcmAnswers = new Array(qcmData.length).fill(null);
+function buildQcm(){
+  const container = document.getElementById('qcmContainer');
+  container.innerHTML = '';
+  qcmData.forEach((item, qi)=>{
+    const div = document.createElement('div');
+    div.className = 'qcm-q';
+    const p = document.createElement('p');
+    p.className = 'question';
+    p.textContent = (qi+1)+'. '+item.q;
+    div.appendChild(p);
+    const optsDiv = document.createElement('div');
+    optsDiv.className = 'qcm-opts';
+    item.opts.forEach((opt, oi)=>{
+      const optDiv = document.createElement('div');
+      optDiv.className = 'qcm-opt';
+      optDiv.textContent = opt;
+      optDiv.onclick = ()=>selectQcm(qi, oi, optDiv);
+      optDiv.setAttribute('data-qi', qi);
+      optDiv.setAttribute('data-oi', oi);
+      optsDiv.appendChild(optDiv);
+    });
+    div.appendChild(optsDiv);
+    container.appendChild(div);
+  });
+}
+function selectQcm(qi, oi, el){
+  qcmAnswers[qi] = oi;
+  const parent = el.parentElement;
+  Array.from(parent.children).forEach(c=>c.style.outline='none');
+  Array.from(parent.children).forEach(c=>c.style.borderColor='var(--border)');
+  el.style.borderColor = 'var(--accent)';
+  el.style.outline = '2px solid var(--accent)';
+}
+function checkQcm(){
+  let score = 0;
+  const container = document.getElementById('qcmContainer');
+  qcmData.forEach((item, qi)=>{
+    const qDiv = container.children[qi];
+    const opts = qDiv.querySelectorAll('.qcm-opt');
+    opts.forEach((optEl, oi)=>{
+      optEl.classList.add('disabled');
+      optEl.style.outline='none';
+      if(oi===item.correct){ optEl.classList.add('correct'); }
+      else if(oi===qcmAnswers[qi] && oi!==item.correct){ optEl.classList.add('incorrect'); }
+    });
+    if(qcmAnswers[qi]===item.correct) score++;
+  });
+  const box = document.getElementById('qcmScoreBox');
+  box.style.display = 'block';
+  box.textContent = 'Score : '+score+' / '+qcmData.length+
+    (score===qcmData.length ? '  🎉 Excellent !' : score>=qcmData.length*0.6 ? '  👍 Bon travail !' : "  Continue à t'entraîner !");
+}
+function resetQcm(){
+  qcmAnswers = new Array(qcmData.length).fill(null);
+  document.getElementById('qcmScoreBox').style.display = 'none';
+  buildQcm();
+}
+</script>
+</body>
+</html>

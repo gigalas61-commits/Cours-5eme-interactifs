@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volumes — 5ème</title>
+<meta name="description" content="Cours interactif sur les volumes (prismes droits, cylindres) pour la classe de 5ème.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f5f2ed; --surface:#ffffff; --surface2:#ebe6de; --text:#2c2418; --heading:#8b4513;
+    --muted:#6b5a48; --border:#d4c8b8; --accent:#a0522d; --accent-light:#faf5ef;
+    --good:#2e7d32; --bad:#c62828;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#161210; --surface:#221c18; --surface2:#302820; --text:#ddd0c0; --heading:#e0a868;
+      --muted:#9a8878; --border:#403428; --accent:#d08840; --accent-light:#1e1610;
+      --good:#66bb6a; --bad:#ef5350;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#161210; --surface:#221c18; --surface2:#302820; --text:#ddd0c0; --heading:#e0a868;
+    --muted:#9a8878; --border:#403428; --accent:#d08840; --accent-light:#1e1610;
+    --good:#66bb6a; --bad:#ef5350;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Nunito Sans', sans-serif;
+    line-height:1.6;
+    transition:background .2s ease, color .2s ease;
+  }
+  h1,h2,h3,h4{font-family:'Cormorant Garamond', serif; color:var(--heading); font-weight:700; margin:0 0 .4em;}
+  h1{font-size:2.1em;}
+  h2{font-size:1.6em; border-bottom:2px solid var(--border); padding-bottom:.25em; margin-top:1.2em;}
+  h3{font-size:1.3em; margin-top:1em;}
+  p{margin:.6em 0;}
+  .wrap{max-width:920px; margin:0 auto; padding:0 16px 60px;}
+  header.top{
+    padding:18px 16px; display:flex; align-items:center; justify-content:space-between;
+    border-bottom:1px solid var(--border); background:var(--surface);
+    position:sticky; top:0; z-index:50; flex-wrap:wrap; gap:10px;
+  }
+  header.top .titleblock{display:flex; align-items:center; gap:12px;}
+  .badge{
+    background:var(--accent); color:#fff; font-family:'Cormorant Garamond', serif;
+    font-weight:700; font-size:1.05em; padding:4px 14px; border-radius:20px; letter-spacing:.5px;
+  }
+  .theme-toggle{
+    background:var(--surface2); border:1px solid var(--border); color:var(--text);
+    border-radius:20px; padding:6px 14px; cursor:pointer; font-family:'Nunito Sans',sans-serif;
+    font-weight:600; font-size:.9em;
+  }
+  .theme-toggle:hover{background:var(--accent-light);}
+  nav.tabs{
+    display:flex; flex-wrap:wrap; gap:6px; padding:12px 16px; background:var(--surface);
+    border-bottom:1px solid var(--border); position:sticky; top:64px; z-index:40;
+  }
+  nav.tabs button{
+    background:var(--surface2); border:1px solid var(--border); color:var(--text);
+    padding:8px 14px; border-radius:10px; cursor:pointer; font-family:'Nunito Sans',sans-serif;
+    font-weight:600; font-size:.88em; transition:all .15s ease;
+  }
+  nav.tabs button:hover{border-color:var(--accent);}
+  nav.tabs button.active{background:var(--accent); color:#fff; border-color:var(--accent);}
+  main{padding-top:20px;}
+  .panel{display:none;}
+  .panel.active{display:block; animation:fadeIn .25s ease;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+  .card{
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    padding:18px 20px; margin:16px 0;
+  }
+  .def{
+    background:var(--accent-light); border-left:4px solid var(--accent); border-radius:8px;
+    padding:12px 16px; margin:14px 0;
+  }
+  .def strong{color:var(--heading);}
+  .formula{
+    background:var(--surface2); border:1px dashed var(--accent); border-radius:10px;
+    padding:14px 18px; margin:14px 0; text-align:center; font-family:'Cormorant Garamond', serif;
+    font-size:1.3em; color:var(--heading); font-weight:600;
+  }
+  table{width:100%; border-collapse:collapse; margin:12px 0;}
+  th,td{border:1px solid var(--border); padding:8px 10px; text-align:center; font-size:.92em;}
+  th{background:var(--surface2); color:var(--heading); font-family:'Cormorant Garamond', serif; font-weight:700;}
+  .conv-table td.unit{font-weight:700; color:var(--accent);}
+  .exo{
+    border:1px solid var(--border); border-radius:12px; padding:14px 18px; margin:16px 0; background:var(--surface);
+  }
+  .exo h4{margin-top:0; color:var(--accent);}
+  details{
+    margin-top:10px; border-top:1px dashed var(--border); padding-top:8px;
+  }
+  summary{
+    cursor:pointer; font-weight:700; color:var(--accent); font-family:'Cormorant Garamond', serif; font-size:1.1em;
+    outline:none;
+  }
+  summary:hover{color:var(--heading);}
+  .correction{margin-top:8px; padding:10px 14px; background:var(--accent-light); border-radius:8px;}
+  canvas{
+    background:var(--surface2); border-radius:10px; border:1px solid var(--border);
+    display:block; margin:14px auto; max-width:100%;
+  }
+  .controls{display:flex; flex-wrap:wrap; gap:16px; justify-content:center; margin:12px 0;}
+  .controls label{display:flex; flex-direction:column; font-size:.85em; font-weight:600; gap:4px; color:var(--muted);}
+  .controls input[type=range]{width:180px; accent-color:var(--accent);}
+  .val{color:var(--heading); font-weight:700;}
+  .result-box{
+    text-align:center; font-family:'Cormorant Garamond', serif; font-size:1.4em; color:var(--heading);
+    font-weight:700; margin:10px 0;
+  }
+  .btn{
+    background:var(--accent); color:#fff; border:none; padding:8px 16px; border-radius:8px;
+    cursor:pointer; font-weight:600; font-family:'Nunito Sans',sans-serif; font-size:.9em;
+  }
+  .btn:hover{opacity:.9;}
+  input.answer{
+    padding:6px 10px; border-radius:6px; border:1px solid var(--border); background:var(--bg);
+    color:var(--text); font-family:'Nunito Sans',sans-serif; width:120px;
+  }
+  .qcm-q{border:1px solid var(--border); border-radius:12px; padding:14px 18px; margin:14px 0; background:var(--surface);}
+  .qcm-q h4{margin-top:0;}
+  .qcm-opts label{display:block; padding:6px 8px; border-radius:6px; cursor:pointer;}
+  .qcm-opts label:hover{background:var(--accent-light);}
+  .qcm-feedback{margin-top:8px; font-weight:700; display:none;}
+  .qcm-feedback.correct{color:var(--good);}
+  .qcm-feedback.wrong{color:var(--bad);}
+  #qcmScore{
+    text-align:center; font-family:'Cormorant Garamond', serif; font-size:1.6em; margin:20px 0; color:var(--heading);
+    font-weight:700; display:none;
+  }
+  .tip{
+    background:var(--surface2); border-radius:8px; padding:10px 14px; margin:10px 0; font-size:.92em;
+    border-left:3px solid var(--accent);
+  }
+  ul{padding-left:22px;}
+  li{margin:.3em 0;}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media (max-width:600px){
+    .grid2{grid-template-columns:1fr;}
+    nav.tabs{top:120px;}
+    h1{font-size:1.6em;}
+    .controls input[type=range]{width:130px;}
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="titleblock">
+    <span class="badge">5ème</span>
+    <h1 style="margin:0;">Volumes</h1>
+  </div>
+  <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌓 Thème</button>
+</header>
+
+<nav class="tabs" id="tabsNav">
+  <button onclick="showTab(0)" id="tabbtn0">1. Solides</button>
+  <button onclick="showTab(1)" id="tabbtn1">2. Unités</button>
+  <button onclick="showTab(2)" id="tabbtn2">3. Prisme droit</button>
+  <button onclick="showTab(3)" id="tabbtn3">4. Cylindre</button>
+  <button onclick="showTab(4)" id="tabbtn4">5. Problèmes</button>
+  <button onclick="showTab(5)" id="tabbtn5">6. Exercices</button>
+  <button onclick="showTab(6)" id="tabbtn6">7. QCM</button>
+</nav>
+
+<main class="wrap">
+
+<!-- ===================== TAB 0 : SOLIDES ===================== -->
+<section class="panel" id="panel0">
+  <div class="card">
+    <h2>Ce que tu vas apprendre dans ce chapitre</h2>
+    <ul>
+      <li>Reconnaître et décrire les solides usuels : pavé droit, cube, prisme droit, cylindre de révolution.</li>
+      <li>Construire et lire un patron de solide.</li>
+      <li>Représenter un solide en perspective cavalière.</li>
+      <li>Connaître et utiliser les unités de volume et de contenance, et savoir les convertir.</li>
+      <li>Calculer le volume d'un prisme droit et d'un cylindre de révolution.</li>
+      <li>Résoudre des problèmes concrets faisant intervenir des volumes.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Vocabulaire des solides</h2>
+    <p>Un solide est délimité par des <strong>faces</strong> (surfaces planes ou courbes), des <strong>arêtes</strong> (segments où se rencontrent deux faces) et des <strong>sommets</strong> (points où se rencontrent plusieurs arêtes).</p>
+    <div class="def">
+      <strong>Pavé droit (parallélépipède rectangle) :</strong> solide à 6 faces rectangulaires, 12 arêtes et 8 sommets. Le <strong>cube</strong> est un pavé droit particulier dont les 6 faces sont des carrés identiques.
+    </div>
+    <div class="grid2">
+      <div>
+        <h3>Pavé droit</h3>
+        <ul>
+          <li>6 faces (rectangles, opposées deux à deux et identiques)</li>
+          <li>12 arêtes</li>
+          <li>8 sommets</li>
+          <li>3 dimensions : longueur L, largeur ℓ, hauteur h</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Cube</h3>
+        <ul>
+          <li>6 faces carrées identiques</li>
+          <li>12 arêtes de même longueur a</li>
+          <li>8 sommets</li>
+        </ul>
+      </div>
+    </div>
+    <h3>Tableau récapitulatif</h3>
+    <table>
+      <tr><th>Solide</th><th>Faces</th><th>Arêtes</th><th>Sommets</th></tr>
+      <tr><td>Cube</td><td>6</td><td>12</td><td>8</td></tr>
+      <tr><td>Pavé droit</td><td>6</td><td>12</td><td>8</td></tr>
+      <tr><td>Prisme droit à base triangulaire</td><td>5</td><td>9</td><td>6</td></tr>
+      <tr><td>Cylindre</td><td>2 faces planes + 1 face courbe</td><td>2 arêtes courbes</td><td>0</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Patron d'un pavé droit</h2>
+    <p>Un <strong>patron</strong> est une figure plane qui, une fois découpée et pliée, permet de construire le solide. Le patron d'un pavé droit est constitué de 6 rectangles : les faces opposées ont la même forme et la même aire.</p>
+    <div class="tip">Astuce : pour dessiner un patron, il faut respecter les dimensions communes entre faces adjacentes (les arêtes qui se replient doivent avoir la même longueur des deux côtés).</div>
+  </div>
+
+  <div class="card">
+    <h2>Perspective cavalière</h2>
+    <p>La <strong>perspective cavalière</strong> est une technique de représentation en 2D des solides de l'espace. Règles principales :</p>
+    <ul>
+      <li>Les arêtes cachées sont dessinées en <strong>pointillés</strong>.</li>
+      <li>Les faces vues « de face » sont représentées en vraie grandeur.</li>
+      <li>Les arêtes fuyantes (qui s'éloignent vers l'arrière) sont tracées obliquement, souvent réduites et parallèles entre elles.</li>
+    </ul>
+    <h3>Pavé droit en 3D (rotation)</h3>
+    <canvas id="cubeCanvas" width="480" height="360"></canvas>
+    <div class="controls">
+      <label>Longueur (L) <input type="range" id="rL" min="40" max="140" value="100" oninput="drawCube()"><span class="val" id="rLval">100</span></label>
+      <label>Largeur (ℓ) <input type="range" id="rW" min="30" max="120" value="70" oninput="drawCube()"><span class="val" id="rWval">70</span></label>
+      <label>Hauteur (h) <input type="range" id="rH" min="30" max="120" value="80" oninput="drawCube()"><span class="val" id="rHval">80</span></label>
+      <label>Rotation <input type="range" id="rRot" min="0" max="360" value="20" oninput="drawCube()"><span class="val" id="rRotval">20°</span></label>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TAB 1 : UNITES ===================== -->
+<section class="panel" id="panel1">
+  <div class="card">
+    <h2>Unités de volume</h2>
+    <p>Les unités de volume dérivent des unités de longueur au cube : chaque unité vaut <strong>1000 fois</strong> l'unité immédiatement inférieure (car il y a 3 dimensions : 10×10×10 = 1000).</p>
+    <div class="formula">1 m³ = 1 000 dm³ = 1 000 000 cm³ = 1 000 000 000 mm³</div>
+    <h3>Tableau de conversion</h3>
+    <table class="conv-table">
+      <tr>
+        <th>km³</th><th>hm³</th><th>dam³</th><th>m³</th><th>dm³</th><th>cm³</th><th>mm³</th>
+      </tr>
+      <tr>
+        <td colspan="7" style="font-size:.8em; color:var(--muted);">chaque unité = 3 chiffres (car x1000 à chaque niveau)</td>
+      </tr>
+    </table>
+    <div class="tip">Pour convertir, on décale la virgule par <strong>groupes de 3 chiffres</strong> (et non 1 comme pour les longueurs).</div>
+  </div>
+
+  <div class="card">
+    <h2>Erreurs fréquentes à éviter</h2>
+    <ul>
+      <li><strong>Confondre longueur et volume :</strong> pour les longueurs, un décalage d'unité correspond à un facteur 10 ; pour les volumes, à un facteur 1 000.</li>
+      <li><strong>Oublier de convertir avant de calculer :</strong> il faut que toutes les dimensions soient exprimées dans la même unité avant d'appliquer une formule de volume.</li>
+      <li><strong>Confondre litre et m³ :</strong> 1 m³ = 1 000 L, et non 1 L comme on pourrait le croire intuitivement.</li>
+      <li><strong>Mélanger cm² (aire) et cm³ (volume) :</strong> une aire se mesure en unités « carrées », un volume en unités « cubes ».</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Glossaire</h2>
+    <table>
+      <tr><th>Mot</th><th>Signification</th></tr>
+      <tr><td>Volume</td><td>Mesure de l'espace occupé par un solide, exprimée en unités « cubes » (m³, dm³, cm³...)</td></tr>
+      <tr><td>Contenance</td><td>Volume que peut contenir un récipient, souvent exprimé en litres</td></tr>
+      <tr><td>Convertir</td><td>Exprimer une mesure dans une autre unité, sans changer sa valeur réelle</td></tr>
+      <tr><td>Aire de la base</td><td>Surface du polygone (ou du disque) qui sert de base au prisme (ou au cylindre)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Unités de contenance</h2>
+    <p>Les unités de contenance (litre) servent à mesurer des volumes de liquides.</p>
+    <table>
+      <tr><th>hL</th><th>daL</th><th>L</th><th>dL</th><th>cL</th><th>mL</th></tr>
+      <tr><td>100 L</td><td>10 L</td><td>1 L</td><td>0,1 L</td><td>0,01 L</td><td>0,001 L</td></tr>
+    </table>
+    <div class="def">
+      <strong>Lien volume ↔ contenance :</strong>
+      1 L = 1 dm³  et  1 mL = 1 cm³
+    </div>
+    <div class="formula">1 m³ = 1 000 L</div>
+  </div>
+
+  <div class="card">
+    <h2>Méthode : bien poser une conversion</h2>
+    <p>Pour convertir un volume, on peut utiliser un tableau à colonnes, en plaçant <strong>3 chiffres par unité</strong> (contrairement aux longueurs où on en place 1 seul par unité). Exemple : convertir 2,4 m³ en cm³.</p>
+    <table class="conv-table">
+      <tr><th>m³</th><th colspan="3">dm³</th><th colspan="3">cm³</th></tr>
+      <tr><td class="unit">2</td><td>4</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+    </table>
+    <p>On lit alors : 2,4 m³ = 2 400 000 cm³.</p>
+    <div class="tip">Remarque : ne pas confondre unités de longueur (1 chiffre par unité) et unités de volume (3 chiffres par unité), car le volume dépend de trois dimensions.</div>
+  </div>
+
+  <div class="card">
+    <h2>Exercices — conversions</h2>
+    <div class="exo">
+      <h4>Exercice 1</h4>
+      <p>Convertis : a) 3,5 m³ = ... dm³   b) 45 000 cm³ = ... dm³   c) 2 L = ... cm³   d) 500 mL = ... cL</p>
+      <details><summary>Voir la correction</summary>
+        <div class="correction">
+          a) 3,5 m³ = 3 500 dm³<br>
+          b) 45 000 cm³ = 45 dm³<br>
+          c) 2 L = 2 dm³ = 2 000 cm³<br>
+          d) 500 mL = 50 cL
+        </div>
+      </details>
+    </div>
+    <div class="exo">
+      <h4>Exercice 2</h4>
+      <p>Une bouteille contient 1,5 L d'eau. Exprime cette quantité en cm³, puis en m³.</p>
+      <details><summary>Voir la correction</summary>
+        <div class="correction">
+          1,5 L = 1,5 dm³ = 1 500 cm³<br>
+          1 500 cm³ = 0,0015 m³
+        </div>
+      </details>
+    </div>
+    <div class="exo">
+      <h4>Exercice 3</h4>
+      <p>Range dans l'ordre croissant : 0,25 m³ ; 3 000 cm³ ; 15 dm³ ; 400 000 mm³</p>
+      <details><summary>Voir la correction</summary>
+        <div class="correction">
+          Convertissons tout en cm³ : 0,25 m³ = 250 000 cm³ ; 3 000 cm³ ; 15 dm³ = 15 000 cm³ ; 400 000 mm³ = 400 cm³.<br>
+          Ordre croissant : 400 mm³ &lt; 3 000 cm³ &lt; 15 dm³ &lt; 0,25 m³
+        </div>
+      </details>
+    </div>
+    <div class="exo">
+      <h4>Exercice 4</h4>
+      <p>Un réservoir contient 12 500 mL d'eau. Exprime cette quantité en litres, puis en dm³.</p>
+      <details><summary>Voir la correction</summary>
+        <div class="correction">
+          12 500 mL = 12,5 L<br>
+          12,5 L = 12,5 dm³
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TAB 2 : PRISME DROIT ===================== -->
+<section class="panel" id="panel2">
+  <div class="card">
+    <h2>Le prisme droit</h2>
+    <div class="def">
+      <strong>Définition :</strong> un prisme droit est un solide formé de deux <strong>bases</strong> superposables et parallèles (polygones identiques), reliées par des <strong>faces latérales rectangulaires</strong> perpendiculaires aux bases.
+    </div>
+    <p>Le pavé droit et le cube sont des prismes droits particuliers (bases rectangulaires). On peut aussi avoir des prismes à base triangulaire, pentagonale, etc.</p>
+    <h3>Patron d'un prisme droit</h3>
+    <p>Le patron est composé de : 2 bases (polygones identiques) + autant de rectangles que de côtés du polygone de base, mis bout à bout, dont la hauteur commune est la <strong>hauteur du prisme</strong>.</p>
+  </div>
+
+  <div class="card">
+    <h2>Formule du volume</h2>
+    <div class="formula">V = Aire de la base × hauteur</div>
+    <p>où la hauteur est la distance entre les deux bases (la longueur des arêtes latérales, perpendiculaires aux bases).</p>
+    <div class="tip">Cas particuliers déjà connus : Volume du pavé droit = L × ℓ × h (car aire de la base = L × ℓ). Volume du cube = a³.</div>
+  </div>
+
+  <div class="card">
+    <h2>Exemple détaillé</h2>
+    <p>On considère un prisme droit dont la base est un triangle rectangle de côtés 6 cm et 8 cm (côtés de l'angle droit), et dont la hauteur du prisme est 15 cm.</p>
+    <p><strong>Étape 1 :</strong> calculer l'aire de la base (triangle rectangle) : Aire = (6 × 8) ÷ 2 = 24 cm².</p>
+    <p><strong>Étape 2 :</strong> appliquer la formule du volume : Volume = Aire de la base × hauteur = 24 × 15 = 360 cm³.</p>
+    <div class="tip">Méthode générale : 1) identifier la base et calculer son aire avec la formule adaptée (triangle, rectangle, etc.) ; 2) multiplier par la hauteur du prisme (jamais par la hauteur du triangle si elle est différente de la hauteur du solide).</div>
+  </div>
+
+  <div class="card">
+    <h2>Différentes bases possibles</h2>
+    <p>Un prisme droit peut avoir n'importe quel polygone pour base. Voici quelques exemples d'aires de base à connaître :</p>
+    <table>
+      <tr><th>Forme de la base</th><th>Formule de l'aire</th></tr>
+      <tr><td>Rectangle (longueur L, largeur ℓ)</td><td>Aire = L × ℓ</td></tr>
+      <tr><td>Carré (côté a)</td><td>Aire = a × a</td></tr>
+      <tr><td>Triangle (base b, hauteur ht)</td><td>Aire = (b × ht) ÷ 2</td></tr>
+      <tr><td>Trapèze (grande base B, petite base b, hauteur ht)</td><td>Aire = (B + b) × ht ÷ 2</td></tr>
+    </table>
+    <p>Quelle que soit la forme de la base, la formule du volume reste toujours la même : <strong>Volume = Aire de la base × hauteur du prisme</strong>.</p>
+  </div>
+
+  <div class="card">
+    <h2>Comment reconnaître la hauteur du prisme ?</h2>
+    <p>Sur un dessin en perspective cavalière, la hauteur du prisme est la longueur des arêtes qui relient les deux bases entre elles (les arêtes « fuyantes » ou verticales selon l'orientation du solide). Elle ne doit pas être confondue avec la hauteur d'un triangle de base, qui sert uniquement à calculer l'aire de cette base.</p>
+    <div class="tip">Astuce pour ne pas se tromper : demande-toi « si je pose ce solide sur sa base, quelle est sa hauteur totale ? » — c'est exactement la hauteur à utiliser dans la formule du volume.</div>
+    <p>Cette confusion entre hauteur du prisme et hauteur d'une face de base est l'une des erreurs les plus fréquentes en 5ème : prends toujours le temps d'identifier clairement la base avant de calculer son aire, puis repère la hauteur perpendiculaire qui sépare les deux bases.</p>
+  </div>
+
+  <div class="card">
+    <h2>Prisme droit à base triangulaire — Simulation</h2>
+    <canvas id="prismCanvas" width="480" height="340"></canvas>
+    <div class="controls">
+      <label>Base du triangle (b) <input type="range" id="pB" min="20" max="120" value="60" oninput="drawPrism()"><span class="val" id="pBval">60</span> mm</label>
+      <label>Hauteur du triangle (ht) <input type="range" id="pHt" min="20" max="100" value="50" oninput="drawPrism()"><span class="val" id="pHtval">50</span> mm</label>
+      <label>Hauteur du prisme (h) <input type="range" id="pH" min="30" max="150" value="90" oninput="drawPrism()"><span class="val" id="pHval">90</span> mm</label>
+    </div>
+    <div class="result-box" id="prismResult">Aire base = ... mm² — Volume = ... mm³</div>
+  </div>
+
+  <div class="card">
+    <h2>Exercices — prisme droit</h2>
+    <div class="exo">
+      <h4>Exercice 4</h4>
+      <p>Un prisme droit a une base triangulaire de base 6 cm et de hauteur 4 cm. La hauteur du prisme est 10 cm. Calcule son volume.</p>
+      <details><summary>Voir la correction</summary>
+        <div class="correction">
+          Aire de la base = (6 × 4) ÷ 2 = 12 cm²<br>
+          Volume = 12 × 10 = 120 cm³
+        </div>
+      </details>
+    </div>
+    <div class="exo">
+      <h4>Exercice 5</h4>
+      <p>Un pavé droit mesure 8 cm de longueur, 5 cm de largeur et 3 cm de hauteur. Calcule son volume.</p>
+      <details><summary>Voir la correction</summary>
+        <div class="correction">
+          Volume = L × ℓ × h = 8 × 5 × 3 = 120 cm³
+        </div>
+      </details>
+    </div>
+    <div class="exo">
+      <h4>Exercice 6</h4>
+      <p>Un prisme droit a une base hexagonale d'aire 34 cm² et une hauteur de 12 cm. Calcule son volume.</p>
+      <details><summary>Voir la correction</summary>
+        <div class="correction">
+          Volume = Aire de la base × hauteur = 34 × 12 = 408 cm³
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TAB 3 : CYLINDRE ===================== -->
+<section class="panel" id="panel3">
+  <div class="card">
+    <h2>Le cylindre de révolution</h2>
+    <div class="def">
+      <strong>Définition :</strong> un cylindre de révolution est engendré par la rotation d'un rectangle autour de l'un de ses côtés. Il possède deux bases circulaires identiques et parallèles, reliées par une surface latérale courbe.
+    </div>
+    <h3>Patron du cylindre</h3>
+    <p>Le patron d'un cylindre est composé de :</p>
+    <ul>
+      <li>2 disques de rayon r (les bases)</li>
+      <li>1 rectangle dont la longueur est le <strong>périmètre du cercle de base</strong> (2 × π × r) et la largeur est la <strong>hauteur h</strong> du cylindre</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Formule du volume</h2>
+    <div class="formula">V = π × r² × h</div>
+    <p>où r est le rayon du disque de base et h la hauteur du cylindre. On utilise en général π ≈ 3,14.</p>
+  </div>
+
+  <div class="card">
+    <h2>Exemple détaillé</h2>
+    <p>Un cylindre a un diamètre de base de 14 cm et une hauteur de 20 cm. Calculons son volume.</p>
+    <p><strong>Étape 1 :</strong> déterminer le rayon : r = diamètre ÷ 2 = 14 ÷ 2 = 7 cm.</p>
+    <p><strong>Étape 2 :</strong> appliquer la formule : Volume = π × r² × h ≈ 3,14 × 7² × 20 = 3,14 × 49 × 20 = 3 077,2 cm³.</p>
+    <div class="tip">Attention à l'erreur fréquente : ne pas utiliser le diamètre à la place du rayon dans la formule V = π × r² × h !</div>
+  </div>
+
+  <div class="card">
+    <h2>Cylindre et prisme droit : un point commun</h2>
+    <p>Le cylindre peut être vu comme un cas particulier de la formule générale « Aire de la base × hauteur », où la base est un disque d'aire π × r². C'est pourquoi on retrouve la même structure de formule :</p>
+    <table>
+      <tr><th>Solide</th><th>Aire de la base</th><th>Volume</th></tr>
+      <tr><td>Prisme droit</td><td>Aire du polygone de base</td><td>Aire de la base × h</td></tr>
+      <tr><td>Cylindre</td><td>π × r² (aire du disque)</td><td>π × r² × h</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Cylindre — Simulation interactive</h2>
+    <canvas id="cylCanvas" width="480" height="360"></canvas>
+    <div class="controls">
+      <label>Rayon r (cm) <input type="range" id="cR" min="10" max="60" value="30" oninput="drawCyl()"><span class="val" id="cRval">30</span></label>
+      <label>Hauteur h (cm) <input type="range" id="cH" min="30" max="180" value="100" oninput="drawCyl()"><span class="val" id="cHval">100</span></label>
+    </div>
+    <div class="result-box" id="cylResult">Volume = ... cm³</div>
+  </div>
+
+  <div class="card">
+    <h2>Exercices — cylindre</h2>
+    <div class="exo">
+      <h4>Exercice 6</h4>
+      <p>Un cylindre a un rayon de base de 5 cm et une hauteur de 12 cm. Calcule son volume (π ≈ 3,14).</p>
+      <details><summary>Voir la correction</summary>
+        <div class="correction">
+          Volume = π × r² × h ≈ 3,14 × 5² × 12 = 3,14 × 25 × 12 = 942 cm³
+        </div>
+      </details>
+    </div>
+    <div class="exo">
+      <h4>Exercice 7</h4>
+      <p>Une boîte de conserve cylindrique a un diamètre de 8 cm et une hauteur de 10 cm. Calcule son volume arrondi au cm³ près.</p>
+      <details><summary>Voir la correction</summary>
+        <div class="correction">
+          Rayon = 8 ÷ 2 = 4 cm<br>
+          Volume = π × 4² × 10 ≈ 3,14 × 16 × 10 = 502,4 ≈ 502 cm³
+        </div>
+      </details>
+    </div>
+    <div class="exo">
+      <h4>Exercice 8</h4>
+      <p>Un vase cylindrique a un rayon de 6 cm et une hauteur de 25 cm. Quel volume d'eau maximal peut-il contenir, en litres ?</p>
+      <details><summary>Voir la correction</summary>
+        <div class="correction">
+          Volume = π × 6² × 25 ≈ 3,14 × 36 × 25 = 2 826 cm³<br>
+          2 826 cm³ = 2,826 dm³ ≈ 2,83 L
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TAB 4 : PROBLEMES ===================== -->
+<section class="panel" id="panel4">
+  <div class="card">
+    <h2>Problèmes concrets</h2>
+    <p>Dans les situations réelles, on manipule souvent des volumes et des contenances ensemble. Il faut bien identifier les unités et convertir si nécessaire.</p>
+  </div>
+
+  <div class="card">
+    <h2>Fiche formules à retenir</h2>
+    <table>
+      <tr><th>Solide</th><th>Formule du volume</th><th>Remarque</th></tr>
+      <tr><td>Cube</td><td>V = a × a × a = a³</td><td>a = longueur de l'arête</td></tr>
+      <tr><td>Pavé droit</td><td>V = L × ℓ × h</td><td>L, ℓ, h = dimensions</td></tr>
+      <tr><td>Prisme droit</td><td>V = Aire de la base × h</td><td>h = hauteur du prisme (distance entre les bases)</td></tr>
+      <tr><td>Cylindre de révolution</td><td>V = π × r² × h</td><td>r = rayon, h = hauteur, π ≈ 3,14</td></tr>
+    </table>
+    <div class="tip">Méthode générale pour résoudre un problème de volume : 1) identifier la forme du solide ; 2) repérer les dimensions utiles (attention aux unités différentes !) ; 3) choisir la formule adaptée ; 4) convertir si besoin en litres avec 1 L = 1 dm³.</div>
+  </div>
+
+  <div class="card">
+    <h3>Problème 1 — Aquarium</h3>
+    <p>Un aquarium a la forme d'un pavé droit de 80 cm de longueur, 40 cm de largeur et 50 cm de hauteur. On le remplit d'eau jusqu'à 45 cm de hauteur.</p>
+    <p>a) Calcule le volume d'eau en cm³.<br>b) Convertis ce volume en litres.</p>
+    <details><summary>Voir la correction</summary>
+      <div class="correction">
+        a) Volume = 80 × 40 × 45 = 144 000 cm³<br>
+        b) 144 000 cm³ = 144 dm³ = 144 L
+      </div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>Problème 2 — Piscine</h3>
+    <p>Une piscine rectangulaire mesure 6 m de long, 3 m de large et 1,5 m de profondeur. Elle est remplie entièrement.</p>
+    <p>a) Calcule le volume de la piscine en m³.<br>b) Combien de litres d'eau contient-elle ?</p>
+    <details><summary>Voir la correction</summary>
+      <div class="correction">
+        a) Volume = 6 × 3 × 1,5 = 27 m³<br>
+        b) 27 m³ = 27 000 L
+      </div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>Problème 3 — Tuyau cylindrique</h3>
+    <p>Un tuyau cylindrique a un rayon intérieur de 3 cm et une longueur de 2 m. Quel volume d'eau peut-il contenir (en litres) ?</p>
+    <details><summary>Voir la correction</summary>
+      <div class="correction">
+        Longueur = 2 m = 200 cm<br>
+        Volume = π × r² × h ≈ 3,14 × 3² × 200 = 3,14 × 9 × 200 = 5 652 cm³<br>
+        5 652 cm³ = 5,652 dm³ ≈ 5,65 L
+      </div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>Problème 4 — Boîte cadeau</h3>
+    <p>Une boîte cadeau cubique a une arête de 25 cm. On veut savoir combien de cubes de 5 cm d'arête peuvent y être rangés.</p>
+    <details><summary>Voir la correction</summary>
+      <div class="correction">
+        Volume de la boîte = 25³ = 15 625 cm³<br>
+        Volume d'un petit cube = 5³ = 125 cm³<br>
+        Nombre de cubes = 15 625 ÷ 125 = 125 cubes
+      </div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>Problème 5 — Réservoir cylindrique</h3>
+    <p>Un réservoir cylindrique de rayon 1 m et de hauteur 2,5 m doit être rempli de fioul. Combien de litres faut-il commander pour le remplir entièrement (arrondir à la centaine de litres) ?</p>
+    <details><summary>Voir la correction</summary>
+        <div class="correction">
+          Volume = π × 1² × 2,5 ≈ 3,14 × 2,5 = 7,85 m³<br>
+          7,85 m³ = 7 850 L ≈ 7 800 L (arrondi à la centaine)
+        </div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>Problème 6 — Bac à sable</h3>
+    <p>Un bac à sable a la forme d'un pavé droit de 1,5 m de longueur, 1 m de largeur et 30 cm de hauteur. On veut le remplir de sable aux trois quarts de sa hauteur.</p>
+    <p>a) Calcule le volume de sable nécessaire en cm³.<br>b) Exprime ce volume en litres.</p>
+    <details><summary>Voir la correction</summary>
+      <div class="correction">
+        Hauteur de remplissage = 30 × 3/4 = 22,5 cm ; Longueur = 150 cm ; Largeur = 100 cm<br>
+        a) Volume = 150 × 100 × 22,5 = 337 500 cm³<br>
+        b) 337 500 cm³ = 337,5 dm³ = 337,5 L
+      </div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h3>Problème 7 — Citerne de récupération d'eau</h3>
+    <p>Une citerne cylindrique enterrée a un diamètre de 1,2 m et une hauteur de 2 m. Calcule sa capacité en litres (arrondir à l'unité).</p>
+    <details><summary>Voir la correction</summary>
+      <div class="correction">
+        Rayon = 1,2 ÷ 2 = 0,6 m<br>
+        Volume = π × 0,6² × 2 ≈ 3,14 × 0,36 × 2 = 2,2608 m³<br>
+        2,2608 m³ = 2 260,8 L ≈ 2 261 L
+      </div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2>Pour aller plus loin</h2>
+    <p>En classe de 4ème et de 3ème, tu découvriras le volume d'autres solides comme la <strong>pyramide</strong>, le <strong>cône de révolution</strong> et la <strong>sphère</strong>. Leurs formules feront intervenir un facteur 1/3 (pyramide, cône) ou 4/3 (sphère). En attendant, la maîtrise du prisme droit et du cylindre, vus cette année, est la base indispensable pour comprendre ces nouvelles notions.</p>
+  </div>
+</section>
+
+<!-- ===================== TAB 5 : EXERCICES ===================== -->
+<section class="panel" id="panel5">
+  <div class="card">
+    <h2>Exercices progressifs</h2>
+    <p>10 exercices, du plus simple au plus complexe. Essaie de résoudre avant de consulter la correction !</p>
+    <div class="tip">Objectifs de cette série : maîtriser les conversions d'unités de volume, connaître le vocabulaire des solides, savoir appliquer les formules du pavé droit, du cube, du prisme droit et du cylindre, et résoudre des problèmes où une dimension est inconnue.</div>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice A — Conversion simple</h4>
+    <p>Convertis 7 dm³ en cm³.</p>
+    <details><summary>Correction</summary><div class="correction">7 dm³ = 7 000 cm³</div></details>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice B — Vocabulaire</h4>
+    <p>Combien un cube possède-t-il de faces, d'arêtes et de sommets ?</p>
+    <details><summary>Correction</summary><div class="correction">6 faces, 12 arêtes, 8 sommets.</div></details>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice C — Volume du pavé droit</h4>
+    <p>Un pavé droit a pour dimensions 12 cm, 7 cm et 4 cm. Calcule son volume.</p>
+    <details><summary>Correction</summary><div class="correction">V = 12 × 7 × 4 = 336 cm³</div></details>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice D — Volume du cube</h4>
+    <p>Calcule le volume d'un cube d'arête 6 cm.</p>
+    <details><summary>Correction</summary><div class="correction">V = 6³ = 216 cm³</div></details>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice E — Prisme à base triangulaire</h4>
+    <p>Un prisme droit a une base triangulaire (base 5 cm, hauteur 6 cm) et une hauteur de prisme de 8 cm. Calcule son volume.</p>
+    <details><summary>Correction</summary>
+      <div class="correction">
+        Aire base = (5 × 6) ÷ 2 = 15 cm²<br>
+        V = 15 × 8 = 120 cm³
+      </div>
+    </details>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice F — Cylindre</h4>
+    <p>Calcule le volume d'un cylindre de rayon 7 cm et de hauteur 15 cm (π ≈ 3,14). Arrondis au cm³.</p>
+    <details><summary>Correction</summary>
+      <div class="correction">
+        V = 3,14 × 7² × 15 = 3,14 × 49 × 15 = 2 308,7 ≈ 2 309 cm³
+      </div>
+    </details>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice G — Comparaison</h4>
+    <p>Un pavé droit (10 cm × 10 cm × 10 cm) et un cylindre (rayon 5 cm, hauteur 10 cm) ont-ils le même volume ? Justifie.</p>
+    <details><summary>Correction</summary>
+      <div class="correction">
+        Pavé : V = 10 × 10 × 10 = 1 000 cm³<br>
+        Cylindre : V = 3,14 × 5² × 10 = 3,14 × 25 × 10 = 785 cm³<br>
+        Non, le pavé a un volume plus grand (1 000 cm³ &gt; 785 cm³).
+      </div>
+    </details>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice H — Problème complet</h4>
+    <p>Un silo à grains a la forme d'un cylindre de rayon 2 m et de hauteur 6 m. On veut le remplir de grains. a) Calcule le volume en m³. b) Convertis ce volume en litres.</p>
+    <details><summary>Correction</summary>
+      <div class="correction">
+        a) V = 3,14 × 2² × 6 = 3,14 × 4 × 6 = 75,36 m³<br>
+        b) 75,36 m³ = 75 360 L
+      </div>
+    </details>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice I — Arête inconnue</h4>
+    <p>Le volume d'un cube est 512 cm³. Quelle est la longueur de son arête ?</p>
+    <details><summary>Correction</summary>
+      <div class="correction">
+        On cherche a tel que a³ = 512. Or 8³ = 8 × 8 × 8 = 512.<br>
+        L'arête mesure donc 8 cm.
+      </div>
+    </details>
+  </div>
+
+  <div class="exo">
+    <h4>Exercice J — Hauteur inconnue</h4>
+    <p>Un cylindre a un volume de 942 cm³ et un rayon de 5 cm (π ≈ 3,14). Calcule sa hauteur.</p>
+    <details><summary>Correction</summary>
+      <div class="correction">
+        V = π × r² × h donc h = V ÷ (π × r²)<br>
+        h = 942 ÷ (3,14 × 25) = 942 ÷ 78,5 = 12 cm
+      </div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2>Auto-évaluation</h2>
+    <p>Avant de passer au QCM final, vérifie que tu sais répondre « oui » à chacune de ces affirmations :</p>
+    <ul>
+      <li>Je sais nommer les faces, arêtes et sommets d'un pavé droit ou d'un cube.</li>
+      <li>Je sais reconnaître un patron valide d'un pavé droit ou d'un cylindre.</li>
+      <li>Je sais convertir un volume entre m³, dm³, cm³, mm³, litres, décilitres, centilitres et millilitres.</li>
+      <li>Je connais et sais utiliser la formule V = Aire de la base × hauteur pour un prisme droit.</li>
+      <li>Je connais et sais utiliser la formule V = π × r² × h pour un cylindre.</li>
+      <li>Je sais résoudre un problème concret en choisissant la bonne formule et en convertissant si besoin.</li>
+    </ul>
+    <div class="tip">Si tu as répondu « non » à l'une de ces affirmations, relis l'onglet correspondant avant de faire le QCM.</div>
+  </div>
+
+  <div class="card">
+    <h2>Récapitulatif des 10 exercices</h2>
+    <table>
+      <tr><th>Exercice</th><th>Compétence travaillée</th></tr>
+      <tr><td>A</td><td>Conversion simple d'unités de volume</td></tr>
+      <tr><td>B</td><td>Vocabulaire des solides</td></tr>
+      <tr><td>C</td><td>Volume du pavé droit</td></tr>
+      <tr><td>D</td><td>Volume du cube</td></tr>
+      <tr><td>E</td><td>Volume d'un prisme à base triangulaire</td></tr>
+      <tr><td>F</td><td>Volume d'un cylindre</td></tr>
+      <tr><td>G</td><td>Comparaison de deux volumes</td></tr>
+      <tr><td>H</td><td>Problème complet avec conversion en litres</td></tr>
+      <tr><td>I</td><td>Recherche d'une arête à partir d'un volume</td></tr>
+      <tr><td>J</td><td>Recherche d'une hauteur à partir d'un volume</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== TAB 6 : QCM ===================== -->
+<section class="panel" id="panel6">
+  <div class="card">
+    <h2>QCM — Testez vos connaissances</h2>
+    <p>16 questions couvrant l'ensemble du chapitre : vocabulaire des solides, unités de volume et de contenance, prisme droit et cylindre de révolution. Choisissez une réponse pour chaque question, votre score s'affichera à la fin avec une appréciation.</p>
+    <div class="tip">Conseil : essaie de répondre sans regarder le cours, puis vérifie tes réponses. Si ton score est inférieur à 12/16, relis attentivement les onglets « Prisme droit » et « Cylindre » avant de recommencer.</div>
+    <div style="text-align:center;">
+      <button class="btn" onclick="checkQCM()">Valider mes réponses</button>
+    </div>
+    <div id="qcmScore"></div>
+  </div>
+  <div id="qcmContainer"></div>
+</section>
+
+  <div class="card" style="text-align:center; color:var(--muted); font-size:.85em;">
+    Cours de mathématiques — Chapitre « Volumes » — Classe de 5ème — Document interactif.
+  </div>
+</main>
+
+<script>
+/* ===================== NAVIGATION ===================== */
+var currentTab = 0;
+var initialized = [false,false,false,false,false,false,false];
+
+function showTab(i){
+  for(var k=0;k<7;k++){
+    document.getElementById('panel'+k).classList.remove('active');
+    document.getElementById('tabbtn'+k).classList.remove('active');
+  }
+  document.getElementById('panel'+i).classList.add('active');
+  document.getElementById('tabbtn'+i).classList.add('active');
+  currentTab = i;
+  initSection(i);
+}
+
+function initSection(i){
+  if(initialized[i]) return;
+  initialized[i] = true;
+  if(i===0){ drawCube(); }
+  if(i===2){ drawPrism(); }
+  if(i===3){ drawCyl(); }
+  if(i===6){ buildQCM(); }
+}
+
+/* ===================== THEME ===================== */
+function toggleTheme(){
+  var root = document.documentElement;
+  var current = root.getAttribute('data-theme');
+  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if(!current){
+    root.setAttribute('data-theme', prefersDark ? 'light' : 'dark');
+  } else if(current === 'dark'){
+    root.setAttribute('data-theme','light');
+  } else {
+    root.setAttribute('data-theme','dark');
+  }
+  try{ localStorage.setItem('volumes5-theme', root.getAttribute('data-theme') || ''); }catch(e){}
+  redrawAll();
+}
+(function initTheme(){
+  try{
+    var saved = localStorage.getItem('volumes5-theme');
+    if(saved){ document.documentElement.setAttribute('data-theme', saved); }
+  }catch(e){}
+})();
+
+function redrawAll(){
+  if(initialized[0]) drawCube();
+  if(initialized[2]) drawPrism();
+  if(initialized[3]) drawCyl();
+}
+
+/* ===================== CANVAS HELPERS ===================== */
+function css(varName){
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+}
+
+/* ---------- Cube / pavé droit (tab 0) ---------- */
+function drawCube(){
+  var canvas = document.getElementById('cubeCanvas');
+  if(!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var L = parseInt(document.getElementById('rL').value);
+  var W = parseInt(document.getElementById('rW').value);
+  var H = parseInt(document.getElementById('rH').value);
+  var rot = parseInt(document.getElementById('rRot').value);
+  document.getElementById('rLval').textContent = L;
+  document.getElementById('rWval').textContent = W;
+  document.getElementById('rHval').textContent = H;
+  document.getElementById('rRotval').textContent = rot + '°';
+
+  ctx.clearRect(0,0,canvas.width, canvas.height);
+  var cx = canvas.width/2, cy = canvas.height/2 + 30;
+  var angle = rot * Math.PI/180;
+  var depthFactor = 0.5;
+
+  // 8 vertices of box centered, then rotated around Y axis then projected (cavalier-ish)
+  var pts3d = [];
+  var hx = L/2, hy = H/2, hz = W/2;
+  var raw = [
+    [-hx,-hy,-hz],[hx,-hy,-hz],[hx,hy,-hz],[-hx,hy,-hz],
+    [-hx,-hy,hz],[hx,-hy,hz],[hx,hy,hz],[-hx,hy,hz]
+  ];
+  var proj = raw.map(function(p){
+    var x = p[0], y = p[1], z = p[2];
+    // rotate around Y
+    var xr = x*Math.cos(angle) + z*Math.sin(angle);
+    var zr = -x*Math.sin(angle) + z*Math.cos(angle);
+    var px = cx + xr;
+    var py = cy + y - zr*depthFactor*0.6;
+    return [px,py];
+  });
+
+  var edges = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = css('--accent');
+  ctx.fillStyle = css('--heading');
+
+  // fill top-ish face for depth feel (face 0,1,5,4 as example - approximate front)
+  ctx.beginPath();
+  ctx.moveTo(proj[0][0], proj[0][1]);
+  ctx.lineTo(proj[1][0], proj[1][1]);
+  ctx.lineTo(proj[2][0], proj[2][1]);
+  ctx.lineTo(proj[3][0], proj[3][1]);
+  ctx.closePath();
+  ctx.fillStyle = css('--surface');
+  ctx.globalAlpha = 0.9;
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
+  edges.forEach(function(e){
+    ctx.beginPath();
+    ctx.moveTo(proj[e[0]][0], proj[e[0]][1]);
+    ctx.lineTo(proj[e[1]][0], proj[e[1]][1]);
+    ctx.stroke();
+  });
+
+  ctx.fillStyle = css('--text');
+  ctx.font = '13px Nunito Sans, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('L = '+L+'  ℓ = '+W+'  h = '+H+' (mm)', cx, canvas.height - 20);
+}
+
+/* ---------- Prisme droit (tab 2) ---------- */
+function drawPrism(){
+  var canvas = document.getElementById('prismCanvas');
+  if(!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var b = parseInt(document.getElementById('pB').value);
+  var ht = parseInt(document.getElementById('pHt').value);
+  var h = parseInt(document.getElementById('pH').value);
+  document.getElementById('pBval').textContent = b;
+  document.getElementById('pHtval').textContent = ht;
+  document.getElementById('pHval').textContent = h;
+
+  ctx.clearRect(0,0,canvas.width, canvas.height);
+  var scale = 1.2;
+  var offsetX = 80, offsetY = 250;
+  var shear = 0.55; // perspective cavaliere shift for depth (represents prism length)
+
+  // front triangle (base) points
+  var A = [offsetX, offsetY];
+  var B = [offsetX + b*scale, offsetY];
+  var C = [offsetX + (b*scale)/2, offsetY - ht*scale];
+
+  // back triangle shifted by (h*shear, -h*shear*0.5) to represent depth
+  var dx = h*shear*0.7, dy = -h*shear*0.45;
+  var A2 = [A[0]+dx, A[1]+dy];
+  var B2 = [B[0]+dx, B[1]+dy];
+  var C2 = [C[0]+dx, C[1]+dy];
+
+  ctx.strokeStyle = css('--accent');
+  ctx.fillStyle = css('--surface');
+  ctx.lineWidth = 2;
+
+  // back triangle (dashed, hidden-ish)
+  ctx.setLineDash([5,4]);
+  ctx.beginPath();
+  ctx.moveTo(A2[0],A2[1]); ctx.lineTo(B2[0],B2[1]); ctx.lineTo(C2[0],C2[1]); ctx.closePath();
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // connecting edges
+  ctx.beginPath();
+  ctx.moveTo(A[0],A[1]); ctx.lineTo(A2[0],A2[1]);
+  ctx.moveTo(B[0],B[1]); ctx.lineTo(B2[0],B2[1]);
+  ctx.moveTo(C[0],C[1]); ctx.lineTo(C2[0],C2[1]);
+  ctx.stroke();
+
+  // front triangle (filled)
+  ctx.beginPath();
+  ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); ctx.lineTo(C[0],C[1]); ctx.closePath();
+  ctx.fillStyle = css('--accent-light');
+  ctx.fill();
+  ctx.strokeStyle = css('--accent');
+  ctx.stroke();
+
+  ctx.fillStyle = css('--text');
+  ctx.font = '13px Nunito Sans, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('base b = '+b+' mm, hauteur triangle = '+ht+' mm, hauteur prisme h = '+h+' mm', canvas.width/2, 30);
+
+  var aireBase = (b*ht)/2;
+  var volume = aireBase*h;
+  document.getElementById('prismResult').textContent =
+    'Aire base = ('+b+' × '+ht+') ÷ 2 = '+aireBase.toFixed(1)+' mm² — Volume = '+aireBase.toFixed(1)+' × '+h+' = '+volume.toFixed(0)+' mm³';
+}
+
+/* ---------- Cylindre (tab 3) ---------- */
+function drawCyl(){
+  var canvas = document.getElementById('cylCanvas');
+  if(!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var r = parseInt(document.getElementById('cR').value);
+  var h = parseInt(document.getElementById('cH').value);
+  document.getElementById('cRval').textContent = r;
+  document.getElementById('cHval').textContent = h;
+
+  ctx.clearRect(0,0,canvas.width, canvas.height);
+  var cx = canvas.width/2;
+  var topY = 60;
+  var ellipseRy = r*0.35;
+  var drawH = Math.min(h, 220);
+  var bottomY = topY + drawH;
+
+  ctx.strokeStyle = css('--accent');
+  ctx.fillStyle = css('--accent-light');
+  ctx.lineWidth = 2;
+
+  // side (rectangle-ish body)
+  ctx.beginPath();
+  ctx.moveTo(cx - r, topY);
+  ctx.lineTo(cx - r, bottomY);
+  ctx.ellipse(cx, bottomY, r, ellipseRy, 0, Math.PI, 0, true);
+  ctx.lineTo(cx + r, topY);
+  ctx.closePath();
+  ctx.fillStyle = css('--surface');
+  ctx.fill();
+  ctx.stroke();
+
+  // bottom ellipse full
+  ctx.beginPath();
+  ctx.ellipse(cx, bottomY, r, ellipseRy, 0, 0, Math.PI*2);
+  ctx.stroke();
+
+  // top ellipse
+  ctx.beginPath();
+  ctx.ellipse(cx, topY, r, ellipseRy, 0, 0, Math.PI*2);
+  ctx.fillStyle = css('--accent-light');
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = css('--text');
+  ctx.font = '13px Nunito Sans, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('r = '+r+' cm', cx, topY - 15);
+  ctx.fillText('h = '+h+' cm', cx + r + 40, (topY+bottomY)/2);
+
+  var volume = Math.PI * r * r * h;
+  document.getElementById('cylResult').textContent =
+    'Volume = π × '+r+'² × '+h+' ≈ '+volume.toFixed(1)+' cm³ (soit '+(volume/1000).toFixed(2)+' L)';
+}
+
+/* ===================== QCM ===================== */
+var qcmData = [
+  {q:"Combien un cube possède-t-il de faces ?", opts:["4","6","8","12"], correct:1},
+  {q:"Combien un pavé droit possède-t-il d'arêtes ?", opts:["6","8","10","12"], correct:3},
+  {q:"1 m³ est égal à combien de dm³ ?", opts:["10","100","1 000","1 000 000"], correct:2},
+  {q:"1 L est égal à combien de dm³ ?", opts:["0,1 dm³","1 dm³","10 dm³","100 dm³"], correct:1},
+  {q:"Quelle est la formule du volume d'un prisme droit ?", opts:["Périmètre de la base × hauteur","Aire de la base × hauteur","Aire de la base ÷ hauteur","Aire de la base × 2"], correct:1},
+  {q:"Quelle est la formule du volume d'un cylindre ?", opts:["π × r × h","π × r² × h","2 × π × r × h","π × d² × h"], correct:1},
+  {q:"Le patron d'un cylindre est composé de :", opts:["1 rectangle et 1 disque","2 disques et 1 rectangle","2 rectangles et 1 disque","3 disques"], correct:1},
+  {q:"Le volume d'un cube d'arête 4 cm est :", opts:["16 cm³","12 cm³","64 cm³","48 cm³"], correct:2},
+  {q:"Le volume d'un pavé droit de dimensions 5 cm, 3 cm et 2 cm est :", opts:["10 cm³","30 cm³","15 cm³","60 cm³"], correct:1},
+  {q:"500 cm³ correspond à combien de mL ?", opts:["5 mL","50 mL","500 mL","5 000 mL"], correct:2},
+  {q:"Un prisme droit a une base triangulaire d'aire 20 cm² et une hauteur de 6 cm. Son volume est :", opts:["26 cm³","60 cm³","120 cm³","240 cm³"], correct:2},
+  {q:"Pour un cylindre de rayon 2 cm et de hauteur 5 cm, le volume (π≈3,14) est environ :", opts:["31,4 cm³","62,8 cm³","20 cm³","125,6 cm³"], correct:1},
+  {q:"Dans la formule du prisme droit, la hauteur correspond à :", opts:["La hauteur d'une face latérale seulement", "La distance entre les deux bases", "Le périmètre de la base", "La diagonale du solide"], correct:1},
+  {q:"Les faces latérales d'un prisme droit sont toujours :", opts:["Des triangles","Des cercles","Des rectangles","Des pentagones"], correct:2},
+  {q:"En perspective cavalière, les arêtes cachées sont représentées par :", opts:["Des traits pleins épais","Des pointillés","Des flèches","Rien, elles ne sont pas tracées"], correct:1},
+  {q:"2,5 dm³ correspond à combien de litres ?", opts:["0,25 L","2,5 L","25 L","250 L"], correct:1}
+];
+
+function buildQCM(){
+  var container = document.getElementById('qcmContainer');
+  var html = '';
+  qcmData.forEach(function(item, idx){
+    html += '<div class="qcm-q" id="qcmq'+idx+'">';
+    html += '<h4>Question '+(idx+1)+'. '+item.q+'</h4>';
+    html += '<div class="qcm-opts">';
+    item.opts.forEach(function(opt, oi){
+      html += '<label><input type="radio" name="qcm'+idx+'" value="'+oi+'"> '+opt+'</label>';
+    });
+    html += '</div>';
+    html += '<div class="qcm-feedback" id="qcmfb'+idx+'"></div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+function checkQCM(){
+  var score = 0;
+  var total = qcmData.length;
+  qcmData.forEach(function(item, idx){
+    var selected = document.querySelector('input[name="qcm'+idx+'"]:checked');
+    var fb = document.getElementById('qcmfb'+idx);
+    if(!selected){
+      fb.textContent = 'Aucune réponse sélectionnée.';
+      fb.className = 'qcm-feedback wrong';
+      fb.style.display = 'block';
+      return;
+    }
+    var val = parseInt(selected.value);
+    if(val === item.correct){
+      score++;
+      fb.textContent = 'Correct !';
+      fb.className = 'qcm-feedback correct';
+    } else {
+      fb.textContent = 'Incorrect. Bonne réponse : '+item.opts[item.correct];
+      fb.className = 'qcm-feedback wrong';
+    }
+    fb.style.display = 'block';
+  });
+  var scoreBox = document.getElementById('qcmScore');
+  var mention = '';
+  var pct = score/total;
+  if(pct === 1) mention = 'Excellent, sans faute !';
+  else if(pct >= 0.75) mention = 'Très bien !';
+  else if(pct >= 0.5) mention = 'Bien, continue à t\'entraîner.';
+  else mention = 'Revois le cours et réessaie.';
+  scoreBox.textContent = 'Score : '+score+' / '+total+' — '+mention;
+  scoreBox.style.display = 'block';
+  scoreBox.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+/* ===================== INIT ===================== */
+showTab(0);
+</script>
+</body>
+</html>

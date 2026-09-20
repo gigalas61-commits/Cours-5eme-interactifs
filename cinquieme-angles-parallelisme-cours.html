@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Angles et parallélisme — 5ème</title>
+<meta name="description" content="Cours interactif de 5ème sur les angles et le parallélisme, avec exercices et QCM auto-corrigés.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2ed;
+    --surface: #ffffff;
+    --surface2: #ebe6de;
+    --text: #2c2418;
+    --heading: #8b4513;
+    --muted: #6b5a48;
+    --border: #d4c8b8;
+    --accent: #a0522d;
+    --accent-light: #faf5ef;
+    --good: #2e7d32;
+    --bad: #c0392b;
+    --shadow: 0 2px 10px rgba(60, 40, 20, 0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #161210;
+      --surface: #221c18;
+      --surface2: #302820;
+      --text: #ddd0c0;
+      --heading: #e0a868;
+      --muted: #9a8878;
+      --border: #403428;
+      --accent: #d08840;
+      --accent-light: #1e1610;
+      --good: #5fbf6a;
+      --bad: #e57a68;
+      --shadow: 0 2px 14px rgba(0,0,0,0.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #161210;
+    --surface: #221c18;
+    --surface2: #302820;
+    --text: #ddd0c0;
+    --heading: #e0a868;
+    --muted: #9a8878;
+    --border: #403428;
+    --accent: #d08840;
+    --accent-light: #1e1610;
+    --good: #5fbf6a;
+    --bad: #e57a68;
+    --shadow: 0 2px 14px rgba(0,0,0,0.4);
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito Sans', sans-serif;
+    transition: background .2s ease, color .2s ease;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--heading);
+    font-weight: 700;
+    margin: 0 0 .4em 0;
+  }
+  h1 { font-size: 2.1rem; }
+  h2 { font-size: 1.55rem; border-bottom: 2px solid var(--border); padding-bottom: .3em; }
+  h3 { font-size: 1.25rem; margin-top: 1.4em; }
+
+  a { color: var(--accent); }
+
+  header {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex; align-items: center; gap: 14px;
+    box-shadow: var(--shadow);
+  }
+  .badge {
+    background: var(--accent);
+    color: #fff8f0;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 4px 14px;
+    border-radius: 999px;
+    letter-spacing: .03em;
+    flex-shrink: 0;
+  }
+  header h1 { flex: 1; margin: 0; font-size: 1.4rem; }
+  #themeBtn {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  #themeBtn:hover { border-color: var(--accent); }
+
+  main {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+  }
+
+  nav.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 22px;
+    position: sticky;
+    top: 62px;
+    background: var(--bg);
+    z-index: 10;
+    padding: 8px 0;
+  }
+  nav.tabs button {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 700;
+    font-size: .85rem;
+    background: var(--surface2);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    cursor: pointer;
+    transition: all .15s ease;
+    white-space: nowrap;
+  }
+  nav.tabs button:hover { color: var(--text); border-color: var(--accent); }
+  nav.tabs button.active {
+    background: var(--accent);
+    color: #fff8f0;
+    border-color: var(--accent);
+  }
+
+  section.tabpanel { display: none; }
+  section.tabpanel.active { display: block; animation: fadeIn .25s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px);} to { opacity: 1; transform: none; } }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+  }
+  .card.accent { border-left: 4px solid var(--accent); background: var(--accent-light); }
+
+  .def-box {
+    background: var(--accent-light);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 12px 0;
+  }
+  .def-box strong { color: var(--heading); }
+
+  .prop-box {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    border: 1px dashed var(--accent);
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    max-width: 560px;
+    margin: 14px auto;
+    background: var(--surface2);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    touch-action: none;
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin: 10px 0;
+  }
+  .controls label { font-size: .85rem; color: var(--muted); font-weight: 600; }
+  input[type=range] { accent-color: var(--accent); width: 180px; }
+  button.btn {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 700;
+    background: var(--accent);
+    color: #fff8f0;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: .85rem;
+  }
+  button.btn:hover { opacity: .88; }
+  button.btn.secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .readout {
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    color: var(--heading);
+    font-weight: 600;
+    margin-top: 6px;
+  }
+  .readout span { color: var(--accent); font-weight: 700; }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: .92rem; }
+  th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; }
+  th { background: var(--surface2); color: var(--heading); font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; }
+
+  .exo {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+    background: var(--surface);
+  }
+  .exo .tag {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    padding: 3px 9px;
+    border-radius: 999px;
+    margin-bottom: 8px;
+  }
+  .tag.appliquer { background: #d9edd6; color: #2e7d32; }
+  .tag.comprendre { background: #fde8c8; color: #a0620a; }
+  .tag.approfondir { background: #f3d3d3; color: #a03030; }
+  :root[data-theme="dark"] .tag.appliquer, @media (prefers-color-scheme: dark) { }
+  .dark-safe { }
+
+  details.corr {
+    margin-top: 10px;
+    border-top: 1px dashed var(--border);
+    padding-top: 8px;
+  }
+  details.corr summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--accent);
+    font-size: .88rem;
+    outline: none;
+  }
+  details.corr[open] summary { margin-bottom: 8px; }
+  .corr-body { background: var(--surface2); border-radius: 8px; padding: 10px 14px; font-size: .92rem; }
+
+  .qcm-q {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+    background: var(--surface);
+  }
+  .qcm-q p.stem { font-weight: 700; margin: 0 0 10px 0; }
+  .qcm-opts { display: flex; flex-direction: column; gap: 8px; }
+  .qcm-opt {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: .92rem;
+  }
+  .qcm-opt:hover { border-color: var(--accent); }
+  .qcm-opt.correct { border-color: var(--good); background: rgba(46,125,50,.12); }
+  .qcm-opt.wrong { border-color: var(--bad); background: rgba(192,57,43,.12); }
+  .qcm-opt input { accent-color: var(--accent); }
+  .qcm-opt.locked { cursor: default; }
+
+  #qcmScore {
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    color: var(--heading);
+    margin: 16px 0;
+    font-weight: 700;
+  }
+
+  .footnote { color: var(--muted); font-size: .82rem; font-style: italic; }
+
+  @media (max-width: 600px) {
+    header { padding: 10px 12px; flex-wrap: wrap; }
+    header h1 { font-size: 1.1rem; order: 3; width: 100%; }
+    nav.tabs { top: 96px; }
+    main { padding: 14px 12px 50px; }
+    .card { padding: 14px; }
+    input[type=range] { width: 130px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="badge">5ème</span>
+  <h1>Angles et parallélisme</h1>
+  <button id="themeBtn" onclick="toggleTheme()" aria-label="Changer de thème">🌓</button>
+</header>
+
+<main>
+  <nav class="tabs" id="tabNav">
+    <button onclick="showTab(0)" class="active">1. Vocabulaire</button>
+    <button onclick="showTab(1)">2. Angles et droites</button>
+    <button onclick="showTab(2)">3. Parallèles et sécante</button>
+    <button onclick="showTab(3)">4. Reconnaître</button>
+    <button onclick="showTab(4)">5. Somme des angles</button>
+    <button onclick="showTab(5)">6. Exercices</button>
+    <button onclick="showTab(6)">7. QCM</button>
+  </nav>
+
+  <!-- ============ TAB 0 : VOCABULAIRE ============ -->
+  <section class="tabpanel active" id="panel0">
+    <div class="card">
+      <h2>Vocabulaire des angles</h2>
+      <p>Avant d'étudier les droites parallèles, il faut connaître le vocabulaire qui décrit la position de deux angles l'un par rapport à l'autre.</p>
+
+      <div class="def-box">
+        <strong>Angles complémentaires</strong> : deux angles sont complémentaires lorsque la somme de leurs mesures est égale à <strong>90°</strong>.
+        <br>Exemple : 35° et 55° sont complémentaires, car 35° + 55° = 90°.
+      </div>
+
+      <div class="def-box">
+        <strong>Angles supplémentaires</strong> : deux angles sont supplémentaires lorsque la somme de leurs mesures est égale à <strong>180°</strong>.
+        <br>Exemple : 110° et 70° sont supplémentaires, car 110° + 70° = 180°.
+      </div>
+
+      <div class="def-box">
+        <strong>Angles adjacents</strong> : deux angles sont adjacents lorsqu'ils ont le même sommet, un côté commun, et sont situés de part et d'autre de ce côté commun (ils ne se chevauchent pas).
+      </div>
+
+      <div class="def-box">
+        <strong>Angles opposés par le sommet</strong> : lorsque deux droites se coupent en un point, elles forment deux paires d'angles opposés par le sommet. Ces angles ont le même sommet, et leurs côtés sont dans le prolongement l'un de l'autre. <strong>Deux angles opposés par le sommet ont toujours la même mesure.</strong>
+      </div>
+
+      <h3>Expérimente : deux droites sécantes</h3>
+      <p>Fais glisser le point rouge pour faire pivoter la droite (d₂). Observe les quatre angles formés et repère les paires particulières.</p>
+      <canvas id="canvasVocab" width="560" height="420"></canvas>
+      <div class="readout" id="vocabReadout"></div>
+      <div class="controls">
+        <button class="btn secondary" onclick="resetVocab()">Réinitialiser</button>
+      </div>
+      <p class="footnote">Les angles opposés par le sommet sont affichés dans la même couleur.</p>
+    </div>
+  </section>
+
+  <!-- ============ TAB 1 : ANGLES ET DROITES ============ -->
+  <section class="tabpanel" id="panel1">
+    <div class="card">
+      <h2>Angles formés par deux droites sécantes</h2>
+      <p>Quand deux droites (d₁) et (d₂) se coupent en un point O, elles délimitent quatre angles. On peut les regrouper en deux paires d'angles <strong>opposés par le sommet</strong> et deux paires d'angles <strong>adjacents et supplémentaires</strong>.</p>
+
+      <div class="prop-box">
+        <strong>Propriété.</strong> Si deux angles sont opposés par le sommet, alors ils ont la même mesure.
+      </div>
+
+      <div class="prop-box">
+        <strong>Propriété.</strong> Deux angles adjacents formés par deux droites sécantes (côte à côte, séparés par une des deux droites) sont supplémentaires : leur somme fait 180° (angles qui forment un angle plat).
+      </div>
+
+      <h3>Expérimente : fais tourner (d₂)</h3>
+      <p>Utilise le curseur pour faire tourner la droite (d₂) autour du point O et observe comment les quatre angles évoluent tout en respectant les propriétés ci-dessus.</p>
+      <canvas id="canvasDroites" width="560" height="420"></canvas>
+      <div class="controls">
+        <label for="rotSlider">Angle de rotation</label>
+        <input type="range" id="rotSlider" min="10" max="170" value="55">
+      </div>
+      <div class="readout" id="droitesReadout"></div>
+
+      <h3>À retenir</h3>
+      <table>
+        <tr><th>Relation</th><th>Conséquence</th></tr>
+        <tr><td>Opposés par le sommet</td><td>Angles égaux</td></tr>
+        <tr><td>Adjacents (sur une droite)</td><td>Somme = 180° (supplémentaires)</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ TAB 2 : PARALLELES ET SECANTE ============ -->
+  <section class="tabpanel" id="panel2">
+    <div class="card">
+      <h2>Droites parallèles coupées par une sécante</h2>
+      <p>Lorsqu'une droite (d) — appelée <strong>sécante</strong> — coupe deux droites parallèles (d₁) et (d₂), elle forme huit angles que l'on regroupe en trois familles remarquables :</p>
+
+      <div class="def-box"><strong>Angles correspondants</strong> : même position par rapport au point d'intersection et à la sécante (par exemple, tous deux « en haut à droite »). Si les droites sont parallèles, ils sont <strong>égaux</strong>.</div>
+      <div class="def-box"><strong>Angles alternes-internes</strong> : situés entre les deux parallèles (internes), de part et d'autre de la sécante (alternes). Si les droites sont parallèles, ils sont <strong>égaux</strong>.</div>
+      <div class="def-box"><strong>Angles alternes-externes</strong> : situés à l'extérieur des deux parallèles, de part et d'autre de la sécante. Si les droites sont parallèles, ils sont <strong>égaux</strong>.</div>
+
+      <h3>Expérimente</h3>
+      <p>Déplace la sécante avec le curseur d'inclinaison. Les angles alternes-internes sont en <span style="color:#2e7d32;font-weight:700;">vert</span>, les correspondants sont reliés par un repère de couleur identique.</p>
+      <canvas id="canvasSecante" width="560" height="420"></canvas>
+      <div class="controls">
+        <label for="secAngle">Inclinaison de la sécante</label>
+        <input type="range" id="secAngle" min="20" max="160" value="60">
+        <label for="secPos">Position</label>
+        <input type="range" id="secPos" min="-60" max="60" value="0">
+      </div>
+      <div class="readout" id="secanteReadout"></div>
+      <p class="footnote">Quels que soient les réglages, les droites (d₁) et (d₂) restent parallèles : les angles correspondants, alternes-internes et alternes-externes gardent respectivement la même mesure.</p>
+    </div>
+  </section>
+
+  <!-- ============ TAB 3 : RECONNAITRE ============ -->
+  <section class="tabpanel" id="panel3">
+    <div class="card">
+      <h2>Reconnaître des droites parallèles</h2>
+      <p>La réciproque des propriétés précédentes permet de <strong>démontrer</strong> que deux droites sont parallèles, sans les prolonger ni utiliser une équerre.</p>
+
+      <div class="prop-box">
+        <strong>Réciproque.</strong> Si deux droites coupées par une sécante forment des angles alternes-internes de même mesure, <strong>alors ces deux droites sont parallèles.</strong>
+      </div>
+      <div class="prop-box">
+        <strong>Réciproque.</strong> Si deux droites coupées par une sécante forment des angles correspondants de même mesure, <strong>alors ces deux droites sont parallèles.</strong>
+      </div>
+
+      <h3>Expérimente : parallèle ou pas ?</h3>
+      <p>Règle l'angle de la droite (d₂) pour tenter de rendre (d₁) et (d₂) parallèles. Le message te confirme si les angles alternes-internes correspondent.</p>
+      <canvas id="canvasReco" width="560" height="420"></canvas>
+      <div class="controls">
+        <label for="recoAngle1">Angle en A</label>
+        <input type="range" id="recoAngle1" min="20" max="160" value="65">
+        <label for="recoAngle2">Angle en B</label>
+        <input type="range" id="recoAngle2" min="20" max="160" value="100">
+      </div>
+      <div class="readout" id="recoReadout"></div>
+
+      <h3>Exercice flash</h3>
+      <p>Deux droites (AB) et (CD) sont coupées par une sécante (EF). L'angle alterne-interne en A mesure 72° et celui en D mesure 72°. Que peut-on en conclure ?</p>
+      <details class="corr">
+        <summary>Voir la réponse</summary>
+        <div class="corr-body">Les angles alternes-internes ont la même mesure (72° = 72°), donc, d'après la réciproque, les droites (AB) et (CD) sont parallèles.</div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============ TAB 4 : SOMME DES ANGLES ============ -->
+  <section class="tabpanel" id="panel4">
+    <div class="card">
+      <h2>Somme des angles d'un triangle</h2>
+      <div class="prop-box">
+        <strong>Propriété.</strong> Dans un triangle, la somme des mesures des trois angles est toujours égale à <strong>180°</strong>.
+      </div>
+
+      <h3>Démonstration à l'aide des parallèles</h3>
+      <p>On trace, par le sommet d'un triangle, la droite parallèle au côté opposé. Les angles alternes-internes ainsi créés sont égaux aux deux autres angles du triangle. Les trois angles se retrouvent donc alignés le long de cette parallèle, formant un angle plat de 180°.</p>
+
+      <h3>Expérimente : déforme le triangle</h3>
+      <p>Fais glisser les sommets du triangle. La somme des trois angles reste constamment égale à 180°.</p>
+      <canvas id="canvasTriangle" width="560" height="420"></canvas>
+      <div class="readout" id="triangleReadout"></div>
+      <div class="controls">
+        <button class="btn secondary" onclick="resetTriangle()">Réinitialiser</button>
+      </div>
+
+      <h3>Calculer un angle manquant</h3>
+      <p>Dans un triangle, deux angles mesurent 48° et 67°. Calcule le troisième angle.</p>
+      <details class="corr">
+        <summary>Voir la correction</summary>
+        <div class="corr-body">
+          Somme des angles = 180°.<br>
+          Troisième angle = 180° − 48° − 67° = 180° − 115° = <strong>65°</strong>.
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============ TAB 5 : EXERCICES ============ -->
+  <section class="tabpanel" id="panel5">
+    <div class="card">
+      <h2>Exercices</h2>
+      <p>8 exercices progressifs. Cherche d'abord seul(e), puis clique sur « Voir la correction ».</p>
+
+      <div class="exo">
+        <span class="tag appliquer">Appliquer</span>
+        <p><strong>Exercice 1.</strong> Deux angles complémentaires ont pour mesures x et 34°. Calcule x.</p>
+        <details class="corr"><summary>Voir la correction</summary>
+          <div class="corr-body">x + 34° = 90°, donc x = 90° − 34° = <strong>56°</strong>.</div>
+        </details>
+      </div>
+
+      <div class="exo">
+        <span class="tag appliquer">Appliquer</span>
+        <p><strong>Exercice 2.</strong> Deux angles supplémentaires ont pour mesures 113° et y. Calcule y.</p>
+        <details class="corr"><summary>Voir la correction</summary>
+          <div class="corr-body">113° + y = 180°, donc y = 180° − 113° = <strong>67°</strong>.</div>
+        </details>
+      </div>
+
+      <div class="exo">
+        <span class="tag appliquer">Appliquer</span>
+        <p><strong>Exercice 3.</strong> Deux droites sécantes forment un angle de 48°. Donne la mesure de l'angle opposé par le sommet, puis celle d'un angle adjacent.</p>
+        <details class="corr"><summary>Voir la correction</summary>
+          <div class="corr-body">
+            L'angle opposé par le sommet mesure aussi <strong>48°</strong> (angles opposés par le sommet égaux).<br>
+            L'angle adjacent est supplémentaire : 180° − 48° = <strong>132°</strong>.
+          </div>
+        </details>
+      </div>
+
+      <div class="exo">
+        <span class="tag comprendre">Comprendre</span>
+        <p><strong>Exercice 4.</strong> Les droites (AB) et (CD) sont parallèles et coupées par la sécante (EF). L'angle correspondant à l'angle en A mesure 105°. Quelle est la mesure de l'angle correspondant en C ?</p>
+        <details class="corr"><summary>Voir la correction</summary>
+          <div class="corr-body">Comme (AB) ∥ (CD), les angles correspondants sont égaux : l'angle en C mesure aussi <strong>105°</strong>.</div>
+        </details>
+      </div>
+
+      <div class="exo">
+        <span class="tag comprendre">Comprendre</span>
+        <p><strong>Exercice 5.</strong> Un triangle ABC a un angle en A de 90° et un angle en B de 37°. Calcule l'angle en C. Quel type de triangle est ABC ?</p>
+        <details class="corr"><summary>Voir la correction</summary>
+          <div class="corr-body">
+            Angle en C = 180° − 90° − 37° = <strong>53°</strong>.<br>
+            Le triangle possède un angle droit (90°) : c'est un triangle <strong>rectangle</strong> en A.
+          </div>
+        </details>
+      </div>
+
+      <div class="exo">
+        <span class="tag comprendre">Comprendre</span>
+        <p><strong>Exercice 6.</strong> Deux droites (d₁) et (d₂) sont coupées par une sécante (d). L'angle alterne-interne du côté de (d₁) mesure 63°, celui du côté de (d₂) mesure 63°. Que peut-on conclure sur (d₁) et (d₂) ? Justifie.</p>
+        <details class="corr"><summary>Voir la correction</summary>
+          <div class="corr-body">Les angles alternes-internes sont égaux (63° = 63°). D'après la réciproque de la propriété des angles alternes-internes, on en conclut que <strong>(d₁) et (d₂) sont parallèles</strong>.</div>
+        </details>
+      </div>
+
+      <div class="exo">
+        <span class="tag approfondir">Approfondir</span>
+        <p><strong>Exercice 7.</strong> Dans un triangle isocèle en A, l'angle au sommet A mesure 40°. Calcule les deux autres angles (on rappelle que dans un triangle isocèle, les angles à la base sont égaux).</p>
+        <details class="corr"><summary>Voir la correction</summary>
+          <div class="corr-body">
+            Soit x la mesure de chacun des deux angles égaux à la base.<br>
+            40° + x + x = 180° → 2x = 140° → x = <strong>70°</strong>.<br>
+            Les deux angles à la base mesurent chacun 70°.
+          </div>
+        </details>
+      </div>
+
+      <div class="exo">
+        <span class="tag approfondir">Approfondir</span>
+        <p><strong>Exercice 8.</strong> Trois droites (d₁), (d₂) et (d₃) sont telles que (d₁) ∥ (d₂) et (d₂) ∥ (d₃). Que peut-on dire de (d₁) et (d₃) ? Une sécante coupe (d₁) en formant un angle de 78° avec elle : quel est l'angle correspondant formé avec (d₃) ?</p>
+        <details class="corr"><summary>Voir la correction</summary>
+          <div class="corr-body">
+            Si deux droites sont parallèles à une même troisième droite, alors elles sont parallèles entre elles : <strong>(d₁) ∥ (d₃)</strong>.<br>
+            Comme (d₁) ∥ (d₃), les angles correspondants formés par la sécante sont égaux : l'angle avec (d₃) mesure aussi <strong>78°</strong>.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TAB 6 : QCM ============ -->
+  <section class="tabpanel" id="panel6">
+    <div class="card">
+      <h2>QCM — 16 questions</h2>
+      <p>Clique sur la réponse de ton choix. Le score final s'affiche en bas.</p>
+      <div id="qcmContainer"></div>
+      <div id="qcmScore"></div>
+      <div class="controls">
+        <button class="btn" onclick="resetQCM()">Recommencer le QCM</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* ============================================================
+   THEME
+   ============================================================ */
+function toggleTheme() {
+  const root = document.documentElement;
+  const current = root.getAttribute('data-theme');
+  if (current === 'dark') {
+    root.setAttribute('data-theme', 'light');
+  } else if (current === 'light') {
+    root.removeAttribute('data-theme');
+  } else {
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    root.setAttribute('data-theme', prefersDark ? 'light' : 'dark');
+  }
+  try { localStorage.setItem('angles-theme', document.documentElement.getAttribute('data-theme') || 'auto'); } catch(e) {}
+  redrawAll();
+}
+(function initTheme(){
+  try {
+    const saved = localStorage.getItem('angles-theme');
+    if (saved && saved !== 'auto') document.documentElement.setAttribute('data-theme', saved);
+  } catch(e) {}
+})();
+if (window.matchMedia) {
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', redrawAll);
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+const sectionInitialized = [false,false,false,false,false,false,false];
+function showTab(i) {
+  document.querySelectorAll('.tabpanel').forEach((p, idx) => p.classList.toggle('active', idx === i));
+  document.querySelectorAll('#tabNav button').forEach((b, idx) => b.classList.toggle('active', idx === i));
+  initSection(i);
+}
+function initSection(i) {
+  if (sectionInitialized[i]) { redrawSection(i); return; }
+  sectionInitialized[i] = true;
+  switch(i) {
+    case 0: setupVocab(); break;
+    case 1: setupDroites(); break;
+    case 2: setupSecante(); break;
+    case 3: setupReco(); break;
+    case 4: setupTriangle(); break;
+    case 5: /* static content, no canvas */ break;
+    case 6: setupQCM(); break;
+  }
+}
+function redrawSection(i) {
+  switch(i) {
+    case 0: drawVocab(); break;
+    case 1: drawDroites(); break;
+    case 2: drawSecante(); break;
+    case 3: drawReco(); break;
+    case 4: drawTriangle(); break;
+  }
+}
+function redrawAll() {
+  sectionInitialized.forEach((done, i) => { if (done) redrawSection(i); });
+}
+
+/* helper: CSS var reader */
+function cssVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+function deg(rad){ return rad * 180 / Math.PI; }
+function rad(d){ return d * Math.PI / 180; }
+
+/* ============================================================
+   TAB 0 : VOCABULAIRE — deux droites sécantes, angles en temps réel
+   ============================================================ */
+let vocabCtx, vocabCanvas, vocabAngle = 35, vocabDragging = false;
+function setupVocab() {
+  vocabCanvas = document.getElementById('canvasVocab');
+  vocabCtx = vocabCanvas.getContext('2d');
+  vocabCanvas.addEventListener('pointerdown', vocabPointerDown);
+  vocabCanvas.addEventListener('pointermove', vocabPointerMove);
+  window.addEventListener('pointerup', () => vocabDragging = false);
+  drawVocab();
+}
+function resetVocab(){ vocabAngle = 35; drawVocab(); }
+function vocabCenter(){ return {x: vocabCanvas.width/2, y: vocabCanvas.height/2, r: 150}; }
+function vocabHandlePos(){
+  const c = vocabCenter();
+  return { x: c.x + c.r*Math.cos(rad(vocabAngle)), y: c.y - c.r*Math.sin(rad(vocabAngle)) };
+}
+function vocabPointerDown(e){
+  const rect = vocabCanvas.getBoundingClientRect();
+  const scaleX = vocabCanvas.width/rect.width, scaleY = vocabCanvas.height/rect.height;
+  const mx = (e.clientX-rect.left)*scaleX, my=(e.clientY-rect.top)*scaleY;
+  const h = vocabHandlePos();
+  if (Math.hypot(mx-h.x, my-h.y) < 30) vocabDragging = true;
+}
+function vocabPointerMove(e){
+  if (!vocabDragging) return;
+  const rect = vocabCanvas.getBoundingClientRect();
+  const scaleX = vocabCanvas.width/rect.width, scaleY = vocabCanvas.height/rect.height;
+  const mx = (e.clientX-rect.left)*scaleX, my=(e.clientY-rect.top)*scaleY;
+  const c = vocabCenter();
+  let a = deg(Math.atan2(c.y-my, mx-c.x));
+  if (a < 3) a = 3; if (a > 177) a = 177;
+  vocabAngle = a;
+  drawVocab();
+}
+function drawVocab(){
+  if (!vocabCtx) return;
+  const ctx = vocabCtx, cv = vocabCanvas;
+  const bg = cssVar('--surface2'), border = cssVar('--border'), text = cssVar('--text'),
+        accent = cssVar('--accent'), heading = cssVar('--heading'), muted = cssVar('--muted');
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.fillStyle = bg; ctx.fillRect(0,0,cv.width,cv.height);
+  const c = vocabCenter();
+
+  // droite 1 (horizontale)
+  ctx.strokeStyle = text; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(c.x-c.r-30, c.y); ctx.lineTo(c.x+c.r+30, c.y); ctx.stroke();
+  // droite 2 (variable)
+  const a = rad(vocabAngle);
+  const dx = Math.cos(a)*(c.r+30), dy = Math.sin(a)*(c.r+30);
+  ctx.beginPath(); ctx.moveTo(c.x-dx, c.y+dy); ctx.lineTo(c.x+dx, c.y-dy); ctx.stroke();
+
+  // angle arcs: 4 quadrants. top-right = vocabAngle, top-left = 180-vocabAngle,
+  // bottom-left = vocabAngle (opposé du top-right), bottom-right = 180-vocabAngle (opposé du top-left)
+  const arcR = 46;
+  drawArc(ctx, c.x, c.y, arcR, -vocabAngle, 0, accent, true);      // top-right
+  drawArc(ctx, c.x, c.y, arcR, -180, -vocabAngle, heading, false); // top-left
+  drawArc(ctx, c.x, c.y, arcR, 180-vocabAngle, 180, accent, true); // bottom-left (opposé top-right)
+  drawArc(ctx, c.x, c.y, arcR, 0, 180-vocabAngle, heading, false); // bottom-right (opposé top-left)
+
+  // labels
+  ctx.font = '600 15px "Nunito Sans", sans-serif';
+  ctx.fillStyle = accent;
+  labelAt(ctx, c.x, c.y, arcR+22, -vocabAngle/2, vocabAngle.toFixed(0)+'°');
+  labelAt(ctx, c.x, c.y, arcR+22, 180-vocabAngle/2, vocabAngle.toFixed(0)+'°');
+  ctx.fillStyle = heading;
+  labelAt(ctx, c.x, c.y, arcR+22, -(180+vocabAngle)/2, (180-vocabAngle).toFixed(0)+'°');
+  labelAt(ctx, c.x, c.y, arcR+22, -vocabAngle-((180-vocabAngle)/2), (180-vocabAngle).toFixed(0)+'°');
+
+  // point O
+  ctx.fillStyle = text;
+  ctx.beginPath(); ctx.arc(c.x, c.y, 4, 0, 7); ctx.fill();
+  ctx.font = '600 13px "Nunito Sans", sans-serif';
+  ctx.fillText('O', c.x+8, c.y-8);
+
+  // handle
+  const h = vocabHandlePos();
+  ctx.fillStyle = '#c0392b';
+  ctx.beginPath(); ctx.arc(h.x, h.y, 8, 0, 7); ctx.fill();
+  ctx.strokeStyle = bg; ctx.lineWidth = 2; ctx.stroke();
+
+  document.getElementById('vocabReadout').innerHTML =
+    'Angles opposés par le sommet : <span>'+vocabAngle.toFixed(0)+'°</span> et <span>'+vocabAngle.toFixed(0)+'°</span> — puis <span>'+(180-vocabAngle).toFixed(0)+'°</span> et <span>'+(180-vocabAngle).toFixed(0)+'°</span>.<br>Angles adjacents supplémentaires : '+vocabAngle.toFixed(0)+'° + '+(180-vocabAngle).toFixed(0)+'° = 180°';
+}
+function drawArc(ctx, cx, cy, r, aStartDeg, aEndDeg, color, fillFlag){
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.arc(cx, cy, r, rad(aStartDeg), rad(aEndDeg));
+  ctx.closePath();
+  ctx.fillStyle = color + '33';
+  ctx.fill();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+}
+function labelAt(ctx, cx, cy, r, angleDeg, text){
+  const a = rad(angleDeg);
+  const x = cx + r*Math.cos(a), y = cy - r*Math.sin(a);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(text, x, y);
+}
+
+/* ============================================================
+   TAB 1 : ANGLES ET DROITES — rotation slider
+   ============================================================ */
+let droitesCtx, droitesCanvas;
+function setupDroites(){
+  droitesCanvas = document.getElementById('canvasDroites');
+  droitesCtx = droitesCanvas.getContext('2d');
+  document.getElementById('rotSlider').addEventListener('input', drawDroites);
+  drawDroites();
+}
+function drawDroites(){
+  if (!droitesCtx) return;
+  const ctx = droitesCtx, cv = droitesCanvas;
+  const bg = cssVar('--surface2'), text = cssVar('--text'), accent = cssVar('--accent'), heading = cssVar('--heading');
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.fillStyle = bg; ctx.fillRect(0,0,cv.width,cv.height);
+
+  const angle = parseFloat(document.getElementById('rotSlider').value);
+  const c = {x: cv.width/2, y: cv.height/2, r:150};
+
+  ctx.strokeStyle = text; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(c.x-c.r-30, c.y); ctx.lineTo(c.x+c.r+30, c.y); ctx.stroke();
+  const a = rad(angle);
+  const dx = Math.cos(a)*(c.r+30), dy = Math.sin(a)*(c.r+30);
+  ctx.beginPath(); ctx.moveTo(c.x-dx, c.y+dy); ctx.lineTo(c.x+dx, c.y-dy); ctx.stroke();
+
+  const arcR = 46;
+  drawArc(ctx, c.x, c.y, arcR, -angle, 0, accent, true);
+  drawArc(ctx, c.x, c.y, arcR, -180, -angle, heading, false);
+  drawArc(ctx, c.x, c.y, arcR, 180-angle, 180, accent, true);
+  drawArc(ctx, c.x, c.y, arcR, 0, 180-angle, heading, false);
+
+  ctx.font = '600 15px "Nunito Sans", sans-serif';
+  ctx.fillStyle = accent;
+  labelAt(ctx, c.x, c.y, arcR+22, -angle/2, angle.toFixed(0)+'°');
+  labelAt(ctx, c.x, c.y, arcR+22, 180-angle/2, angle.toFixed(0)+'°');
+  ctx.fillStyle = heading;
+  labelAt(ctx, c.x, c.y, arcR+22, -(180+angle)/2, (180-angle).toFixed(0)+'°');
+  labelAt(ctx, c.x, c.y, arcR+22, -angle-((180-angle)/2), (180-angle).toFixed(0)+'°');
+
+  ctx.fillStyle = text;
+  ctx.beginPath(); ctx.arc(c.x, c.y, 4, 0, 7); ctx.fill();
+  ctx.font = '600 14px "Nunito Sans", sans-serif';
+  ctx.textAlign='left';
+  ctx.fillText('d₁', c.x+c.r+8, c.y+16);
+  ctx.fillText('d₂', c.x+dx+6, c.y-dy-6);
+  ctx.fillText('O', c.x+8, c.y-8);
+
+  document.getElementById('droitesReadout').innerHTML =
+    'Paire opposée par le sommet : <span>'+angle.toFixed(0)+'°</span> = <span>'+angle.toFixed(0)+'°</span> &nbsp;|&nbsp; Paire adjacente : '+angle.toFixed(0)+'° + '+(180-angle).toFixed(0)+'° = 180°';
+}
+
+/* ============================================================
+   TAB 2 : PARALLELES ET SECANTE
+   ============================================================ */
+let secCtx, secCanvas;
+function setupSecante(){
+  secCanvas = document.getElementById('canvasSecante');
+  secCtx = secCanvas.getContext('2d');
+  document.getElementById('secAngle').addEventListener('input', drawSecante);
+  document.getElementById('secPos').addEventListener('input', drawSecante);
+  drawSecante();
+}
+function drawSecante(){
+  if (!secCtx) return;
+  const ctx = secCtx, cv = secCanvas;
+  const bg = cssVar('--surface2'), text = cssVar('--text'), accent = cssVar('--accent'),
+        heading = cssVar('--heading'), good = cssVar('--good');
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.fillStyle = bg; ctx.fillRect(0,0,cv.width,cv.height);
+
+  const inclDeg = parseFloat(document.getElementById('secAngle').value);
+  const pos = parseFloat(document.getElementById('secPos').value);
+
+  const y1 = 130, y2 = 290;
+  const xL = 60, xR = cv.width-60;
+
+  // parallel lines
+  ctx.strokeStyle = text; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(xL,y1); ctx.lineTo(xR,y1); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(xL,y2); ctx.lineTo(xR,y2); ctx.stroke();
+
+  // secant line through midpoint offset by pos, with given inclination
+  const midX = cv.width/2 + pos;
+  const midY = (y1+y2)/2;
+  const a = rad(inclDeg);
+  const len = 260;
+  const sx1 = midX - Math.cos(a)*len, sy1 = midY - Math.sin(a)*len;
+  const sx2 = midX + Math.cos(a)*len, sy2 = midY + Math.sin(a)*len;
+  ctx.strokeStyle = accent; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(sx1,sy1); ctx.lineTo(sx2,sy2); ctx.stroke();
+
+  // intersection points with y1 and y2
+  const t1 = (y1-midY)/Math.sin(a); const P1 = {x: midX+Math.cos(a)*t1, y:y1};
+  const t2 = (y2-midY)/Math.sin(a); const P2 = {x: midX+Math.cos(a)*t2, y:y2};
+
+  [P1,P2].forEach(p=>{
+    ctx.fillStyle = text;
+    ctx.beginPath(); ctx.arc(p.x,p.y,4,0,7); ctx.fill();
+  });
+
+  // Angle at P1 top-right (between secant going down-right and line1 going right) = inclDeg
+  // Angle at P2 top-right (between secant going down-right and line2 going right) = inclDeg  (correspondant)
+  const arcR = 32;
+  // correspondant: P1 haut-droit & P2 haut-droit
+  drawArc(ctx, P1.x, P1.y, arcR, -inclDeg, 0, heading, true);
+  drawArc(ctx, P2.x, P2.y, arcR, -inclDeg, 0, heading, true);
+  // alterne-interne: P1 bas-droit & P2 haut-gauche
+  drawArc(ctx, P1.x, P1.y, arcR, 0, 180-inclDeg, good, true);
+  drawArc(ctx, P2.x, P2.y, arcR, -180, -inclDeg, good, true);
+  // alterne-externe: P1 haut-gauche & P2 bas-droit
+  drawArc(ctx, P1.x, P1.y, arcR, -180, -inclDeg, accent, true);
+  drawArc(ctx, P2.x, P2.y, arcR, 0, 180-inclDeg, accent, true);
+
+  ctx.font = '600 13px "Nunito Sans", sans-serif';
+  ctx.textAlign='left';
+  ctx.fillStyle = text;
+  ctx.fillText('d₁', xR+4, y1+4);
+  ctx.fillText('d₂', xR+4, y2+4);
+  ctx.fillText('A', P1.x+6, P1.y-10);
+  ctx.fillText('B', P2.x+6, P2.y-10);
+
+  document.getElementById('secanteReadout').innerHTML =
+    '<span style="color:'+heading+'">Correspondants</span> = '+inclDeg.toFixed(0)+'° &nbsp;|&nbsp; '+
+    '<span style="color:'+good+'">Alternes-internes</span> = '+(180-inclDeg).toFixed(0)+'° &nbsp;|&nbsp; '+
+    '<span style="color:'+accent+'">Alternes-externes</span> = '+(180-inclDeg).toFixed(0)+'°';
+}
+
+/* ============================================================
+   TAB 3 : RECONNAITRE — deux droites indépendantes, sécante fixe
+   ============================================================ */
+let recoCtx, recoCanvas;
+function setupReco(){
+  recoCanvas = document.getElementById('canvasReco');
+  recoCtx = recoCanvas.getContext('2d');
+  document.getElementById('recoAngle1').addEventListener('input', drawReco);
+  document.getElementById('recoAngle2').addEventListener('input', drawReco);
+  drawReco();
+}
+function drawReco(){
+  if (!recoCtx) return;
+  const ctx = recoCtx, cv = recoCanvas;
+  const bg = cssVar('--surface2'), text = cssVar('--text'), accent = cssVar('--accent'),
+        heading = cssVar('--heading'), good = cssVar('--good'), bad = cssVar('--bad');
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.fillStyle = bg; ctx.fillRect(0,0,cv.width,cv.height);
+
+  const angA = parseFloat(document.getElementById('recoAngle1').value); // angle at A between line1 and secant, measured top-right
+  const angB = parseFloat(document.getElementById('recoAngle2').value); // angle at B between line2 and secant, top-right
+
+  const y1 = 120, y2 = 300;
+  const xL = 50, xR = cv.width-50;
+  const Ax = 200, Bx = 260;
+
+  // secant vertical-ish line through A and B fixed points... we build secant from A to B
+  ctx.strokeStyle = accent; ctx.lineWidth = 2.5;
+  const secDX = Bx-Ax, secDY = y2-y1;
+  const secLen = Math.hypot(secDX,secDY);
+  const ux = secDX/secLen, uy = secDY/secLen;
+  ctx.beginPath();
+  ctx.moveTo(Ax-ux*80, y1-uy*80);
+  ctx.lineTo(Bx+ux*80, y2+uy*80);
+  ctx.stroke();
+
+  // line1 through A with angle angA relative to horizontal
+  const a1 = rad(angA);
+  ctx.strokeStyle = text; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(Ax-Math.cos(a1)*160, y1+Math.sin(a1)*160); ctx.lineTo(Ax+Math.cos(a1)*160, y1-Math.sin(a1)*160); ctx.stroke();
+
+  const a2 = rad(angB);
+  ctx.beginPath(); ctx.moveTo(Bx-Math.cos(a2)*160, y2+Math.sin(a2)*160); ctx.lineTo(Bx+Math.cos(a2)*160, y2-Math.sin(a2)*160); ctx.stroke();
+
+  ctx.fillStyle = text;
+  [ [Ax,y1,'A'], [Bx,y2,'B'] ].forEach(p=>{
+    ctx.beginPath(); ctx.arc(p[0],p[1],4,0,7); ctx.fill();
+    ctx.font='600 13px "Nunito Sans", sans-serif';
+    ctx.fillText(p[2], p[0]-16, p[1]-10);
+  });
+
+  // Alterne interne pair: at A bottom-right (between secant-down and line1-right) & at B top-left (between secant-up and line2-left)
+  const arcR = 30;
+  drawArc(ctx, Ax, y1, arcR, -angA, 0, good, true);
+  drawArc(ctx, Bx, y2, arcR, 180-angB, 180, good, true);
+
+  document.getElementById('recoReadout').innerHTML =
+    'Angle en A : <span>'+angA.toFixed(0)+'°</span> — Angle en B : <span>'+angB.toFixed(0)+'°</span><br>';
+
+  const status = document.createElement('span');
+  const diff = Math.abs(angA-angB);
+  const msg = diff < 1 ?
+    '<strong style="color:'+good+'">Angles alternes-internes égaux → (d₁) et (d₂) sont parallèles !</strong>' :
+    '<strong style="color:'+bad+'">Angles alternes-internes différents → (d₁) et (d₂) ne sont pas parallèles.</strong>';
+  document.getElementById('recoReadout').innerHTML += msg;
+}
+
+/* ============================================================
+   TAB 4 : SOMME DES ANGLES — triangle déformable
+   ============================================================ */
+let triCtx, triCanvas, triPts, triDragIdx = -1;
+function setupTriangle(){
+  triCanvas = document.getElementById('canvasTriangle');
+  triCtx = triCanvas.getContext('2d');
+  resetTriangle();
+  triCanvas.addEventListener('pointerdown', triPointerDown);
+  triCanvas.addEventListener('pointermove', triPointerMove);
+  window.addEventListener('pointerup', () => triDragIdx = -1);
+}
+function resetTriangle(){
+  triPts = [ {x:280,y:80}, {x:120,y:340}, {x:440,y:340} ];
+  drawTriangle();
+}
+function triLocalPos(e){
+  const rect = triCanvas.getBoundingClientRect();
+  const scaleX = triCanvas.width/rect.width, scaleY = triCanvas.height/rect.height;
+  return { x:(e.clientX-rect.left)*scaleX, y:(e.clientY-rect.top)*scaleY };
+}
+function triPointerDown(e){
+  const p = triLocalPos(e);
+  for (let i=0;i<3;i++){
+    if (Math.hypot(p.x-triPts[i].x, p.y-triPts[i].y) < 22) { triDragIdx = i; return; }
+  }
+}
+function triPointerMove(e){
+  if (triDragIdx < 0) return;
+  const p = triLocalPos(e);
+  p.x = Math.max(20, Math.min(triCanvas.width-20, p.x));
+  p.y = Math.max(20, Math.min(triCanvas.height-20, p.y));
+  triPts[triDragIdx] = p;
+  drawTriangle();
+}
+function angleAt(p, q, r){
+  // angle at vertex p formed by q-p-r, in degrees
+  const v1 = {x:q.x-p.x, y:q.y-p.y};
+  const v2 = {x:r.x-p.x, y:r.y-p.y};
+  const dot = v1.x*v2.x + v1.y*v2.y;
+  const mag1 = Math.hypot(v1.x,v1.y), mag2 = Math.hypot(v2.x,v2.y);
+  let cosv = dot/(mag1*mag2);
+  cosv = Math.max(-1, Math.min(1, cosv));
+  return deg(Math.acos(cosv));
+}
+function drawTriangle(){
+  if (!triCtx) return;
+  const ctx = triCtx, cv = triCanvas;
+  const bg = cssVar('--surface2'), text = cssVar('--text'), accent = cssVar('--accent'), heading = cssVar('--heading');
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.fillStyle = bg; ctx.fillRect(0,0,cv.width,cv.height);
+
+  const [A,B,C] = triPts;
+  ctx.strokeStyle = accent; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(A.x,A.y); ctx.lineTo(B.x,B.y); ctx.lineTo(C.x,C.y); ctx.closePath(); ctx.stroke();
+  ctx.fillStyle = accent+'22'; ctx.fill();
+
+  const angA = angleAt(A,B,C), angB = angleAt(B,A,C), angC = angleAt(C,A,B);
+
+  ctx.fillStyle = text;
+  [[A,'A'],[B,'B'],[C,'C']].forEach(([p,l])=>{
+    ctx.beginPath(); ctx.arc(p.x,p.y,7,0,7); ctx.fill();
+    ctx.font='700 14px "Nunito Sans", sans-serif';
+    ctx.fillText(l, p.x+10, p.y-10);
+  });
+
+  ctx.font='600 14px "Cormorant Garamond", serif';
+  ctx.fillStyle = heading;
+  const centroid = {x:(A.x+B.x+C.x)/3, y:(A.y+B.y+C.y)/3};
+  function labelNear(p){
+    const dx = centroid.x-p.x, dy = centroid.y-p.y;
+    const dist = Math.hypot(dx,dy);
+    return {x: p.x+dx/dist*28, y: p.y+dy/dist*28};
+  }
+  [[A,angA],[B,angB],[C,angC]].forEach(([p,ang])=>{
+    const lp = labelNear(p);
+    ctx.fillText(ang.toFixed(0)+'°', lp.x-12, lp.y+5);
+  });
+
+  const sum = angA+angB+angC;
+  document.getElementById('triangleReadout').innerHTML =
+    'A = <span>'+angA.toFixed(0)+'°</span> · B = <span>'+angB.toFixed(0)+'°</span> · C = <span>'+angC.toFixed(0)+'°</span> &nbsp;→&nbsp; Somme = <span>'+sum.toFixed(0)+'°</span>';
+}
+
+/* ============================================================
+   TAB 6 : QCM
+   ============================================================ */
+const qcmData = [
+  {q:"Deux angles complémentaires ont une somme de :", opts:["90°","180°","360°","45°"], correct:0},
+  {q:"Deux angles supplémentaires ont une somme de :", opts:["90°","180°","270°","100°"], correct:1},
+  {q:"Deux angles opposés par le sommet sont toujours :", opts:["Supplémentaires","Complémentaires","Égaux","Adjacents seulement"], correct:2},
+  {q:"Un angle mesure 63°. Son complémentaire mesure :", opts:["27°","37°","117°","153°"], correct:0},
+  {q:"Un angle mesure 105°. Son supplémentaire mesure :", opts:["75°","85°","95°","180°"], correct:0},
+  {q:"Deux droites sécantes forment 4 angles. Combien de paires d'angles opposés par le sommet obtient-on ?", opts:["1","2","3","4"], correct:1},
+  {q:"Deux droites parallèles coupées par une sécante : les angles alternes-internes sont...", opts:["Supplémentaires","Égaux","Complémentaires","Toujours droits"], correct:1},
+  {q:"Deux droites parallèles coupées par une sécante : les angles correspondants sont...", opts:["Égaux","Supplémentaires","Opposés","Différents"], correct:0},
+  {q:"Les angles alternes-externes sont situés :", opts:["Entre les deux parallèles","À l'extérieur des deux parallèles, côtés opposés de la sécante","Du même côté de la sécante","Toujours au sommet"], correct:1},
+  {q:"Si deux angles alternes-internes formés par deux droites et une sécante sont égaux, alors :", opts:["Les droites sont perpendiculaires","On ne peut rien dire","Les droites sont parallèles","Les droites sont sécantes obligatoirement"], correct:2},
+  {q:"La somme des angles d'un triangle est toujours égale à :", opts:["90°","180°","270°","360°"], correct:1},
+  {q:"Un triangle a des angles de 50° et 70°. Le troisième angle mesure :", opts:["60°","50°","70°","80°"], correct:0},
+  {q:"Un triangle rectangle a un angle de 90° et un angle de 35°. Le troisième angle mesure :", opts:["45°","55°","65°","35°"], correct:1},
+  {q:"Deux angles adjacents formés par deux droites sécantes (situés sur une même droite) sont :", opts:["Complémentaires","Égaux","Supplémentaires","Opposés par le sommet"], correct:2},
+  {q:"Dans un triangle isocèle avec un angle au sommet de 80°, les angles à la base mesurent chacun :", opts:["40°","50°","60°","100°"], correct:1},
+  {q:"Si (d₁) ∥ (d₂) et (d₂) ∥ (d₃), alors on peut affirmer que :", opts:["(d₁) et (d₃) sont perpendiculaires","(d₁) et (d₃) sont sécantes","(d₁) et (d₃) sont parallèles","On ne sait rien"], correct:2}
+];
+let qcmAnswered = [];
+function setupQCM(){
+  qcmAnswered = new Array(qcmData.length).fill(-1);
+  const container = document.getElementById('qcmContainer');
+  container.innerHTML = '';
+  qcmData.forEach((item, qi) => {
+    const div = document.createElement('div');
+    div.className = 'qcm-q';
+    const p = document.createElement('p');
+    p.className = 'stem';
+    p.textContent = (qi+1)+'. '+item.q;
+    div.appendChild(p);
+    const optsDiv = document.createElement('div');
+    optsDiv.className = 'qcm-opts';
+    item.opts.forEach((opt, oi) => {
+      const label = document.createElement('label');
+      label.className = 'qcm-opt';
+      label.id = 'qopt-'+qi+'-'+oi;
+      label.innerHTML = '<input type="radio" name="q'+qi+'" value="'+oi+'"> <span>'+opt+'</span>';
+      label.querySelector('input').addEventListener('change', () => answerQCM(qi, oi));
+      optsDiv.appendChild(label);
+    });
+    div.appendChild(optsDiv);
+    container.appendChild(div);
+  });
+  updateQCMScore();
+}
+function answerQCM(qi, oi){
+  if (qcmAnswered[qi] !== -1) return;
+  qcmAnswered[qi] = oi;
+  const item = qcmData[qi];
+  for (let o=0; o<item.opts.length; o++){
+    const el = document.getElementById('qopt-'+qi+'-'+o);
+    el.classList.add('locked');
+    el.querySelector('input').disabled = true;
+    if (o === item.correct) el.classList.add('correct');
+    else if (o === oi) el.classList.add('wrong');
+  }
+  updateQCMScore();
+}
+function updateQCMScore(){
+  const answeredCount = qcmAnswered.filter(a => a !== -1).length;
+  const correctCount = qcmAnswered.filter((a,i) => a === qcmData[i].correct).length;
+  const scoreEl = document.getElementById('qcmScore');
+  if (answeredCount === 0) { scoreEl.textContent = ''; return; }
+  if (answeredCount < qcmData.length) {
+    scoreEl.textContent = 'Score provisoire : '+correctCount+' / '+answeredCount+' (répondu à '+answeredCount+'/'+qcmData.length+')';
+  } else {
+    scoreEl.textContent = 'Score final : '+correctCount+' / '+qcmData.length;
+  }
+}
+function resetQCM(){ setupQCM(); }
+
+/* ============================================================
+   INIT
+   ============================================================ */
+initSection(0);
+</script>
+
+</body>
+</html>
